@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.7.2
+DIÁRIO DO TÉCNICO — VERSÃO 1.7.3
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -47,5 +47,6 @@ OBSERVAÇÕES SOBRE O USO OFFLINE
 - O app pode abrir offline depois que os arquivos forem armazenados pelo navegador. A fonte Barlow do Google pode precisar de conexão.
 - Os dados e imagens adicionados no app ficam neste navegador/aparelho até exportar um backup.
 - O app pede ao navegador armazenamento persistente, para reduzir o risco de limpeza automática. Em Configurações > Backup dos dados aparece se a proteção foi concedida; ela é mais provável com o app instalado na tela inicial.
+- Se um escudo ou uma taça não carregar, o app mostra as iniciais do clube ou uma taça desenhada no lugar. Para ver as imagens, confirme que a pasta assets/ foi enviada ao GitHub com os nomes em minúsculas (ex.: assets/clubs/ars.png). Só 32 clubes têm escudo embutido; nos demais, use Configurações para adicionar o escudo.
 - Se a rede demorar mais de 3 segundos, o app abre pela cópia guardada e se atualiza em segundo plano.
 - A cada versão nova, atualize APP_VERSION no início do service-worker.js para o mesmo número do index.html.

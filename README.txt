@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.7.3
+DIÁRIO DO TÉCNICO — VERSÃO 1.7.4
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.

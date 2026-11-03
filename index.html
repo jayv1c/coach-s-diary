@@ -464,7 +464,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.7.4';
+const APP_VERSION='1.7.5';
 const KEY='carreira-tecnico-v1';
 const LANG_MAP={
  en:Object.fromEntries([['Resumo','Overview'],['Partidas','Matches'],['Elenco','Squad'],['Mercado','Transfers'],['Estatísticas','Statistics'],['Mais','More'],['Configurações','Settings'],['Aparência','Appearance'],['Tema (neste aparelho)','Theme (this device)'],['Automático','System'],['Claro','Light'],['Escuro','Dark'],['Cor de fundo no modo claro','Light mode background color'],['Escolha um tom suave para reduzir o brilho. A cor só se aplica no tema claro.','Choose a softer shade to reduce glare. This color only applies in light mode.'],['Idioma','Language'],['Português','Portuguese'],['Espanhol','Spanish'],['Inglês','English'],['Versão do app','App version'],['Próximo passo','Next step'],['PRÓXIMO PASSO','NEXT STEP'],['Prepare a temporada','Set up your season'],['Registre a primeira partida','Record your first match'],['Continue sua carreira','Continue your career'],['Monte seu elenco','Build your squad'],['Adicione um campeonato para começar a registrar os jogos.','Add a competition to start recording matches.'],['Escolha o campeonato, o adversário e informe o placar.','Choose the competition and opponent, then enter the score.'],['Registre a próxima partida e mantenha a temporada atualizada.','Record the next match to keep your season up to date.'],['Cadastre os jogadores para acompanhar o desempenho individual.','Add players to track individual performance.'],['Adicionar campeonato','Add competition'],['Registrar partida','Record match'],['Cadastrar jogadores','Add players'],['Central do elenco','Squad hub'],['Fechar temporada','Close season'],['Esta temporada','This season'],['Carreira toda','All-time career'],['Campeonatos','Competitions'],['Resultado (opcional)','Result (optional)'],['Adicionar','Add'],['Temporada','Season'],['Nova temporada','New season'],['Todas as temporadas','All seasons'],['Abrir temporada','Start season'],['Copiar elenco e campeonatos','Copy squad and competitions'],['Posição final no grupo','Final group position'],['Selecione','Select'],['1º lugar','1st place'],['2º lugar','2nd place'],['3º lugar','3rd place'],['4º lugar','4th place'],['Gols','Goals'],['Assistências','Assists'],['Amarelos','Yellow cards'],['Vermelho','Red card'],['Nota','Rating'],['Jogadores selecionados','Selected players'],['Editar dados','Edit details'],['Pesquisar jogador do elenco','Search squad players'],['Digite o nome do jogador...','Enter a player name...'],['Comece a digitar para encontrar um jogador.','Start typing to find a player.'],['Nenhum jogador selecionado.','No players selected.'],['Dados da atuação','Match performance'],['Salvar atuação','Save performance'],['Cancelar','Cancel'],['Buscar adversário','Search opponent'],['Competição','Competition'],['Mando','Venue'],['Todas','All'],['Todos','All'],['Casa','Home'],['Fora','Away'],['Neutro','Neutral'],['Backup dos dados','Data backup'],['Baixar backup (.json)','Download backup (.json)'],['Copiar backup','Copy backup'],['Restaurar backup colado','Restore pasted backup'],['Bases de dados e skins','Databases and skins'],['Clubes','Clubs'],['Competições','Competitions'],['Adicionar item à lista','Add item to list'],['Nome do item','Item name'],['Escolher imagem','Choose image'],['Trocar','Replace'],['Remover','Remove'],['Prêmios individuais','Individual awards'],['Sala de troféus','Trophy room'],['Artih','Top scorer'],['Aproveitamento','Win rate'],['Últimos jogos','Recent matches'],['Saldo de gols','Goal difference'],['Vitórias','Wins'],['Empates','Draws'],['Derrotas','Losses'],['Gols feitos','Goals scored'],['Gols sofridos','Goals conceded'],['Histórico geral','Career history'],['Posição','Position'],['Idade','Age'],['Overall','Overall'],['Jogos','Matches played'],['Adicionar jogador','Add player'],['Adicionar jogador','Add player'],['Salvar partida','Save match'],['Salvar e registrar outra','Save and record another'],['Editar partida','Edit match'],['Editar partida e atuações','Edit match and performances'],['Pênaltis do seu time','Your team penalties'],['Pênaltis do adversário','Opponent penalties'],['Rodada / fase','Round / stage'],['Observações da temporada','Season notes'],['Registrar transferência','Record transfer'],['Caixa atual','Current balance'],['Aparência','Appearance'],['Desfazer','Undo'],['Desfazer saída','Undo transfer'],['Voltar às cores padrão','Restore default colors'],['Resultado em','Result in'],['Digite e escolha','Type and choose'],['Classificação','Standings'],['Oitavas de final','Round of 16'],['Playoff','Playoff'],['Selecione','Select'],['Regra','Rule'],['Salvar','Save'],['Editar','Edit'],['Fechar','Close'],['Abrir','Open'],['Nenhum campeonato ainda. Adicione abaixo ou registre partidas.','No competitions yet. Add one below or record a match.'],['Elenco vazio nesta temporada. Adicione jogadores acima.','The squad is empty this season. Add players above.']]),
@@ -840,8 +840,8 @@ function delCareer(id){
   saveIx();render();
 }
 document.addEventListener('error',e=>{const im=e.target;if(!im||im.tagName!=='IMG'||im.dataset.fb)return;
-  if(im.dataset.club!==undefined){im.dataset.fb='1';const n=im.dataset.club,sz=im.width||28,bg=okHex(S.cor1)?S.cor1:hueOf(n),sp=document.createElement('span');sp.className='avt';sp.setAttribute('style','width:'+sz+'px;height:'+sz+'px;background:'+bg+';color:'+txtOn(bg));sp.textContent=initials(n);im.replaceWith(sp)}
-  else if(im.dataset.troph!==undefined){im.dataset.fb='1';const w=document.createElement('span');w.innerHTML=TSVG(im.width||24);im.replaceWith(w.firstChild)}
+  if(im.dataset.club!==undefined){im.dataset.fb='1';const n=im.dataset.club,sz=+im.getAttribute('width')||28,bg=okHex(S.cor1)?S.cor1:hueOf(n),sp=document.createElement('span');sp.className='avt';sp.setAttribute('style','width:'+sz+'px;height:'+sz+'px;background:'+bg+';color:'+txtOn(bg));sp.textContent=initials(n);im.replaceWith(sp)}
+  else if(im.dataset.troph!==undefined){im.dataset.fb='1';const w=document.createElement('span');w.innerHTML=TSVG(+im.getAttribute('width')||24);im.replaceWith(w.firstChild)}
 },true);
 let storagePersisted=null;
 async function protectStorage(){try{if(navigator.storage&&navigator.storage.persist){storagePersisted=(await navigator.storage.persisted())||(await navigator.storage.persist())}}catch(e){}}
@@ -986,7 +986,7 @@ function tbSet(f,v){
   if(v==='')delete d.tb[f];else{const df=+v-au;if(df)d.tb[f]=df;else delete d.tb[f]}
   save();render();
 }
-function setResC(c,v){const d=D(),x=d.res.find(y=>y.c===c);if(x)x.r=v.trim();else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)));save();FL=()=>[...document.querySelectorAll('.cc[data-cc]')].find(z=>z.dataset.cc===c);render()}
+function setResC(c,v){const d=D(),x=d.res.find(y=>y.c===c);if(x){x.r=v.trim();delete x.auto}else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)));save();FL=()=>[...document.querySelectorAll('.cc[data-cc]')].find(z=>z.dataset.cc===c);render()}
 function delRes(c){mark('Campeonato removido');const d=D();d.res=d.res.filter(y=>y.c!==c);save();render()}
 const NAVI={
  home:'<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -1375,7 +1375,7 @@ function closeSeason(f){
   if(!n||n===S.cur)return false;
   mark('Temporada fechada');
   const names=compNames(d);
-  names.forEach((c,i)=>{const v=o['r_'+i];if(v===undefined)return;const x=d.res.find(y=>y.c===c);if(x)x.r=v.trim();else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))});
+  names.forEach((c,i)=>{const v=o['r_'+i];if(v===undefined)return;const x=d.res.find(y=>y.c===c);if(x){x.r=v.trim();delete x.auto}else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))});
   let x=S.data[n];
   if(!x){x=ns();S.data[n]=x;S.order.push(n);S.order.sort()}
   d.p.filter(p=>!p.out).forEach(p=>{
@@ -1655,7 +1655,36 @@ function vHist(){
 }
 
 function nextName(){const m=S.cur.match(/^(\d{4})\/(\d{2})$/);if(!m)return '';const y=+m[1]+1;return y+'/'+String((+m[2]+1)%100).padStart(2,'0')}
-function upsertChampion(season,competition,club){const d=S.data[season];if(!d||!competition||!club)return;d.champs=Array.isArray(d.champs)?d.champs:[];const before=rankPosition(club),key=norm(competition),old=d.champs.find(x=>norm(x.competition)===key);if(old)old.club=club;else d.champs.push({competition,club});const after=rankPosition(club),delta=before?before-after:0,points=compTitlePoints(competition),move=delta>0?` e sobe da posição ${before} para ${after}`:after?` e passa a ocupar a posição ${after}`:'';const titleByLang={pt:`${club} conquista ${competition}`,en:`${club} win ${competition}`,es:`${club} conquista ${competition}`},bodyByLang={pt:`O título acrescenta um bônus de ${points.toFixed(1)} pontos ao ranking interno${move}.`,en:`The title adds a ${points.toFixed(1)}-point bonus to the internal ranking${delta>0?` and moves the club from ${before}th to ${after}th place`:after?` and places the club at ${after}th`:''}.`,es:`El título añade un bonus de ${points.toFixed(1)} puntos a la clasificación interna${delta>0?` y sube al club del puesto ${before} al ${after}`:after?` y deja al club en el puesto ${after}`:''}.`};addNews(season,{key:`champion:${key}`,kind:'champion',importance:100,title:titleByLang.pt,titleByLang,body:bodyByLang.pt,bodyByLang,competition})}
+let AUTO_CH=false,QUIET_CH=false;
+function reconcileFinals(season){
+  const d=S.data[season];if(!d)return false;
+  d.champs=Array.isArray(d.champs)?d.champs:[];d.res=Array.isArray(d.res)?d.res:[];
+  let changed=false;const seen=new Set();
+  (Array.isArray(d.m)&&d.m.length?ties(d):[]).forEach(t=>{
+    if(!/^Final/.test(t.base)||!t.c)return;
+    seen.add(norm(t.c));
+    const c=t.c,key=norm(c),e=d.champs.find(x=>norm(x.competition)===key);
+    if(e&&!e.auto)return;
+    const x=d.res.find(y=>norm(y.c)===key),win=t.res==='avancou'?S.club:t.res==='eliminado'?String(t.adv||'').trim():'';
+    if(win){
+      if(!e||norm(e.club)!==norm(win)){AUTO_CH=true;try{upsertChampion(season,c,win)}finally{AUTO_CH=false}changed=true}
+      const want=norm(win)===norm(S.club)?'Campeão':'Vice-campeão';
+      if(x&&(!x.r||x.auto)&&x.r!==want){x.r=want;x.auto=true;changed=true}
+    }else if(e){
+      d.champs=d.champs.filter(y=>y!==e);d.news=(d.news||[]).filter(n=>n.key!==`champion:${key}`);
+      if(x&&x.auto){x.r='';delete x.auto}
+      changed=true;
+    }
+  });
+  d.champs.filter(e=>e.auto&&!seen.has(norm(e.competition))).forEach(e=>{
+    d.champs=d.champs.filter(y=>y!==e);d.news=(d.news||[]).filter(n=>n.key!==`champion:${norm(e.competition)}`);
+    const x=d.res.find(y=>norm(y.c)===norm(e.competition));if(x&&x.auto){x.r='';delete x.auto}
+    changed=true;
+  });
+  return changed;
+}
+function reconcileAllFinals(){let ch=false;S.order.forEach(s=>{QUIET_CH=(s!==S.cur);try{if(reconcileFinals(s))ch=true}finally{QUIET_CH=false}});return ch}
+function upsertChampion(season,competition,club){const d=S.data[season];if(!d||!competition||!club)return;d.champs=Array.isArray(d.champs)?d.champs:[];const before=rankPosition(club),key=norm(competition),old=d.champs.find(x=>norm(x.competition)===key);let ent=old;if(old)old.club=club;else{ent={competition,club};d.champs.push(ent)}if(AUTO_CH)ent.auto=true;else delete ent.auto;const after=rankPosition(club),delta=before?before-after:0,points=compTitlePoints(competition),move=delta>0?` e sobe da posição ${before} para ${after}`:after?` e passa a ocupar a posição ${after}`:'';const titleByLang={pt:`${club} conquista ${competition}`,en:`${club} win ${competition}`,es:`${club} conquista ${competition}`},bodyByLang={pt:`O título acrescenta um bônus de ${points.toFixed(1)} pontos ao ranking interno${move}.`,en:`The title adds a ${points.toFixed(1)}-point bonus to the internal ranking${delta>0?` and moves the club from ${before}th to ${after}th place`:after?` and places the club at ${after}th`:''}.`,es:`El título añade un bonus de ${points.toFixed(1)} puntos a la clasificación interna${delta>0?` y sube al club del puesto ${before} al ${after}`:after?` y deja al club en el puesto ${after}`:''}.`};if(!QUIET_CH)addNews(season,{key:`champion:${key}`,kind:'champion',importance:100,title:titleByLang.pt,titleByLang,body:bodyByLang.pt,bodyByLang,competition})}
 function registerChampion(form){const o=Object.fromEntries(new FormData(form)),season=o.season,competition=(o.comp||'').trim(),club=(o.club||'').trim();if(!S.data[season]||!competition||!club)return false;upsertChampion(season,competition,club);sub.champSeason=season;save();render();return false}
 function removeChampion(season,competition){const d=S.data[season];if(!d)return;const explicit=(d.champs||[]).some(x=>norm(x.competition)===norm(competition));d.champs=(d.champs||[]).filter(x=>norm(x.competition)!==norm(competition));if(!explicit)d.res=(d.res||[]).filter(x=>!(norm(x.c)===norm(competition)&&x.r==='Campeão'));d.news=(d.news||[]).filter(x=>x.key!==`champion:${norm(competition)}`);save();render()}
 function filterClubRankRows(q){const term=norm(q),rows=[...document.querySelectorAll('#club-rank-table tbody tr')];rows.forEach(r=>r.hidden=!!term&&!r.dataset.club.includes(term))}
@@ -1668,7 +1697,7 @@ function vTemp(){
   <h3>Todas as temporadas</h3>
   ${sortSel('s',RECANT,'rec')}
   ${totalSeasons()}
-  ${(so.s==='ant'?[...S.order]:[...S.order].reverse()).map(s=>{const x=S.data[s],r=rec(x),ch=seasonChampions(s);return `<div class="row"><span class="sc">${esc(s)}</span><div><div>${r.j} jogos · ${r.v}V ${r.e}E ${r.l}D · ${r.gp}:${r.gc} gols${ch.length?' · '+ch.map(c=>trophy(c.competition,24)).join(' '):''}</div><div class="sub">${esc(x.obs)}</div></div><button class="sm" onclick="tab='partidas';goSeason('${esc(s)}')">Abrir</button>${S.order.length>1?(seasonDeleteConfirm===s?`<span class="season-delete-confirm"><button class="sm" onclick="delSeason('${esc(s)}')">Apagar mesmo</button> <button class="sm" onclick="seasonDeleteConfirm=null;render()">Cancelar</button></span>`:`<button class="x" aria-label="Apagar temporada ${esc(s)}" onclick="delSeason('${esc(s)}')">✕</button>`):'<span></span>'}</div>`}).join('')}
+  ${(so.s==='ant'?[...S.order]:[...S.order].reverse()).map(s=>{const x=S.data[s],r=rec(x),ch=seasonChampions(s).filter(c=>norm(c.club)===norm(S.club));return `<div class="row"><span class="sc">${esc(s)}</span><div><div>${r.j} jogos · ${r.v}V ${r.e}E ${r.l}D · ${r.gp}:${r.gc} gols${ch.length?' · '+ch.map(c=>trophy(c.competition,24)).join(' '):''}</div><div class="sub">${esc(x.obs)}</div></div><button class="sm" onclick="tab='partidas';goSeason('${esc(s)}')">Abrir</button>${S.order.length>1?(seasonDeleteConfirm===s?`<span class="season-delete-confirm"><button class="sm" onclick="delSeason('${esc(s)}')">Apagar mesmo</button> <button class="sm" onclick="seasonDeleteConfirm=null;render()">Cancelar</button></span>`:`<button class="x" aria-label="Apagar temporada ${esc(s)}" onclick="delSeason('${esc(s)}')">✕</button>`):'<span></span>'}</div>`}).join('')}
   ${vChampions()}
   ${vClubRank()}
   <details class="stats-extra"><summary>Fechar temporada</summary>${vClose()}</details>
@@ -1685,6 +1714,7 @@ function vTemp(){
 let renderedTab=null,detailStates={},statsDetailOpenRequest=null;
 function detailKey(el){return (el.querySelector(':scope > summary')?.textContent||'').trim().replace(/\s+·.*$/,'').replace(/\s+\(\d+\)$/,'')}
 function render(){
+  try{if(reconcileAllFinals())persist()}catch(e){}
   const app=document.getElementById('app');
   if(app&&renderedTab){const counts={},state={};app.querySelectorAll('details').forEach(el=>{const title=detailKey(el),n=counts[title]||0;counts[title]=n+1;state[title+'#'+n]=el.open});detailStates[renderedTab]=state}
   applyAcc();queueMicrotask(()=>{ui();armPickers();flashNow();bkOpen=false;translateUi()});
@@ -1703,7 +1733,7 @@ function add(k,f,event){
   if(k==='m'&&hasDuplicateMatch(o.c,o.ph)){const er=document.getElementById('stageErr');if(er)er.textContent='Já existe uma partida desta competição registrada nessa rodada/fase.';return false}
   if(k==='m'){if(!(o.adv||'').trim()){const er=document.getElementById('vserr');if(er)er.textContent='Escolha o adversário: toque no círculo com +.';return false}const away=o.away==='1',sl=+o.sl||0,sr=+o.sr||0,m={id:'m-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),date:o.date,adv:o.adv.trim(),loc:isNeutro(o.ph)?'Neutro':(away?'Fora':'Casa'),gp:away?sr:sl,gc:away?sl:sr,c:(o.c||'').trim(),ph:o.ph||'',pg:pn(o.pg),pc:pn(o.pc),pl:draft};d.m.push(m);maybeMatchNews(m,S.cur);draft={};FL=()=>document.querySelector('[data-mi="'+(D().m.length-1)+'"]')}
   if(k==='p'){const b={};[['sj','j'],['sg','g'],['sa','a'],['sy','y'],['sr','r']].forEach(([x,f])=>{if(+o[x])b[f]=+o[x]});if(o.sn!==undefined&&o.sn!=='')b.n=+o.sn;const np={n:o.n.trim(),nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,foot:o.foot,k:nk()};if(Object.keys(b).length)np.base=b;d.p.push(np)}
-  if(k==='r'&&o.c.trim()){const c=o.c.trim(),r=(o.r||'').trim(),x=d.res.find(y=>y.c===c);if(x){if(r)x.r=r}else d.res.push({c,r});if(norm(r)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))}
+  if(k==='r'&&o.c.trim()){const c=o.c.trim(),r=(o.r||'').trim(),x=d.res.find(y=>y.c===c);if(x){if(r){x.r=r;delete x.auto}}else d.res.push({c,r});if(norm(r)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))}
   if(k==='t'){const inn=o.tipo==='compra'||o.tipo==='empin';let nm,pk,player;
     if(inn){nm=o.j.trim();const np={n:nm,nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,foot:o.foot,k:nk(),ent:o.tipo};d.p.push(np);pk=np.k;player=np}
     else{const q=d.p.find(x=>String(x.k)===o.jk);if(!q)return false;q.out=o.tipo;nm=q.n;pk=q.k;player=q}

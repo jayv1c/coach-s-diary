@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.7.5
+DIÁRIO DO TÉCNICO — VERSÃO 1.9.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -27,6 +27,10 @@ DADOS E BACKUPS
 - O backup inclui os dados da carreira e imagens personalizadas. A sincronização em nuvem foi removida; use o backup para transferir seus dados.
 
 RECURSOS DESTA VERSÃO
+- Jornal em edições semanais (segunda a domingo, pela data das partidas): manchete, resultados da semana, números e craque da semana, com navegação entre edições. Partidas sem data entram em uma edição retrospectiva por temporada. Matérias novas: marcos (jogos no comando, gols pelo clube), maior vitória, sequências e primeira vitória sobre um adversário.
+- Avisos de destaque: ao registrar algo importante aparece um aviso com o botão Ler; títulos abrem uma edição extra. Uma bolinha em Resumo indica novidades. Em Jornal, no rodapé, escolha entre só destaques, todas as notícias ou desligado.
+- Imagens incluídas no app: escudos, logos de competições e troféus ficam como arquivos em assets/img/ (clubs, comps e trophies), sem ocupar o armazenamento do navegador e sem entrar no backup. A imagem que você adicionar em Configurações continua valendo por cima da incluída. Em Configurações > Imagens incluídas no app dá para remover as cópias repetidas guardadas no navegador e deixar o backup bem menor.
+- Menu inicial ao abrir o app: Continuar carreira, Iniciar nova carreira, Minhas carreiras, Configurações (as mesmas de dentro do jogo), atalho de backup e instalação do app. Em Configurações do menu há a opção de pular o menu ao abrir. Dentro do jogo, o botão ☰ no topo volta ao menu.
 - O Jornal publica automaticamente uma matéria curta por partida. As notícias destacam placar e fatos relevantes, como hat-trick, goleada, vitória inesperada, sequência de resultados ou uma atuação individual marcante, sem listar todos os participantes.
 - O registro de partida permite informar a data. Ela acompanha o intervalo da temporada (1º de julho a 30 de junho), aparece no jornal e organiza as matérias por data. A próxima data sugerida é calculada a partir dos jogos já registrados; as datas antigas ficam opcionais para preservar registros anteriores.
 - Títulos e transferências de impacto também geram notícias. O jornal tem aparência de página esportiva, mostra seis matérias por página e permite navegar pelo histórico. Entrevistas não são mais exibidas.

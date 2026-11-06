@@ -448,6 +448,41 @@ nav#tabs>button,.nav,.msheet button,.pki{font-weight:600}
 .roster-table tbody td:not(:first-child):not(.act){display:grid;grid-template-rows:auto 28px;align-items:center;justify-items:center}
 .roster-table tbody td .ni{justify-self:stretch}
 }
+body.menu-on #top,body.menu-on #tabs{display:none}
+.menu{max-width:460px;margin:0 auto;padding:max(8px,env(safe-area-inset-top)) 0 32px}
+.mn-hero{text-align:center;padding:24px 0 4px}
+.mn-hero svg{width:128px;height:auto;filter:drop-shadow(0 8px 16px rgba(0,0,0,.28))}
+.mn-hero h1{margin:12px 0 2px;font:800 32px 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.5px}
+.mn-hero p{margin:0;color:var(--mute)}
+.mn-actions{display:grid;gap:12px;margin:24px 0 16px}
+.mn-btn{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;padding:15px 18px;border:1px solid var(--line);border-radius:14px;background:var(--surf);color:var(--ink);font:700 19px Barlow,sans-serif;text-align:left;white-space:normal;cursor:pointer}
+.mn-btn small{font:500 13.5px/1.35 Barlow,sans-serif;color:var(--mute)}
+.mn-btn.main{background:var(--acc);border-color:transparent;color:var(--onacc)}
+.mn-btn.main small{color:inherit;opacity:.85}
+.mn-btn:active,.mn-tile:active{transform:scale(.985)}
+.mn-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mn-tile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surf);color:var(--ink);font:600 15px Barlow,sans-serif;text-align:left;white-space:normal;cursor:pointer}
+.mn-tile small{font:500 12.5px Barlow,sans-serif;color:var(--mute)}
+.mn-tile b{font-weight:700}
+.mn-tile.warn b{color:var(--loss)}
+.mn-foot{margin:22px 0 0;text-align:center;color:var(--mute);font-size:13px}
+.mn-top{display:flex;align-items:center;gap:10px;margin:6px 0 4px}
+.mn-top h2{margin:0}
+.mn-back{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surf);color:var(--ink);font:600 15px Barlow,sans-serif}
+.mn-skip{display:flex;align-items:center;gap:10px;margin:10px 0 4px;color:var(--ink)}
+.mn-new{display:grid;gap:12px;margin-top:12px}
+.menu-btn{padding:4px 10px 4px 0;border:0;font-size:24px;line-height:1;color:inherit;background:none}
+.ed-nav{display:flex;gap:8px;align-items:center;margin:8px 0 12px}.ed-nav select{flex:1;min-width:0}.ed-nav button:disabled{opacity:.35}
+.ed-box{margin:14px 0;padding:12px 14px;border:1px solid rgba(0,0,0,.22);border-radius:12px;background:rgba(0,0,0,.05);color:inherit}
+.ed-box h3{margin:0 0 8px;font:700 12.5px Barlow,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:inherit;opacity:.7}
+.ed-res{display:grid;grid-template-columns:42px 1fr auto;gap:8px 10px;align-items:center;font-size:15px}.ed-res small{opacity:.65}
+.ed-res .sc{font:700 18px 'Barlow Condensed',Barlow,sans-serif}.ed-res .w{color:#2e9e5b}.ed-res .l{color:var(--loss)}
+.ed-nums{display:flex;gap:18px;flex-wrap:wrap}.ed-nums span{font-size:13px;opacity:.9}.ed-nums b{display:block;color:inherit;font:700 22px 'Barlow Condensed',Barlow,sans-serif}
+#tabs>button{position:relative}.hl-dot{position:absolute;top:8px;left:calc(50% + 9px);width:10px;height:10px;border-radius:50%;background:#e5484d;box-shadow:0 0 0 2px var(--bg)}
+.hl-toast{position:fixed;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:50;max-width:520px;margin:0 auto;padding:12px 14px;border-radius:14px;background:var(--ink);color:var(--bg);box-shadow:0 8px 24px rgba(0,0,0,.35);display:flex;gap:8px;align-items:center}
+.hl-toast small{display:block;opacity:.75}.hl-toast b{display:block;font-size:15px;line-height:1.25}.hl-toast .chip2{flex:none}
+.hl-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.62)}
+.hl-card{max-width:420px;width:100%;padding:22px 20px;border-radius:18px;background:var(--surf);color:var(--ink);text-align:center}.hl-card h2{margin:6px 0}.hl-card p{color:var(--mute)}.hl-actions{display:flex;gap:10px;justify-content:center;margin-top:14px}
 </style>
 </head>
 <body>
@@ -464,7 +499,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.7.5';
+const APP_VERSION='1.9.0';
 const KEY='carreira-tecnico-v1';
 const LANG_MAP={
  en:Object.fromEntries([['Resumo','Overview'],['Partidas','Matches'],['Elenco','Squad'],['Mercado','Transfers'],['Estatísticas','Statistics'],['Mais','More'],['Configurações','Settings'],['Aparência','Appearance'],['Tema (neste aparelho)','Theme (this device)'],['Automático','System'],['Claro','Light'],['Escuro','Dark'],['Cor de fundo no modo claro','Light mode background color'],['Escolha um tom suave para reduzir o brilho. A cor só se aplica no tema claro.','Choose a softer shade to reduce glare. This color only applies in light mode.'],['Idioma','Language'],['Português','Portuguese'],['Espanhol','Spanish'],['Inglês','English'],['Versão do app','App version'],['Próximo passo','Next step'],['PRÓXIMO PASSO','NEXT STEP'],['Prepare a temporada','Set up your season'],['Registre a primeira partida','Record your first match'],['Continue sua carreira','Continue your career'],['Monte seu elenco','Build your squad'],['Adicione um campeonato para começar a registrar os jogos.','Add a competition to start recording matches.'],['Escolha o campeonato, o adversário e informe o placar.','Choose the competition and opponent, then enter the score.'],['Registre a próxima partida e mantenha a temporada atualizada.','Record the next match to keep your season up to date.'],['Cadastre os jogadores para acompanhar o desempenho individual.','Add players to track individual performance.'],['Adicionar campeonato','Add competition'],['Registrar partida','Record match'],['Cadastrar jogadores','Add players'],['Central do elenco','Squad hub'],['Fechar temporada','Close season'],['Esta temporada','This season'],['Carreira toda','All-time career'],['Campeonatos','Competitions'],['Resultado (opcional)','Result (optional)'],['Adicionar','Add'],['Temporada','Season'],['Nova temporada','New season'],['Todas as temporadas','All seasons'],['Abrir temporada','Start season'],['Copiar elenco e campeonatos','Copy squad and competitions'],['Posição final no grupo','Final group position'],['Selecione','Select'],['1º lugar','1st place'],['2º lugar','2nd place'],['3º lugar','3rd place'],['4º lugar','4th place'],['Gols','Goals'],['Assistências','Assists'],['Amarelos','Yellow cards'],['Vermelho','Red card'],['Nota','Rating'],['Jogadores selecionados','Selected players'],['Editar dados','Edit details'],['Pesquisar jogador do elenco','Search squad players'],['Digite o nome do jogador...','Enter a player name...'],['Comece a digitar para encontrar um jogador.','Start typing to find a player.'],['Nenhum jogador selecionado.','No players selected.'],['Dados da atuação','Match performance'],['Salvar atuação','Save performance'],['Cancelar','Cancel'],['Buscar adversário','Search opponent'],['Competição','Competition'],['Mando','Venue'],['Todas','All'],['Todos','All'],['Casa','Home'],['Fora','Away'],['Neutro','Neutral'],['Backup dos dados','Data backup'],['Baixar backup (.json)','Download backup (.json)'],['Copiar backup','Copy backup'],['Restaurar backup colado','Restore pasted backup'],['Bases de dados e skins','Databases and skins'],['Clubes','Clubs'],['Competições','Competitions'],['Adicionar item à lista','Add item to list'],['Nome do item','Item name'],['Escolher imagem','Choose image'],['Trocar','Replace'],['Remover','Remove'],['Prêmios individuais','Individual awards'],['Sala de troféus','Trophy room'],['Artih','Top scorer'],['Aproveitamento','Win rate'],['Últimos jogos','Recent matches'],['Saldo de gols','Goal difference'],['Vitórias','Wins'],['Empates','Draws'],['Derrotas','Losses'],['Gols feitos','Goals scored'],['Gols sofridos','Goals conceded'],['Histórico geral','Career history'],['Posição','Position'],['Idade','Age'],['Overall','Overall'],['Jogos','Matches played'],['Adicionar jogador','Add player'],['Adicionar jogador','Add player'],['Salvar partida','Save match'],['Salvar e registrar outra','Save and record another'],['Editar partida','Edit match'],['Editar partida e atuações','Edit match and performances'],['Pênaltis do seu time','Your team penalties'],['Pênaltis do adversário','Opponent penalties'],['Rodada / fase','Round / stage'],['Observações da temporada','Season notes'],['Registrar transferência','Record transfer'],['Caixa atual','Current balance'],['Aparência','Appearance'],['Desfazer','Undo'],['Desfazer saída','Undo transfer'],['Voltar às cores padrão','Restore default colors'],['Resultado em','Result in'],['Digite e escolha','Type and choose'],['Classificação','Standings'],['Oitavas de final','Round of 16'],['Playoff','Playoff'],['Selecione','Select'],['Regra','Rule'],['Salvar','Save'],['Editar','Edit'],['Fechar','Close'],['Abrir','Open'],['Nenhum campeonato ainda. Adicione abaixo ou registre partidas.','No competitions yet. Add one below or record a match.'],['Elenco vazio nesta temporada. Adicione jogadores acima.','The squad is empty this season. Add players above.']]),
@@ -496,7 +531,7 @@ Object.assign(LANG_MAP.en,{'Data da partida':'Match date','A data precisa estar 
 Object.assign(LANG_MAP.es,{'Data da partida':'Fecha del partido','A data precisa estar dentro da temporada.':'La fecha debe estar dentro de la temporada.','A data da partida aparece no jornal e acompanha o período da temporada.':'La fecha del partido aparece en el periódico y corresponde al periodo de la temporada.','Destaque da partida':'Figura del partido'});
 Object.assign(LANG_MAP.en,{'Armazenamento protegido: o navegador não deve apagar estes dados sozinho.':'Protected storage: the browser should not clear this data on its own.','O navegador não garantiu proteção contra limpeza automática. Instale o app na tela inicial e faça backups com frequência.':'The browser did not guarantee protection against automatic clearing. Install the app on your home screen and back up often.'});
 Object.assign(LANG_MAP.es,{'Armazenamento protegido: o navegador não deve apagar estes dados sozinho.':'Almacenamiento protegido: el navegador no debería borrar estos datos por sí solo.','O navegador não garantiu proteção contra limpeza automática. Instale o app na tela inicial e faça backups com frequência.':'El navegador no garantizó protección contra la limpieza automática. Instala la app en la pantalla de inicio y haz copias de seguridad con frecuencia.'});
-Object.assign(LANG_MAP.en,{'Config.':'Settings'});Object.assign(LANG_MAP.es,{'Config.':'Ajustes'});
+Object.assign(LANG_MAP.en,{'Config.':'Settings'},{"Imagens incluídas no app": "Images built into the app", "O app já inclui escudos de clubes, logos de competições e troféus como arquivos. Eles sempre aparecem, mesmo em outro aparelho ou depois de limpar os dados do site, e não fazem parte do backup. Uma imagem que você adicionar à mão continua valendo por cima da incluída.": "The app already includes club crests, competition logos and trophies as files. They always show up, even on another device or after clearing site data, and they are not part of the backup. An image you add by hand still takes priority over the built-in one.", "escudos": "crests", "troféus": "trophies", "imagens repetidas guardadas no navegador": "duplicate images stored in the browser", "Remover cópias e liberar espaço": "Remove copies and free up space", "Nenhuma cópia repetida guardada no navegador.": "No duplicate copies stored in the browser."},{"Registro do seu modo carreira": "Your career mode log", "Continuar carreira": "Continue career", "Iniciar nova carreira": "Start a new career", "Minhas carreiras": "My careers", "carreiras": "careers", "Idioma, aparência, backup e mais": "Language, appearance, backup and more", "Backup e restauração": "Backup and restore", "Último backup": "Last backup", "nunca": "never", "Instalar app": "Install app", "Abrir pela tela inicial, mesmo sem internet": "Open from your home screen, even offline", "Versão": "Version", "← Voltar": "← Back", "Nova carreira": "New career", "Pular o menu ao abrir o app": "Skip this menu when opening the app", "jogos": "games", "títulos": "titles"});Object.assign(LANG_MAP.es,{'Config.':'Ajustes'},{"Imagens incluídas no app": "Imágenes incluidas en la app", "O app já inclui escudos de clubes, logos de competições e troféus como arquivos. Eles sempre aparecem, mesmo em outro aparelho ou depois de limpar os dados do site, e não fazem parte do backup. Uma imagem que você adicionar à mão continua valendo por cima da incluída.": "La app ya incluye escudos de clubes, logos de competiciones y trofeos como archivos. Siempre aparecen, incluso en otro dispositivo o tras borrar los datos del sitio, y no forman parte de la copia de seguridad. Una imagen que añadas a mano sigue teniendo prioridad sobre la incluida.", "troféus": "trofeos", "imagens repetidas guardadas no navegador": "imágenes repetidas guardadas en el navegador", "Remover cópias e liberar espaço": "Quitar copias y liberar espacio", "Nenhuma cópia repetida guardada no navegador.": "Ninguna copia repetida guardada en el navegador."},{"Registro do seu modo carreira": "Registro de tu modo carrera", "Continuar carreira": "Continuar carrera", "Iniciar nova carreira": "Iniciar nueva carrera", "Minhas carreiras": "Mis carreras", "carreiras": "carreras", "Idioma, aparência, backup e mais": "Idioma, apariencia, copia de seguridad y más", "Backup e restauração": "Copia y restauración", "Último backup": "Última copia", "Abrir pela tela inicial, mesmo sem internet": "Abrir desde la pantalla de inicio, incluso sin internet", "Versão": "Versión", "← Voltar": "← Volver", "Nova carreira": "Nueva carrera", "Pular o menu ao abrir o app": "Omitir este menú al abrir la app", "jogos": "partidos"});
 function translateUi(){const lang=appLanguage(),map=LANG_MAP[lang];document.documentElement.lang=lang==='pt'?'pt-BR':lang;if(!map)return;const roots=[document.getElementById('top'),document.getElementById('tabs'),document.getElementById('app'),document.getElementById('player-stats-modal'),document.getElementById('pkov')].filter(Boolean),w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while((n=w.nextNode())){if(!roots.some(r=>r.contains(n)))continue;const key=n.nodeValue.trim(),translated=translatedPhrase(key,lang,map);if(translated)n.nodeValue=n.nodeValue.replace(key,translated)}for(const el of document.querySelectorAll('#top [placeholder],#tabs [placeholder],#app [placeholder],#top [aria-label],#tabs [aria-label],#app [aria-label],#top [title],#tabs [title],#app [title],#top [alt],#tabs [alt],#app [alt]'))for(const a of ['placeholder','aria-label','title','alt']){const v=el.getAttribute(a),translated=v&&translatedPhrase(v,lang,map);if(translated)el.setAttribute(a,translated)}document.title=lang==='en'?'Football Manager Diary':lang==='es'?'Diario del Técnico':'Diário do Técnico'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
 function fresh(club){return{club,budget:50,cur:'2021/22',order:['2021/22'],data:{'2021/22':ns()}}}
@@ -541,7 +576,7 @@ function cashBefore(){let c=S.budget;for(const s of S.order){if(s===S.cur)break;
 function head(){
   const r=rec(D()),cash=cashBefore()+net(D());
   const it=(l,t,val)=>`<div><dt title="${t}">${l}</dt><dd>${val}</dd></div>`;
-  return `<header class="board" style="${hdrStyle()}"><div class="wrap"><div class="ident">${IX.list.length>1?`<select class="car" aria-label="Carreira" onchange="switchCareer(this.value)">${IX.list.map(c=>`<option value="${c.id}" ${c.id===IX.cur?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:''}
+  return `<header class="board" style="${hdrStyle()}"><div class="wrap"><div class="ident"><button type="button" class="menu-btn" aria-label="Menu inicial" title="Menu inicial" onclick="openMenu()">☰</button>${IX.list.length>1?`<select class="car" aria-label="Carreira" onchange="switchCareer(this.value)">${IX.list.map(c=>`<option value="${c.id}" ${c.id===IX.cur?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:''}
   <span class="head-club-avatar" title="Escudo do clube">${avMe()}</span><strong class="club-name">${esc(S.club)}</strong>
   ${S.order.length>1?`<select aria-label="Temporada" onchange="goSeason(this.value)">${seasonOpts()}</select>`:`<span class="season-label">${esc(S.cur)}</span>`}</div>
   </div></header>`;
@@ -826,12 +861,14 @@ function allJson(){
   return JSON.stringify(o);
 }
 let confC=null;
-function switchCareer(id){save();IX.cur=id;saveIx();loadCur();draft={};editK=null;openM=null;confC=null;tab='partidas';render()}
+function switchCareer(id,t){save();IX.cur=id;saveIx();loadCur();draft={};editK=null;openM=null;confC=null;tab=t||'partidas';enterGame()}
 function newCareer(f){
   const n=new FormData(f).get('n').trim();if(!n)return false;
-  save();const id='c'+Date.now().toString(36);
-  IX.list.push({id,name:n});IX.cur=id;S=fresh(n);fix();saveIx();save();
-  draft={};editK=null;openM=null;tab='partidas';render();return false;
+  save();
+  const reuse=careerInfo(IX.cur).vazia,cur=IX.list.find(c=>c.id===IX.cur);
+  if(reuse&&cur){cur.name=n}else{const id='c'+Date.now().toString(36);IX.list.push({id,name:n});IX.cur=id}
+  S=fresh(n);fix();saveIx();save();
+  draft={};editK=null;openM=null;tab='partidas';enterGame();return false;
 }
 function delCareer(id){
   try{localStorage.removeItem(keyOf(id))}catch(e){}
@@ -842,7 +879,165 @@ function delCareer(id){
 document.addEventListener('error',e=>{const im=e.target;if(!im||im.tagName!=='IMG'||im.dataset.fb)return;
   if(im.dataset.club!==undefined){im.dataset.fb='1';const n=im.dataset.club,sz=+im.getAttribute('width')||28,bg=okHex(S.cor1)?S.cor1:hueOf(n),sp=document.createElement('span');sp.className='avt';sp.setAttribute('style','width:'+sz+'px;height:'+sz+'px;background:'+bg+';color:'+txtOn(bg));sp.textContent=initials(n);im.replaceWith(sp)}
   else if(im.dataset.troph!==undefined){im.dataset.fb='1';const w=document.createElement('span');w.innerHTML=TSVG(+im.getAttribute('width')||24);im.replaceWith(w.firstChild)}
+  else if(im.dataset.complogo!==undefined){im.dataset.fb='1';const nm=im.dataset.complogo,sp=document.createElement('span');sp.className='comp-logo-fallback';sp.setAttribute('role','img');sp.setAttribute('aria-label',nm);sp.setAttribute('style','--logo-size:'+(+im.getAttribute('width')||24)+'px');sp.textContent=nm.replace(/\s*\(formato antigo\)/i,'').split(/\s+/).map(x=>x[0]).join('').slice(0,3).toUpperCase()||'🏆';im.replaceWith(sp)}
 },true);
+const BUILTIN_IMG={"club":{"alaves":"alaves","almeria":"almeria","atletico de madrid":"atletico-de-madrid","barcelona":"barcelona","bologna":"bologna","braga":"braga","cadiz":"cadiz","celta de vigo":"celta-de-vigo","espanyol":"espanyol","granada":"granada","las palmas":"las-palmas","levante":"levante","mallorca":"mallorca","manchester united":"manchester-united","nice":"nice","osasuna":"osasuna","rayo vallecano":"rayo-vallecano","real betis":"real-betis","real madrid":"real-madrid","real sociedad":"real-sociedad","real valladolid":"real-valladolid","real zaragoza":"real-zaragoza","schalke 04":"schalke-04","sevilla":"sevilla","shamrock rovers":"shamrock-rovers","valencia":"valencia","villarreal":"villarreal","wolves":"wolves","athletic club":"athletic-club","elche cf":"elche-cf","juventus":"juventus","malaga":"malaga","arsenal":"arsenal","lyon":"lyon","paris saint-germain":"paris-saint-germain","chelsea":"chelsea","fcsb":"fcsb","royal antwerp fc":"royal-antwerp-fc","bayern munchen":"bayern-munchen","borussia dortmund":"borussia-dortmund","club brugge":"club-brugge","fenerbahce":"fenerbahce","ferecvarosi":"ferecvarosi","fiorentina":"fiorentina","liverpool":"liverpool","manchester city":"manchester-city","marseille":"marseille","porto":"porto","psv":"psv","rb leipzig":"rb-leipzig","rb salzburg":"rb-salzburg","sassuolo":"sassuolo","shakhtar donetsk":"shakhtar-donetsk","sl benfica":"sl-benfica","slavia praga":"slavia-praga","tottenham":"tottenham","napoli":"napoli","københavn":"kobenhavn","arminia":"arminia","augsburg":"augsburg","b. monchengladbach":"b-monchengladbach","bayer leverkusen":"bayer-leverkusen","bochum":"bochum","eintracht frankfurt":"eintracht-frankfurt","elversberg":"elversberg","fc koln":"fc-koln","freiburg":"freiburg","hamburg":"hamburg","hannover 96":"hannover-96","heidenheim":"heidenheim","hertar berlin":"hertar-berlin","hoffenheim":"hoffenheim","kaiserslautern":"kaiserslautern","mainz 05":"mainz-05","nuremberg":"nuremberg","paderborn 07":"paderborn-07","st. pauli":"st-pauli","vfb stuttgart":"vfb-stuttgart","werder bremen":"werder-bremen","wolfsburg":"wolfsburg"},"comp":{"copa del rey":"copa-del-rey","la liga":"la-liga","la liga 2":"la-liga-2","uefa europa league (formato antigo)":"uefa-europa-league-formato-antigo","supercopa da uefa":"supercopa-da-uefa","uefa champions league (formato antigo)":"uefa-champions-league-formato-antigo","2. bundesliga":"2-bundesliga","bundesliga":"bundesliga","dfb-pokal":"dfb-pokal","supercopa de espana":"supercopa-de-espana"},"trophy":{"uefa europa league (formato antigo)":"uefa-europa-league-formato-antigo","supercopa de espana":"supercopa-de-espana","uefa champions league (formato antigo)":"uefa-champions-league-formato-antigo","la liga 2":"la-liga-2","la liga":"la-liga","dfb-pokal":"dfb-pokal","copa del rey":"copa-del-rey","bundesliga":"bundesliga","2. bundesliga":"2-bundesliga","supercopa da alemanha":"supercopa-da-alemanha","uefa conference league (formato antigo)":"uefa-conference-league-formato-antigo","uefa europa league":"uefa-europa-league","uefa conference league":"uefa-conference-league","uefa champions league":"uefa-champions-league"}};
+const builtinSrc=(kind,name)=>{const m=BUILTIN_IMG[kind];if(!m)return '';const raw=String(name||'').trim(),al=(typeof CLUB_ALIASES!=='undefined'&&kind==='club'&&CLUB_ALIASES[raw])||raw,f=m[norm(raw)]||m[norm(al)];return f?'./assets/img/'+({club:'clubs',comp:'comps',trophy:'trophies'})[kind]+'/'+f+'.webp':''};
+const careerRaw=id=>{try{const r=localStorage.getItem(keyOf(id));return r?JSON.parse(r):null}catch(e){return null}};
+function builtinDupes(){
+  let n=0,chars=0;
+  const cnt=(o,kind,pre)=>{if(!o)return;Object.keys(o).forEach(k=>{const v=o[k];if(typeof v!=='string'||v.indexOf('data:image/')!==0)return;const nk=pre?(k.indexOf(pre)===0?k.slice(pre.length):null):k;if(nk!=null&&BUILTIN_IMG[kind][nk]){n++;chars+=v.length}})};
+  cnt(CLUB_DB.images,'club','');
+  IX.list.forEach(c=>{const d=c.id===IX.cur?S:careerRaw(c.id);if(!d||!d.img)return;cnt(d.img,'club','club:');cnt(d.img,'comp','comp:');cnt(d.img,'trophy','trophy:')});
+  return {n,chars};
+}
+function builtinBox(){
+  const nc=Object.keys(BUILTIN_IMG.club).length,nm=Object.keys(BUILTIN_IMG.comp).length,nt=Object.keys(BUILTIN_IMG.trophy).length,d=builtinDupes();
+  return `<details class="bkd"><summary>Imagens incluídas no app</summary><p class="sub">O app já inclui escudos de clubes, logos de competições e troféus como arquivos. Eles sempre aparecem, mesmo em outro aparelho ou depois de limpar os dados do site, e não fazem parte do backup. Uma imagem que você adicionar à mão continua valendo por cima da incluída.</p><p class="sub"><b>${nc}</b> <span>escudos</span> · <b>${nm}</b> logos · <b>${nt}</b> <span>troféus</span></p>${d.n?`<p><b>${d.n}</b> <span>imagens repetidas guardadas no navegador</span> · ${Math.round(d.chars/1024)} KB</p><button class="btn" onclick="cleanBuiltinCopies()">Remover cópias e liberar espaço</button>`:'<p class="sub">Nenhuma cópia repetida guardada no navegador.</p>'}</details>`;
+}
+function cleanBuiltinCopies(){
+  const d=builtinDupes();if(!d.n)return;
+  if(!confirm('Remover '+d.n+' imagens guardadas no navegador que já estão incluídas no app? Elas continuam aparecendo. Se quiser, faça um backup antes.'))return;
+  const strip=(o,kind,pre)=>{if(!o)return;Object.keys(o).forEach(k=>{const v=o[k];if(typeof v!=='string'||v.indexOf('data:image/')!==0)return;const nk=pre?(k.indexOf(pre)===0?k.slice(pre.length):null):k;if(nk!=null&&BUILTIN_IMG[kind][nk])delete o[k]})};
+  strip(CLUB_DB.images,'club','');saveClubDb();
+  IX.list.forEach(c=>{
+    if(c.id===IX.cur){strip(S.img,'club','club:');strip(S.img,'comp','comp:');strip(S.img,'trophy','trophy:');save();return}
+    try{const o=careerRaw(c.id);if(!o||!o.img)return;strip(o.img,'club','club:');strip(o.img,'comp','comp:');strip(o.img,'trophy','trophy:');localStorage.setItem(keyOf(c.id),JSON.stringify(o))}catch(e){}
+  });
+  render();
+}
+let MENU=true,menuView='home',deferredInstall=null;
+const LOGO_SVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220"><defs><linearGradient id="lgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6f8f"/><stop offset="1" stop-color="#14213d"/></linearGradient><clipPath id="lgc"><circle cx="100" cy="100" r="44"/></clipPath></defs><path d="M100 8 L184 34 V108 C184 156 148 192 100 212 C52 192 16 156 16 108 V34 Z" fill="url(#lgg)" stroke="#f4c542" stroke-width="8" stroke-linejoin="round"/><path d="M100 22 L172 44 V108 C172 148 142 180 100 198 C58 180 28 148 28 108 V44 Z" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="2"/><circle cx="100" cy="100" r="44" fill="#fff"/><g clip-path="url(#lgc)" fill="#14213d"><polygon points="119.4,73.3 114.7,58.8 127.0,49.8 139.4,58.8 134.7,73.3"/><polygon points="131.4,110.2 143.7,101.2 156.1,110.2 151.4,124.7 136.1,124.7"/><polygon points="100.0,133.0 112.4,142.0 107.6,156.5 92.4,156.5 87.6,142.0"/><polygon points="68.6,110.2 63.9,124.7 48.6,124.7 43.9,110.2 56.3,101.2"/><polygon points="80.6,73.3 65.3,73.3 60.6,58.8 73.0,49.8 85.3,58.8"/></g><polygon points="100.0,84.0 115.2,95.1 109.4,112.9 90.6,112.9 84.8,95.1" fill="#14213d"/><g stroke="#14213d" stroke-width="3" stroke-linecap="round"><path d="M100.0 84.0 L100.0 56.0"/><path d="M115.2 95.1 L141.8 86.4"/><path d="M109.4 112.9 L125.9 135.6"/><path d="M90.6 112.9 L74.1 135.6"/><path d="M84.8 95.1 L58.2 86.4"/></g><circle cx="100" cy="100" r="44" fill="none" stroke="#14213d" stroke-width="3"/><path d="M40 150 H160 L151 165 L160 180 H40 L49 165 Z" fill="#f4c542" stroke="#14213d" stroke-width="3" stroke-linejoin="round"/><text x="100" y="173" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,Arial,sans-serif" font-weight="800" font-size="22" letter-spacing="3" fill="#14213d">DT</text></svg>`;
+function careerInfo(id){
+  let d=null;
+  try{if(id===IX.cur)d=S;else{const r=localStorage.getItem(keyOf(id));if(r)d=mig(JSON.parse(r))}}catch(e){d=null}
+  const base={name:((IX.list.find(c=>c.id===id)||{}).name)||'Carreira',jogos:0,titulos:0,temp:'',ts:0,vazia:true};
+  if(!d||!d.data||!Array.isArray(d.order))return base;
+  let j=0,t=0,any=false;
+  d.order.forEach(s=>{const x=d.data[s]||{};j+=(x.m||[]).length;t+=(x.res||[]).filter(r=>norm(r.r)==='campeao').length;if((x.m||[]).length||(x.p||[]).length||(x.t||[]).length||(x.aw||[]).length)any=true});
+  return {name:d.club||base.name,jogos:j,titulos:t,temp:d.cur||'',ts:d.ts||0,vazia:!any&&(d.club||'')==='Meu clube'};
+}
+function enterGame(t){MENU=false;document.body.classList.remove('menu-on');if(t)tab=t;render();window.scrollTo(0,0)}
+function openMenu(){save();MENU=true;menuView='home';render();window.scrollTo(0,0)}
+function menuGo(v){menuView=v;render();window.scrollTo(0,0)}
+function menuOpen(id){if(id!==IX.cur)switchCareer(id,'home');else enterGame('home')}
+function menuInstall(){const e=deferredInstall;if(!e)return;deferredInstall=null;try{e.prompt()}catch(x){}render()}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(MENU&&menuView==='home')render()});
+window.addEventListener('appinstalled',()=>{deferredInstall=null;if(MENU)render()});
+function renderMenu(){
+  applyAcc();document.body.classList.add('menu-on');
+  document.getElementById('top').innerHTML='';document.getElementById('tabs').innerHTML='';
+  document.getElementById('app').innerHTML=vMenu();renderedTab=null;
+  queueMicrotask(()=>{ui();armPickers();flashNow();bkOpen=false;translateUi()});
+}
+function vMenu(){
+  const all=IX.list.map(c=>Object.assign({id:c.id},careerInfo(c.id))).filter(c=>!c.vazia).sort((a,b)=>b.ts-a.ts),last=all[0];
+  const sum=c=>`<b>${c.jogos}</b> <span>jogos</span> · <b>${c.titulos}</b> <span>títulos</span> · <span>${esc(c.temp)}</span>`;
+  const back=`<button type="button" class="mn-back" onclick="menuGo('home')">← Voltar</button>`;
+  if(menuView==='config')return `<div class="menu"><div class="mn-top">${back}</div><label class="mn-skip"><input type="checkbox" ${IX.skipMenu?'checked':''} onchange="IX.skipMenu=this.checked;saveIx()"><span>Pular o menu ao abrir o app</span></label>${vConfig()}</div>`;
+  if(menuView==='new')return `<div class="menu"><div class="mn-top">${back}<h2>Nova carreira</h2></div><form class="mn-new" onsubmit="return newCareer(this)"><label>Novo time para treinar<input name="n" list="dl-career-clubs" autocomplete="off" placeholder="Buscar ou digitar o clube" required></label><datalist id="dl-career-clubs">${databaseClubNames().map(n=>`<option value="${esc(n)}">`).join('')}</datalist><button class="btn">Criar carreira com este clube</button></form></div>`;
+  if(menuView==='careers')return `<div class="menu"><div class="mn-top">${back}<h2>Minhas carreiras</h2></div><div class="mn-actions">${all.map(c=>`<button class="mn-btn" onclick="menuOpen('${c.id}')"><span>${esc(c.name)}${c.id===IX.cur?' ●':''}</span><small>${sum(c)}</small></button>`).join('')}</div></div>`;
+  const bk=IX.lastBk?new Date(IX.lastBk):null,days=bk&&!isNaN(bk)?Math.floor((Date.now()-bk)/864e5):null,
+    when=days==null?'<span>nunca</span>':bk.toLocaleDateString(appLanguage()==='pt'?'pt-BR':appLanguage()),warn=days==null||days>=7;
+  return `<div class="menu"><div class="mn-hero">${LOGO_SVG}<h1>Diário do Técnico</h1><p>Registro do seu modo carreira</p></div>
+  <div class="mn-actions">
+   ${last?`<button class="mn-btn main" onclick="menuOpen('${last.id}')"><span>Continuar carreira</span><small><b>${esc(last.name)}</b> · ${sum(last)}</small></button>`:''}
+   <button class="mn-btn ${last?'':'main'}" onclick="menuGo('new')"><span>Iniciar nova carreira</span></button>
+   ${all.length>1?`<button class="mn-btn" onclick="menuGo('careers')"><span>Minhas carreiras</span><small>${all.length} <span>carreiras</span></small></button>`:''}
+   <button class="mn-btn" onclick="menuGo('config')"><span>Configurações</span><small>Idioma, aparência, backup e mais</small></button>
+  </div>
+  <div class="mn-tiles"><button class="mn-tile ${warn?'warn':''}" onclick="bkOpen=true;menuGo('config')"><span>Backup e restauração</span><small>Último backup</small><b>${when}</b></button>
+   ${deferredInstall?`<button class="mn-tile" onclick="menuInstall()"><span>Instalar app</span><small>Abrir pela tela inicial, mesmo sem internet</small></button>`:''}</div>
+  <p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p></div>`;
+}
+let NEWS_QUIET=false,SEQC=null,HLQ=[],hlTimer=null,EDCACHE=[];
+const T3=(pt,en,es)=>({pt,en,es})[appLanguage()]||pt;
+const nrm=x=>norm(String(x||''));
+function careerSeq(){const out=[];S.order.forEach(s=>{const ms=(S.data[s].m||[]).map((m,i)=>({m,season:s,i}));if(ms.length&&ms.every(x=>x.m.date))ms.sort((a,b)=>a.m.date<b.m.date?-1:a.m.date>b.m.date?1:a.i-b.i);out.push(...ms)});return out}
+function addDays(iso,n){const[y,m,d]=iso.split('-').map(Number),dt=new Date(Date.UTC(y,m-1,d,12));dt.setUTCDate(dt.getUTCDate()+n);return dt.toISOString().slice(0,10)}
+function weekStart(iso){const[y,m,d]=iso.split('-').map(Number);return addDays(iso,-((new Date(Date.UTC(y,m-1,d,12)).getUTCDay()+6)%7))}
+function milestoneNews(match,season){
+  const d=S.data[season];if(!d||!match||!match.id)return;
+  const pre='ms:'+match.id+':';d.news=(d.news||[]).filter(x=>!x.key||x.key.indexOf(pre)!==0);
+  const seq=SEQC||careerSeq(),idx=seq.findIndex(x=>x.m===match);if(idx<0)return;
+  const club=S.club,cur=match,past=seq.slice(0,idx),W=x=>x.gp>x.gc,Lz=x=>x.gp<x.gc;
+  const add=(t,imp,T,B)=>addNews(season,{key:pre+t,kind:'milestone',matchDate:match.date||'',importance:imp,title:T[0],titleByLang:{pt:T[0],en:T[1],es:T[2]},body:B[0],bodyByLang:{pt:B[0],en:B[1],es:B[2]},competition:match.c||''});
+  const n=idx+1,wins=seq.slice(0,n).filter(x=>W(x.m)).length,pc=Math.round(wins/n*100);
+  if([25,50,100,150,200,250,300,400,500].includes(n))add('games',n>=100?76:70,[`Marco: ${n} jogos no comando do ${club}`,`Milestone: ${n} matches in charge of ${club}`,`Hito: ${n} partidos al mando del ${club}`],[`${club} chega a ${n} partidas sob o seu comando, com ${wins} vitórias (${pc}%).`,`${club} reach ${n} matches under your command, with ${wins} wins (${pc}%).`,`${club} llega a ${n} partidos bajo tu mando, con ${wins} victorias (${pc}%).`]);
+  const nameOf=(s,k)=>{const p=(S.data[s].p||[]).find(q=>String(q.k)===String(k));return p?p.n:null},goals={};
+  past.forEach(x=>Object.entries(x.m.pl||{}).forEach(([k,v])=>{const nm=nameOf(x.season,k);if(nm&&+v.g>0)goals[nm]=(goals[nm]||0)+(+v.g)}));
+  Object.entries(cur.pl||{}).forEach(([k,v])=>{const nm=nameOf(season,k),g=+v.g||0;if(!nm||!g)return;const b=goals[nm]||0,m=[10,25,50,75,100,150,200,250,300].find(z=>b<z&&b+g>=z);if(m)add('g:'+nm+':'+m,m>=50?78:72,[`${nm} chega aos ${m} gols pelo ${club}`,`${nm} reaches ${m} goals for ${club}`,`${nm} llega a los ${m} goles con el ${club}`],[`O gol número ${m} de ${nm} saiu contra o ${cur.adv}.`,`${nm} scored goal number ${m} against ${cur.adv}.`,`${nm} marcó el gol número ${m} ante ${cur.adv}.`])});
+  const mg=cur.gp-cur.gc;
+  if(mg>=3&&past.length>=10&&!past.some(x=>W(x.m)&&x.m.gp-x.m.gc>=mg))add('rout',mg>=4?80:74,[`Maior vitória da carreira: ${cur.gp}–${cur.gc} sobre o ${cur.adv}`,`Biggest win of the career: ${cur.gp}–${cur.gc} over ${cur.adv}`,`Mayor victoria de la carrera: ${cur.gp}–${cur.gc} ante ${cur.adv}`],[`Nenhum resultado anterior teve uma diferença tão grande.`,`No previous result had such a big margin.`,`Ningún resultado anterior tuvo una diferencia tan grande.`]);
+  const all=past.map(x=>x.m).concat([cur]);let u=0,w=0,l=0;
+  for(let i=all.length-1;i>=0&&!Lz(all[i]);i--)u++;for(let i=all.length-1;i>=0&&W(all[i]);i--)w++;for(let i=all.length-1;i>=0&&Lz(all[i]);i--)l++;
+  if(!Lz(cur)&&[5,8,10,15,20,25,30].includes(u))add('unb',u>=10?78:70,[`${club} chega a ${u} jogos sem perder`,`${club} reach ${u} games unbeaten`,`${club} suma ${u} partidos sin perder`],[`A sequência invicta passa por todas as competições.`,`The unbeaten run covers all competitions.`,`La racha invicta abarca todas las competiciones.`]);
+  if(W(cur)&&[4,5,6,7,8,10,12,15].includes(w))add('wins',w>=5?72:66,[`${w} vitórias seguidas para o ${club}`,`${w} wins in a row for ${club}`,`${w} victorias seguidas para el ${club}`],[`A última vitória foi sobre o ${cur.adv}.`,`The latest win came against ${cur.adv}.`,`La última victoria fue ante ${cur.adv}.`]);
+  if(Lz(cur)&&[3,4,5,6].includes(l))add('loss',l>=4?72:62,[`${l} derrotas seguidas: a pressão aumenta`,`${l} straight defeats: pressure builds`,`${l} derrotas seguidas: aumenta la presión`],[`O ${club} não vence há ${l} jogos.`,`${club} have lost ${l} in a row.`,`El ${club} lleva ${l} partidos sin ganar.`]);
+  const vs=past.filter(x=>nrm(x.m.adv)===nrm(cur.adv));
+  if(W(cur)&&vs.length>=3&&!vs.some(x=>W(x.m)))add('h2h',76,[`Enfim! ${club} vence o ${cur.adv} após ${vs.length} jogos`,`At last! ${club} beat ${cur.adv} after ${vs.length} games`,`¡Por fin! ${club} vence al ${cur.adv} tras ${vs.length} partidos`],[`Era a primeira vitória sobre o ${cur.adv} na carreira.`,`It was the first win over ${cur.adv} of the career.`,`Era la primera victoria sobre el ${cur.adv} de la carrera.`]);
+}
+function buildEditions(){
+  const seq=careerSeq(),map=new Map(),sidx=s=>S.order.indexOf(s);
+  const get=(season,id,start,kind)=>{const key=season+'|'+id;if(!map.has(key))map.set(key,{key,season,kind,start,ms:[],news:[]});return map.get(key)};
+  const edOf=x=>{if(x.m.date){const w=weekStart(x.m.date);return get(x.season,w,w,'w')}const ch=Math.floor(x.i/5);return get(x.season,'r'+ch,'1'+String(ch).padStart(3,'0'),'retro')};
+  seq.forEach(x=>edOf(x).ms.push(x));
+  S.order.forEach(s=>{(S.data[s].news||[]).forEach(n=>{
+    if(!n||n.kind==='interview')return;let e=null;
+    if(n.kind==='match'||n.kind==='milestone'){const id=String(n.key).split(':')[1],x=seq.find(q=>q.m.id===id);if(!x)return;e=edOf(x)}
+    else if(n.kind==='champion'){const f=seq.find(q=>q.season===s&&nrm(q.m.c)===nrm(n.competition)&&/^Final/.test(q.m.ph||''));if(f)e=edOf(f)}
+    if(!e){const list=[...map.values()].filter(q=>q.season===s).sort((a,b)=>a.start<b.start?-1:1);e=(n.kind==='champion'?list[list.length-1]:list[0])||get(s,'pre','0','pre')}
+    e.news.push(n)})});
+  const eds=[...map.values()].sort((a,b)=>sidx(a.season)-sidx(b.season)||(a.start<b.start?-1:a.start>b.start?1:0));
+  eds.forEach((e,i)=>e.no=i+1);return eds;
+}
+function edRange(e,locale){if(e.kind==='retro'&&e.ms.length)return T3('Retrospectiva · jogos','Retrospective · games','Retrospectiva · partidos')+' '+(e.ms[0].i+1)+'–'+(e.ms[e.ms.length-1].i+1);if(e.kind!=='w')return T3('Pré-temporada','Pre-season','Pretemporada');const f=x=>formatMatchDate(x,locale).replace(/\s*(de\s)?\d{4}$/,'');return f(e.start)+' – '+f(addDays(e.start,6))}
+function edGo(i){const e=EDCACHE[i];if(e){sub.ed=e.key;render();window.scrollTo(0,0)}}
+function vJornal(){
+  ensureJournalArticles();
+  if(IX.hlUnread&&IX.hlUnread.length){IX.hlUnread=[];saveIx()}
+  const lang=appLanguage(),locale=lang==='en'?'en-US':lang==='es'?'es-ES':'pt-BR',eds=buildEditions();EDCACHE=eds;
+  if(!eds.length)return `<section class="paper-page"><p class="paper-empty">${T3('O jornal ainda não tem partidas ou acontecimentos registrados.','There are no matches or events recorded yet.','Todavía no hay partidos ni acontecimientos registrados.')}</p></section>`;
+  let at=eds.findIndex(x=>x.key===sub.ed);if(at<0)at=eds.length-1;const e=eds[at];sub.ed=e.key;const wk=e.kind==='w',per=wk?T3('da semana','of the week','de la semana'):T3('do período','of the period','del período');
+  const club=S.club,ms=e.ms.map(x=>x.m),J=ms.length,V=ms.filter(m=>m.gp>m.gc).length,E=ms.filter(m=>m.gp===m.gc).length,D=J-V-E,GP=ms.reduce((a,m)=>a+(+m.gp||0),0),GC=ms.reduce((a,m)=>a+(+m.gc||0),0);
+  const perf={};e.ms.forEach(x=>Object.entries(x.m.pl||{}).forEach(([k,v])=>{const p=(S.data[x.season].p||[]).find(q=>String(q.k)===String(k));if(!p)return;const o=perf[p.n]||(perf[p.n]={n:p.n,pos:p.pos,g:0,a:0,r:[]});o.g+=+v.g||0;o.a+=+v.a||0;if(v.n!==''&&v.n!=null&&Number.isFinite(+v.n))o.r.push(+v.n)}));
+  const star=Object.values(perf).map(o=>{const avg=o.r.length?o.r.reduce((a,b)=>a+b,0)/o.r.length:0;return {...o,avg,score:o.g*3+o.a*2+avg}}).filter(o=>o.g+o.a>0||o.avg>=7.5).sort((a,b)=>b.score-a.score)[0];
+  const pool=e.news.filter(n=>n.kind!=='match'||(n.importance||0)>=52).sort((a,b)=>(b.importance||0)-(a.importance||0));
+  const h=[...e.key].reduce((a,ch)=>(a*31+ch.charCodeAt(0))>>>0,7),pick=(a)=>a[h%a.length],pt=(x)=>x.titleByLang&&x.titleByLang[lang]||x.title,bd=(x)=>x.bodyByLang&&x.bodyByLang[lang]||x.body;
+  let lead=pool[0]&&(pool[0].importance||0)>=55?pool.shift():null,leadT='',leadB='';
+  if(lead){leadT=pt(lead);leadB=bd(lead)}
+  else if(J){const m=ms[0],a=esc(m.adv);
+    leadT=(J>1&&!wk)?T3(`${club} soma ${V}V ${E}E ${D}D em ${J} jogos`,`${club}: ${V}W ${E}D ${D}L in ${J} games`,`${club} suma ${V}V ${E}E ${D}D en ${J} partidos`):J===1?(m.gp>m.gc?pick([T3(`${club} vence o ${m.adv} por ${m.gp}–${m.gc}`,`${club} beat ${m.adv} ${m.gp}–${m.gc}`,`${club} vence al ${m.adv} por ${m.gp}–${m.gc}`),T3(`Três pontos: ${club} supera o ${m.adv}`,`Three points: ${club} get past ${m.adv}`,`Tres puntos: ${club} supera al ${m.adv}`)]):m.gp===m.gc?pick([T3(`${club} e ${m.adv} ficam no empate`,`${club} and ${m.adv} share the points`,`${club} y ${m.adv} empatan`),T3(`Empate por ${m.gp}–${m.gc} com o ${m.adv}`,`${m.gp}–${m.gc} draw with ${m.adv}`,`Empate ${m.gp}–${m.gc} con el ${m.adv}`)]):pick([T3(`${club} tropeça diante do ${m.adv}`,`${club} stumble against ${m.adv}`,`${club} tropieza ante el ${m.adv}`),T3(`Derrota para o ${m.adv} por ${m.gc}–${m.gp}`,`Defeat to ${m.adv} by ${m.gc}–${m.gp}`,`Derrota ante el ${m.adv} por ${m.gc}–${m.gp}`)])):
+    D===0&&E===0?pick([T3(`Semana perfeita: ${V} vitórias em ${J} jogos`,`Perfect week: ${V} wins in ${J} games`,`Semana perfecta: ${V} victorias en ${J} partidos`),T3(`${club} vence todos os jogos da semana`,`${club} win every game this week`,`${club} gana todos los partidos de la semana`)]):D===0?pick([T3(`${club} fecha a semana sem perder`,`${club} stay unbeaten this week`,`${club} cierra la semana sin perder`),T3(`Semana invicta: ${V}V e ${E}E`,`Unbeaten week: ${V}W ${E}D`,`Semana invicta: ${V}V y ${E}E`)]):V===0&&E===0?pick([T3(`Semana para esquecer: ${D} derrotas`,`A week to forget: ${D} defeats`,`Semana para olvidar: ${D} derrotas`),T3(`${club} perde todos os jogos da semana`,`${club} lose every game this week`,`${club} pierde todos los partidos de la semana`)]):pick([T3(`Semana de altos e baixos para o ${club}`,`Ups and downs for ${club}`,`Semana de altibajos para el ${club}`),T3(`${V}V ${E}E ${D}D: semana irregular`,`${V}W ${E}D ${D}L: an uneven week`,`${V}V ${E}E ${D}D: semana irregular`)]);
+    leadB=T3(`Foram ${J} ${J>1?'jogos':'jogo'}: ${V}V ${E}E ${D}D, com ${GP} gols marcados e ${GC} sofridos.`,`${J} ${J>1?'games':'game'}: ${V}W ${E}D ${D}L, ${GP} goals scored and ${GC} conceded.`,`${J} ${J>1?'partidos':'partido'}: ${V}V ${E}E ${D}D, con ${GP} goles a favor y ${GC} en contra.`)}
+  else if(pool[0]){lead=pool.shift();leadT=pt(lead);leadB=bd(lead)}
+  const story=(x,f)=>`<article class="paper-story${f?' paper-lead':''}"><div class="paper-story-meta"><span>${x.kind==='champion'?T3('Título','Title','Título'):x.kind==='transfer'?T3('Mercado','Transfer market','Mercado'):x.kind==='milestone'?T3('Marcos','Milestones','Hitos'):T3('Partida','Match','Partido')}</span>${x.competition?`<span>${esc(x.competition)}</span>`:''}</div><h2>${esc(f&&!x.title?'':(f?leadT:pt(x)))}</h2><p>${esc(f?leadB:bd(x))}</p></article>`;
+  const rows=e.ms.map(x=>{const m=x.m,w=m.gp>m.gc?'w':m.gp<m.gc?'l':'d',dt=m.date?m.date.slice(8,10)+'/'+m.date.slice(5,7):'#'+(x.i+1);return `<span>${dt}</span><span>${clubBadge(m.adv,20)} ${esc(m.adv)} <small>${esc(m.ph||m.c||'')}</small></span><b class="sc ${w}">${m.gp}–${m.gc}</b>`}).join('');
+  const opts=[...eds].reverse().map(x=>`<option value="${esc(x.key)}"${x===e?' selected':''}>${T3('Nº','No.','Nº')} ${x.no} · ${esc(edRange(x,locale))} · ${esc(x.season)}</option>`).join('');
+  const mode=IX.hlMode||'destaques';
+  return `<section class="paper-page"><header class="paper-masthead"><div class="paper-overline"><span>${T3('DIÁRIO DO TÉCNICO','THE MANAGER DIARY','DIARIO DEL TÉCNICO')}</span><span>${T3('EDIÇÃO','EDITION','EDICIÓN')} Nº ${e.no}</span></div><div class="paper-underline"><span>${esc(edRange(e,locale))}</span><span>${esc(e.season)}</span></div></header>
+  <div class="ed-nav"><button type="button" class="chip2" onclick="edGo(${at-1})" ${at?'':'disabled'} aria-label="${T3('Edição anterior','Previous edition','Edición anterior')}">←</button><select onchange="sub.ed=this.value;render()">${opts}</select><button type="button" class="chip2" onclick="edGo(${at+1})" ${at<eds.length-1?'':'disabled'} aria-label="${T3('Próxima edição','Next edition','Edición siguiente')}">→</button></div>
+  ${leadT?story(lead||{kind:'match',competition:J?ms[0].c:'',title:'x'},true):''}
+  ${J?`<div class="ed-box"><h3>${T3('Resultados','Results','Resultados')} ${per}</h3><div class="ed-res">${rows}</div></div><div class="ed-box"><h3>${T3('Em números','By the numbers','En números')}</h3><div class="ed-nums"><span><b>${V}V ${E}E ${D}D</b>${T3('campanha','record','campaña')}</span><span><b>${GP}:${GC}</b>${T3('gols','goals','goles')}</span>${star?`<span><b>${esc(star.n)}</b>${T3('craque','player','jugador')} ${per} · ${star.g?star.g+' '+T3('gol(s)','goal(s)','gol(es)')+' ':''}${star.a?star.a+' '+T3('assist.','assists','asist.')+' ':''}${star.avg?T3('nota','rating','nota')+' '+star.avg.toFixed(1):''}</span>`:''}</div></div>`:''}
+  ${pool.slice(0,3).map(x=>story(x,false)).join('')}
+  <p class="paper-footer">${T3('Avisos do Jornal','Newspaper alerts','Avisos del Periódico')}: <select onchange="IX.hlMode=this.value;saveIx()"><option value="destaques"${mode==='destaques'?' selected':''}>${T3('só destaques','highlights only','solo destacados')}</option><option value="tudo"${mode==='tudo'?' selected':''}>${T3('todas as notícias','all stories','todas las noticias')}</option><option value="off"${mode==='off'?' selected':''}>${T3('desligados','off','desactivados')}</option></select></p></section>`;
+}
+function editionOf(key){return buildEditions().find(e=>e.news.some(n=>n.key===key))}
+function hlNew(item){
+  const mode=IX.hlMode||'destaques';if(mode==='off'||item.kind==='interview')return;
+  const big=item.kind==='champion';if(mode==='destaques'&&(item.importance||0)<75&&!big)return;
+  IX.hlUnread=(IX.hlUnread||[]).concat(item.key).slice(-20);saveIx();HLQ.push(item);clearTimeout(hlTimer);hlTimer=setTimeout(showHl,450);
+}
+function showHl(){
+  const q=HLQ.splice(0).sort((a,b)=>(b.importance||0)-(a.importance||0));if(!q.length)return;
+  const it=q[0],lang=appLanguage(),title=it.titleByLang&&it.titleByLang[lang]||it.title,body=it.bodyByLang&&it.bodyByLang[lang]||it.body||'',more=q.length>1?` (+${q.length-1})`:'';
+  document.querySelectorAll('.hl-toast,.hl-modal').forEach(x=>x.remove());
+  const el=document.createElement('div');
+  if(it.kind==='champion'){el.className='hl-modal';el.innerHTML=`<div class="hl-card"><div style="font-size:34px">📰</div><small>${T3('EDIÇÃO EXTRA','EXTRA EDITION','EDICIÓN EXTRA')}</small><h2>${esc(title)}</h2><p>${esc(body)}</p><div class="hl-actions"><button type="button" class="btn" data-k="${esc(it.key)}" onclick="openHl(this.dataset.k)">${T3('Ler no Jornal','Read in the paper','Leer en el periódico')}</button><button type="button" class="chip2" onclick="this.closest('.hl-modal').remove()">${T3('Fechar','Close','Cerrar')}</button></div></div>`}
+  else{el.className='hl-toast';el.innerHTML=`<div style="flex:1;min-width:0"><small>📰 ${T3('Destaque no Jornal','Newspaper highlight','Destacado en el periódico')}${more}</small><b>${esc(title)}</b></div><button type="button" class="chip2" data-k="${esc(it.key)}" onclick="openHl(this.dataset.k)">${T3('Ler','Read','Leer')}</button><button type="button" class="chip2" aria-label="${T3('Fechar','Close','Cerrar')}" onclick="this.closest('.hl-toast').remove()">×</button>`;setTimeout(()=>el.remove(),9000)}
+  document.body.appendChild(el);
+}
+function openHl(key){document.querySelectorAll('.hl-toast,.hl-modal').forEach(x=>x.remove());const e=editionOf(key);if(e)sub.ed=e.key;MENU=false;document.body.classList.remove('menu-on');tab='home';sub.home='n';render();window.scrollTo(0,0)}
 let storagePersisted=null;
 async function protectStorage(){try{if(navigator.storage&&navigator.storage.persist){storagePersisted=(await navigator.storage.persisted())||(await navigator.storage.persist())}}catch(e){}}
 const storageNote=()=>storagePersisted===true?'<p class="sub">Armazenamento protegido: o navegador não deve apagar estes dados sozinho.</p>':storagePersisted===false?'<p class="sub">O navegador não garantiu proteção contra limpeza automática. Instale o app na tela inicial e faça backups com frequência.</p>':'';
@@ -855,7 +1050,7 @@ function downloadBk(){
 function restoreFile(file){if(!file)return;const rd=new FileReader();rd.onerror=()=>{bkm='Não foi possível ler o arquivo de backup.';render()};rd.onload=()=>restoreText(String(rd.result||''));rd.readAsText(file)}
 function restoreText(text){const box=document.getElementById('bk');if(box)box.value=text;return prepareRestore(text)}
 function languageBox(){const lang=appLanguage();return `<details class="bkd"><summary>Idioma e versão</summary><label>Idioma da interface<select onchange="setLanguage(this.value)"><option value="pt" ${lang==='pt'?'selected':''}>Português</option><option value="es" ${lang==='es'?'selected':''}>Español</option><option value="en" ${lang==='en'?'selected':''}>English</option></select></label><p class="sub">Versão do app: <b>${APP_VERSION}</b></p><p class="sub">As carreiras ficam neste navegador e aparelho. Exporte um backup antes de trocar de aparelho, navegador ou limpar os dados do site.</p></details>`}
-function vConfig(){return `<h2>Configurações</h2>${languageBox()}${appearBox()}${assetLibraryBox()}${matchBox()}${careersBox()}${backupBox()}`}
+function vConfig(){return `<h2>Configurações</h2>${languageBox()}${appearBox()}${assetLibraryBox()}${builtinBox()}${matchBox()}${careersBox()}${backupBox()}`}
 function assetClubNames(){
  const names=new Set([...Object.keys(CLUB_BADGES),...(CLUB_DB.clubs||[]),...(S.assetClubs||[]),String(S.nome||S.club||'').trim()].filter(Boolean));
  S.order.forEach(se=>S.data[se].m.forEach(m=>{if(m.adv)names.add(String(m.adv).trim())}));
@@ -868,7 +1063,7 @@ function assetImage(key,fallback){
 function assetRow(kind,name){
  const key=(kind==='club'?'club:':'comp:')+norm(name);
  if(kind==='club'){
-  const current=CLUB_DB.images&&CLUB_DB.images[norm(name)],fallback=clubBadgeFile(name)?'./assets/clubs/'+clubBadgeFile(name):'';
+  const current=CLUB_DB.images&&CLUB_DB.images[norm(name)],fallback=builtinSrc('club',name)||(clubBadgeFile(name)?'./assets/clubs/'+clubBadgeFile(name):'');
   return `<div class="asset-item"><img class="asset-preview" data-club="${esc(name)}" src="${current||fallback||'./icons/icon-192.png'}" alt=""><span class="asset-name">${esc(name)}</span><span class="asset-actions"><label class="sm">${current?'Trocar escudo':'Adicionar escudo'}<input type="file" accept="image/*" hidden data-asset-key="${esc(key)}" onchange="setImg(this.dataset.assetKey,this.files[0])"></label>${current?`<button type="button" class="x" title="Remover escudo personalizado" data-asset-key="${esc(key)}" onclick="delImg(this.dataset.assetKey)">✕</button>`:''}</span></div>`;
  }
  const logoKey=key,trophyKey='trophy:'+norm(name),logo=S.img&&S.img[logoKey],cup=S.img&&(S.img[trophyKey]||S.img[name]);
@@ -1001,7 +1196,7 @@ const ico=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 const NAVB=[['home','Resumo'],['partidas','Partidas'],['elenco','Elenco'],['transf','Mercado'],['rank','Estatísticas'],['config','Configurações']];
 function go(k){tab=k;render();const e=document.getElementById('app');if(e&&e.classList){e.classList.remove('tin');void e.offsetWidth;e.classList.add('tin')}if(typeof window!=='undefined'&&window.scrollTo)window.scrollTo(0,0)}
 function navHtml(){
-  return NAVB.map(([k,n])=>`<button role="tab" aria-selected="${k===tab}" onclick="go('${k}')">${ico(k)}<span>${k==='config'?'<span class="nl">'+n+'</span><span class="ns">Config.</span>':n}</span></button>`).join('');
+  return NAVB.map(([k,n])=>`<button role="tab" aria-selected="${k===tab}" onclick="go('${k}')">${ico(k)}${k==='home'&&(IX.hlUnread||[]).length?'<i class="hl-dot"></i>':''}<span>${k==='config'?'<span class="nl">'+n+'</span><span class="ns">Config.</span>':n}</span></button>`).join('');
 }
 const heroStyle=()=>okHex(S.cor1)?`background:${S.cor1};color:${txtOn(S.cor1)}`:'';
 function vHome(){
@@ -1053,12 +1248,12 @@ function seasonChampions(season){const d=S.data[season];if(!d)return[];const out
 function allChampions(){return S.order.flatMap(seasonChampions)}
 function clubRankRows(){const clubs=new Map(),add=n=>{n=String(n||'').trim();if(!n||/^sele[cç][aã]o /i.test(n))return;const k=norm(n);if(!clubs.has(k))clubs.set(k,n)};databaseClubNames().forEach(add);add(S.club);S.order.forEach(s=>{const d=S.data[s];d.m.forEach(m=>add(m.adv));d.t.forEach(t=>add(t.cl));seasonChampions(s).forEach(c=>add(c.club))});const order=new Map(S.order.map((s,i)=>[s,i])),titles=allChampions();return[...clubs.entries()].map(([key,name])=>{let rawBonus=0,count=0;titles.filter(t=>norm(t.club)===key).forEach(t=>{const age=Math.max(0,S.order.length-1-(order.get(t.season)||0));rawBonus+=compTitlePoints(t.competition)*Math.max(.2,1-age*.1);count++});const base=baseClubPoints(name),bonus=Math.min(12,rawBonus),points=Math.min(100,base+bonus);return{name,points:+points.toFixed(1),titles:count,base:+base.toFixed(1),bonus:+bonus.toFixed(1)}}).sort((a,b)=>b.points-a.points||b.base-a.base||b.titles-a.titles||a.name.localeCompare(b.name,'pt-BR')).map((x,i)=>({...x,rank:i+1}))}
 function rankPosition(name){const row=clubRankRows().find(x=>norm(x.name)===norm(name));return row?row.rank:0}
-function addNews(season,item){const d=S.data[season];if(!d)return;d.news=Array.isArray(d.news)?d.news:[];const i=d.news.findIndex(x=>x.key===item.key);const value={createdAt:Date.now(),season,...item};if(i>=0)d.news[i]=value;else{d.news.unshift(value);if(typeof sub!=="undefined"&&sub.home==="n")sub.newsPage=0}}
+function addNews(season,item){const d=S.data[season];if(!d)return;d.news=Array.isArray(d.news)?d.news:[];const i=d.news.findIndex(x=>x.key===item.key);const value={createdAt:Date.now(),season,...item};if(i>=0)d.news[i]=value;else{d.news.unshift(value);if(!NEWS_QUIET&&!QUIET_CH)hlNew(value);if(typeof sub!=="undefined"&&sub.home==="n")sub.newsPage=0}}
 function maybeMatchNews(match,season){
   const d=S.data[season];if(!d||!match)return;
   if(!match.id)match.id=`m-${season}-${Math.max(0,d.m.indexOf(match))}`;
   const key=`match:${match.id}`;d.news=(d.news||[]).filter(x=>x.key!==key);
-  const won=match.gp>match.gc,draw=match.gp===match.gc,margin=Math.abs(match.gp-match.gc),opponentPower=baseClubPoints(match.adv),ourPower=baseClubPoints(S.club),index=Math.max(0,d.m.indexOf(match)),recent=d.m.slice(0,index+1).slice(-3),winRun=recent.length===3&&recent.every(x=>x.gp>x.gc),lossRun=recent.length===3&&recent.every(x=>x.gp<x.gc);
+  const won=match.gp>match.gc,draw=match.gp===match.gc,margin=Math.abs(match.gp-match.gc),opponentPower=baseClubPoints(match.adv),ourPower=baseClubPoints(S.club),index=Math.max(0,d.m.indexOf(match)),recent=d.m.slice(0,index+1).slice(-3),winRun=recent.length===3&&recent.every(x=>x.gp>x.gc)&&!(index>=3&&d.m[index-3].gp>d.m[index-3].gc),lossRun=recent.length===3&&recent.every(x=>x.gp<x.gc)&&!(index>=3&&d.m[index-3].gp<d.m[index-3].gc);
   const lines=Object.entries(match.pl||{}).map(([k,x])=>({p:d.p.find(q=>String(q.k)===String(k)),x:x||{}})).filter(v=>v.p),scorers=lines.filter(v=>(+v.x.g||0)>0).sort((a,b)=>(+b.x.g||0)-(+a.x.g||0)),assisters=lines.filter(v=>(+v.x.a||0)>0).sort((a,b)=>(+b.x.a||0)-(+a.x.a||0)),rated=lines.filter(v=>v.x.n!==''&&v.x.n!=null&&Number.isFinite(+v.x.n)).sort((a,b)=>(+b.x.n)-(+a.x.n))[0];
   const scorer=scorers[0],assistant=assisters[0],hatTrick=!!scorer&&(+scorer.x.g||0)>=3,brace=!!scorer&&(+scorer.x.g||0)===2,upset=won&&opponentPower-ourPower>=12,highRating=!!rated&&(+rated.x.n)>=8;
   let titleByLang,highlight={pt:'',en:'',es:''};
@@ -1076,12 +1271,13 @@ function maybeMatchNews(match,season){
   else titleByLang={pt:`${S.club} é derrotado por ${match.adv}`,en:`${S.club} fall to ${match.adv}`,es:`${S.club} cae ante ${match.adv}`};
   const competition=match.c||'Amistoso',stage=match.ph?` (${match.ph})`:'',score=`${match.gp}–${match.gc}`,bodyByLang={pt:`${S.club} ${won?'venceu':draw?'empatou com':'perdeu para'} ${match.adv} por ${score}, em ${competition}${stage}.${highlight.pt?' '+highlight.pt:''}`,en:`${S.club} ${won?'beat':draw?'drew with':'lost to'} ${match.adv} ${score} in ${competition}${stage}.${highlight.en?' '+highlight.en:''}`,es:`${S.club} ${won?'venció a':draw?'empató con':'perdió ante'} ${match.adv} ${score}, en ${competition}${stage}.${highlight.es?' '+highlight.es:''}`};
   let importance=24;if(upset)importance+=28;if(margin>=3)importance+=18;if(hatTrick)importance+=24;if(highRating)importance+=12;if(winRun||lossRun)importance+=12;
-  addNews(season,{key,kind:'match',revision:2,matchDate:match.date||'',importance:Math.min(100,importance),title:titleByLang.pt,titleByLang,body:bodyByLang.pt,bodyByLang,competition});
+  addNews(season,{key,kind:'match',revision:3,matchDate:match.date||'',importance:Math.min(100,importance),title:titleByLang.pt,titleByLang,body:bodyByLang.pt,bodyByLang,competition});
+  try{milestoneNews(match,season)}catch(e){}
 }
 function maybeTransferNews(season,transfer,player){const important=(+player.ov||0)>=80||(+transfer.v||0)>=30||baseClubPoints(transfer.cl)>=70;if(!important)return;const incoming=transfer.tipo==='compra'||transfer.tipo==='empin',verb=incoming?'chega ao clube':'deixa o elenco',club=transfer.cl||'o mercado',action=incoming?['chega ao clube','joins the club','llega al club']:['deixa o elenco','leaves the squad','deja la plantilla'],titleByLang={pt:`Movimento de impacto: ${transfer.j} ${action[0]}`,en:`Major move: ${transfer.j} ${action[1]}`,es:`Movimiento de impacto: ${transfer.j} ${action[2]}`},value=transfer.v?`${fm(transfer.v)} milhões`:'valor não informado',bodyByLang={pt:`A negociação envolve ${club} e foi registrada por ${value}. Overall informado: ${player.ov||'não informado'}.`,en:`The deal involves ${club} and was recorded at ${transfer.v?`${fm(transfer.v)} million`:'an undisclosed fee'}. Recorded overall: ${player.ov||'not provided'}.`,es:`La operación involucra a ${club} y se registró por ${transfer.v?`${fm(transfer.v)} millones`:'un valor no revelado'}. Media informada: ${player.ov||'no disponible'}.`};addNews(season,{key:`transfer:${transfer.id}`,importance:72,kind:'transfer',title:titleByLang.pt,titleByLang,body:bodyByLang.pt,bodyByLang,competition:''})}
-function ensureJournalArticles(){let changed=false;S.order.forEach(season=>{const d=S.data[season];d.news=Array.isArray(d.news)?d.news:[];d.m.forEach((m,i)=>{if(!m.id){m.id=`m-${season}-${i}`;changed=true}const article=d.news.find(x=>x.key===`match:${m.id}`);if(!article||article.revision!==2||article.matchDate!==(m.date||'')){maybeMatchNews(m,season);changed=true}})});if(changed)persist()}
+function ensureJournalArticles(){let changed=false;NEWS_QUIET=true;SEQC=careerSeq();try{S.order.forEach(season=>{const d=S.data[season];d.news=Array.isArray(d.news)?d.news:[];d.m.forEach((m,i)=>{if(!m.id){m.id=`m-${season}-${i}`;changed=true}const article=d.news.find(x=>x.key===`match:${m.id}`);if(!article||article.revision!==3||article.matchDate!==(m.date||'')){maybeMatchNews(m,season);changed=true}})})}finally{NEWS_QUIET=false;SEQC=null}if(changed)persist()}
 function setNewsPage(page){sub.newsPage=Math.max(0,+page||0);render()}
-function vJornal(){
+function vJornalOld(){
   ensureJournalArticles();
   const lang=appLanguage(),copy={pt:{paper:'DIÁRIO DO TÉCNICO',edition:'EDIÇÃO DA CARREIRA',club:'Caderno do clube',empty:'O jornal ainda não tem partidas ou acontecimentos registrados.',match:'Partida',champion:'Título',transfer:'Mercado',other:'Clube',page:'Página',of:'de',issue:'Notícias da carreira',footer:'Feito com os registros da sua carreira.'},en:{paper:'THE MANAGER DIARY',edition:'CAREER EDITION',club:'Club section',empty:'There are no matches or events recorded yet.',match:'Match',champion:'Title',transfer:'Transfer market',other:'Club',page:'Page',of:'of',issue:'Career news',footer:'Built from your career records.'},es:{paper:'DIARIO DEL TÉCNICO',edition:'EDICIÓN DE LA CARRERA',club:'Sección del club',empty:'Todavía no hay partidos ni acontecimientos registrados.',match:'Partido',champion:'Título',transfer:'Mercado',other:'Club',page:'Página',of:'de',issue:'Noticias de la carrera',footer:'Creado con los registros de tu carrera.'}}[lang],locale=lang==='en'?'en-US':lang==='es'?'es-ES':'pt-BR';
   const entries=S.order.flatMap(s=>(S.data[s].news||[]).filter(x=>x.kind!=='interview').map(x=>({...x,season:s}))).sort((a,b)=>newsTimestamp(b)-newsTimestamp(a)||(b.createdAt||0)-(a.createdAt||0));
@@ -1306,6 +1502,7 @@ function clubBadgeFile(name){
 function clubBadge(name,size=28){
  const key='club:'+norm(name),custom=(CLUB_DB.images&&CLUB_DB.images[norm(name)])||(S.img&&S.img[key]);
  if(typeof custom==='string'&&custom.startsWith('data:image/'))return `<img class="mini-crest" src="${custom}" width="${size}" height="${size}" alt="Escudo personalizado de ${esc(name)}" style="width:${size}px;height:${size}px;object-fit:contain">`;
+ const bi=builtinSrc('club',name);if(bi)return `<img class="mini-crest" data-club="${esc(name)}" src="${bi}" width="${size}" height="${size}" alt="Escudo de ${esc(name)}" style="width:${size}px;height:${size}px;object-fit:contain" loading="lazy">`;
  const f=clubBadgeFile(name);return f?`<img class="mini-crest" data-club="${esc(name)}" src="./assets/clubs/${f}" width="${size}" height="${size}" alt="Distintivo ilustrativo de ${esc(name)}" style="width:${size}px;height:${size}px;object-fit:contain" loading="lazy">`:''
 }
 function clubAvatar(name,size=56){
@@ -1315,6 +1512,7 @@ function clubAvatar(name,size=56){
 function compLogo(name,sz=24){
  const k='comp:'+norm(name),v=S.img&&S.img[k];
  if(typeof v==='string'&&v.startsWith('data:image/'))return `<img class="comp-logo" src="${v}" alt="Logo de ${esc(name)}" width="${sz}" height="${sz}" style="object-fit:contain;vertical-align:middle">`;
+ const bi=builtinSrc('comp',name);if(bi)return `<img class="comp-logo" data-complogo="${esc(name)}" src="${bi}" alt="Logo de ${esc(name)}" width="${sz}" height="${sz}" style="object-fit:contain;vertical-align:middle" loading="lazy">`;
  const short=String(name||'').replace(/\s*\(formato antigo\)/i,'').split(/\s+/).map(x=>x[0]).join('').slice(0,3).toUpperCase();
  return `<span class="comp-logo-fallback" role="img" aria-label="${esc(name)}" style="--logo-size:${sz}px">${esc(short||'🏆')}</span>`;
 }
@@ -1332,7 +1530,7 @@ function trophyAssetFile(name){
  return 'generic.png';
 }
 const TSVG=sz=>`<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" style="vertical-align:middle" aria-hidden="true"><path d="M7 3h10v5a5 5 0 0 1-10 0z" fill="#e0a800"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3" fill="none" stroke="#e0a800" stroke-width="1.6"/><rect x="11" y="13" width="2" height="4" fill="#e0a800"/><rect x="8" y="17" width="8" height="3" rx="1" fill="#b8860b"/></svg>`;
-const trophy=(c,sz)=>{const k='trophy:'+norm(c),v=S.img&&(S.img[k]||S.img[c]);return typeof v==='string'&&v.indexOf('data:image/')===0?`<img src="${v}" alt="Troféu personalizado de ${esc(c)}" width="${sz}" height="${sz}" style="object-fit:contain;vertical-align:middle">`:`<img data-troph="1" src="./assets/trophies/${trophyAssetFile(c)}" alt="Taça ilustrativa de ${esc(c)}" width="${sz}" height="${sz}" style="object-fit:contain;vertical-align:middle" loading="lazy">`};
+const trophy=(c,sz)=>{const k='trophy:'+norm(c),v=S.img&&(S.img[k]||S.img[c]);return typeof v==='string'&&v.indexOf('data:image/')===0?`<img src="${v}" alt="Troféu personalizado de ${esc(c)}" width="${sz}" height="${sz}" style="object-fit:contain;vertical-align:middle">`:`<img data-troph="1" src="${builtinSrc('trophy',c)||'./assets/trophies/'+trophyAssetFile(c)}" alt="Taça ilustrativa de ${esc(c)}" width="${sz}" height="${sz}" style="object-fit:contain;vertical-align:middle" loading="lazy">`};
 function setImg(c,file){
   if(!file)return;if(!file.type||!file.type.startsWith('image/')){alert('Escolha um arquivo de imagem.');return}
   const rd=new FileReader();
@@ -1683,7 +1881,7 @@ function reconcileFinals(season){
   });
   return changed;
 }
-function reconcileAllFinals(){let ch=false;S.order.forEach(s=>{QUIET_CH=(s!==S.cur);try{if(reconcileFinals(s))ch=true}finally{QUIET_CH=false}});return ch}
+function reconcileAllFinals(){let ch=false;const first=!S.recon;NEWS_QUIET=first;try{S.order.forEach(s=>{QUIET_CH=(s!==S.cur);try{if(reconcileFinals(s))ch=true}finally{QUIET_CH=false}})}finally{NEWS_QUIET=false}if(first){S.recon=1;ch=true}return ch}
 function upsertChampion(season,competition,club){const d=S.data[season];if(!d||!competition||!club)return;d.champs=Array.isArray(d.champs)?d.champs:[];const before=rankPosition(club),key=norm(competition),old=d.champs.find(x=>norm(x.competition)===key);let ent=old;if(old)old.club=club;else{ent={competition,club};d.champs.push(ent)}if(AUTO_CH)ent.auto=true;else delete ent.auto;const after=rankPosition(club),delta=before?before-after:0,points=compTitlePoints(competition),move=delta>0?` e sobe da posição ${before} para ${after}`:after?` e passa a ocupar a posição ${after}`:'';const titleByLang={pt:`${club} conquista ${competition}`,en:`${club} win ${competition}`,es:`${club} conquista ${competition}`},bodyByLang={pt:`O título acrescenta um bônus de ${points.toFixed(1)} pontos ao ranking interno${move}.`,en:`The title adds a ${points.toFixed(1)}-point bonus to the internal ranking${delta>0?` and moves the club from ${before}th to ${after}th place`:after?` and places the club at ${after}th`:''}.`,es:`El título añade un bonus de ${points.toFixed(1)} puntos a la clasificación interna${delta>0?` y sube al club del puesto ${before} al ${after}`:after?` y deja al club en el puesto ${after}`:''}.`};if(!QUIET_CH)addNews(season,{key:`champion:${key}`,kind:'champion',importance:100,title:titleByLang.pt,titleByLang,body:bodyByLang.pt,bodyByLang,competition})}
 function registerChampion(form){const o=Object.fromEntries(new FormData(form)),season=o.season,competition=(o.comp||'').trim(),club=(o.club||'').trim();if(!S.data[season]||!competition||!club)return false;upsertChampion(season,competition,club);sub.champSeason=season;save();render();return false}
 function removeChampion(season,competition){const d=S.data[season];if(!d)return;const explicit=(d.champs||[]).some(x=>norm(x.competition)===norm(competition));d.champs=(d.champs||[]).filter(x=>norm(x.competition)!==norm(competition));if(!explicit)d.res=(d.res||[]).filter(x=>!(norm(x.c)===norm(competition)&&x.r==='Campeão'));d.news=(d.news||[]).filter(x=>x.key!==`champion:${norm(competition)}`);save();render()}
@@ -1715,6 +1913,7 @@ let renderedTab=null,detailStates={},statsDetailOpenRequest=null;
 function detailKey(el){return (el.querySelector(':scope > summary')?.textContent||'').trim().replace(/\s+·.*$/,'').replace(/\s+\(\d+\)$/,'')}
 function render(){
   try{if(reconcileAllFinals())persist()}catch(e){}
+  if(MENU){renderMenu();return}
   const app=document.getElementById('app');
   if(app&&renderedTab){const counts={},state={};app.querySelectorAll('details').forEach(el=>{const title=detailKey(el),n=counts[title]||0;counts[title]=n+1;state[title+'#'+n]=el.open});detailStates[renderedTab]=state}
   applyAcc();queueMicrotask(()=>{ui();armPickers();flashNow();bkOpen=false;translateUi()});
@@ -1787,6 +1986,7 @@ function commitRestore(){
   }catch(e){bkm=e&&e.name==='QuotaExceededError'?'O armazenamento deste navegador está cheio. Exporte os dados atuais antes de liberar espaço e tente novamente.':'Não foi possível concluir a restauração. Confira o espaço de armazenamento e tente novamente.';render();return false}
 }
 applyTema();
+if(IX.skipMenu&&!careerInfo(IX.cur).vazia)MENU=false;
 render();
 protectStorage();
 

@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.11.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.12.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -30,9 +30,9 @@ RECURSOS DESTA VERSÃO
 - Mata-mata de ida e volta: ao escolher a competição no registro, o adversário e o mando do jogo de volta já vêm preenchidos.
 - Cópias automáticas dentro do app (Configurações > Backup): uma ao abrir e uma por dia, dos últimos 7 dias, com botão Restaurar. Ficam neste aparelho e não substituem o backup em arquivo.
 - Ranking com pontos para vice e coluna de reputação; no registro de partida aparece favorito, azarão ou equilibrado; em Estatísticas há o desempenho por nível do adversário; o Jornal cita carrasco e azarão.
-- Calendário mensal em Partidas: marque os jogos de cada dia e use Registrar para preencher a partida.
+- Calendário mensal em Partidas: toque no dia para abrir uma janela e marcar os jogos; cada dia mostra o escudo do adversário, V/E/D e C/F (casa ou fora); use Registrar para preencher a partida.
 - Balanço da temporada (edição especial): aparece ao fechar a temporada e pelo botão Balanço em Estatísticas > Temporadas. Mostra campanha, competições, artilheiro, assistências, craque, time da temporada (4-3-3 pelas notas), mercado e momentos. É calculado a partir dos dados, sem guardar notícias, e pode ser salvo ou compartilhado como imagem.
-- Jornal em edições semanais (segunda a domingo, pela data das partidas), apenas da temporada atual (notícias de outras temporadas são apagadas): manchete, resultados da semana, números e craque da semana, com navegação entre edições. Partidas sem data entram em uma edição retrospectiva por temporada. Matérias novas: marcos (jogos no comando, gols pelo clube), maior vitória, sequências e primeira vitória sobre um adversário.
+- Jornal em edições mensais (pela data das partidas), apenas da temporada atual (notícias de outras temporadas são apagadas): manchete, resultados da semana, números e craque da semana, com navegação entre edições. Partidas sem data entram em uma edição retrospectiva por temporada. Matérias novas: marcos (jogos no comando, gols pelo clube), maior vitória, sequências e primeira vitória sobre um adversário.
 - Avisos de destaque: ao registrar algo importante aparece um aviso com o botão Ler; títulos abrem uma edição extra. Uma bolinha em Resumo indica novidades. Em Jornal, no rodapé, escolha entre só destaques, todas as notícias ou desligado.
 - Menu inicial ao abrir o app: Continuar carreira, Iniciar nova carreira, Minhas carreiras, Configurações (as mesmas de dentro do jogo), atalho de backup e instalação do app. Em Configurações do menu há a opção de pular o menu ao abrir. Dentro do jogo, o botão ☰ no topo volta ao menu.
 - O Jornal publica automaticamente uma matéria curta por partida. As notícias destacam placar e fatos relevantes, como hat-trick, goleada, vitória inesperada, sequência de resultados ou uma atuação individual marcante, sem listar todos os participantes.

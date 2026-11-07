@@ -1,5 +1,5 @@
 // Mantenha APP_VERSION igual ao APP_VERSION do index.html a cada versão publicada.
-const APP_VERSION = '1.11.0';
+const APP_VERSION = '1.12.0';
 const CACHE_PREFIX = 'diario-tecnico-pwa-';
 const CACHE_NAME = CACHE_PREFIX + APP_VERSION;
 const NAV_TIMEOUT_MS = 3000;

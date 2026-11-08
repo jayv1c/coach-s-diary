@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.12.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.13.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -27,6 +27,7 @@ DADOS E BACKUPS
 - O backup inclui os dados da carreira e imagens personalizadas. A sincronização em nuvem foi removida; use o backup para transferir seus dados.
 
 RECURSOS DESTA VERSÃO
+- Sincronização com a nuvem por e-mail e senha (opcional): a mesma carreira em vários aparelhos, usando um Firebase gratuito. Veja o passo a passo na seção SINCRONIZAÇÃO COM A NUVEM, no fim deste arquivo.
 - Mata-mata de ida e volta: ao escolher a competição no registro, o adversário e o mando do jogo de volta já vêm preenchidos.
 - Cópias automáticas dentro do app (Configurações > Backup): uma ao abrir e uma por dia, dos últimos 7 dias, com botão Restaurar. Ficam neste aparelho e não substituem o backup em arquivo.
 - Ranking com pontos para vice e coluna de reputação; no registro de partida aparece favorito, azarão ou equilibrado; em Estatísticas há o desempenho por nível do adversário; o Jornal cita carrasco e azarão.
@@ -58,3 +59,28 @@ OBSERVAÇÕES SOBRE O USO OFFLINE
 - Se um escudo ou uma taça não carregar, o app mostra as iniciais do clube ou uma taça desenhada no lugar. Para ver as imagens, confirme que a pasta assets/ foi enviada ao GitHub com os nomes em minúsculas (ex.: assets/clubs/ars.png). Só 32 clubes têm escudo embutido; nos demais, use Configurações para adicionar o escudo.
 - Se a rede demorar mais de 3 segundos, o app abre pela cópia guardada e se atualiza em segundo plano.
 - A cada versão nova, atualize APP_VERSION no início do service-worker.js para o mesmo número do index.html.
+
+SINCRONIZAÇÃO COM A NUVEM (OPCIONAL, GRATUITA)
+Serve para usar a mesma carreira em outro celular ou no computador, entrando com e-mail e senha. Os dados ficam no seu próprio projeto do Firebase (Google). O plano gratuito (Spark) não pede cartão e é suficiente para este app.
+
+Passo a passo (faça uma vez, de preferência no computador):
+1. Abra console.firebase.google.com, entre com a sua conta Google e clique em Criar projeto. Dê um nome (ex.: diario-tecnico). O Google Analytics pode ficar desativado.
+2. No menu da esquerda, abra Authentication, clique em Começar, vá em Método de login, escolha E-mail/senha, ative a primeira chave (não a de link por e-mail) e salve.
+3. No menu, abra Realtime Database, clique em Criar banco de dados, escolha o local (pode ser o padrão) e inicie no modo bloqueado.
+4. Na aba Regras do Realtime Database, apague tudo, cole o texto abaixo e clique em Publicar:
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}
+5. Volte à Visão geral do projeto, clique no ícone </> (Web), registre um app (qualquer apelido, sem Hosting) e copie o valor de apiKey (começa com AIza). O endereço do banco aparece na aba Dados do Realtime Database, no topo, e termina em firebaseio.com ou firebasedatabase.app.
+6. Monte o código de conexão juntando os dois com ponto e vírgula, sem espaços: chave;endereço (ex.: AIzaSy...;https://nome-default-rtdb.firebaseio.com).
+7. No app, abra Configurações, Sincronizar com a nuvem, cole o código e toque em Salvar código. Digite um e-mail e uma senha (mínimo 6 caracteres) e toque em Criar conta.
+8. Em outro aparelho: instale o app, cole o mesmo código, escolha Entrar com o mesmo e-mail e senha. Os dados da carreira aparecem sozinhos.
+
+Como funciona: ao abrir o app e depois de alterações, ele sincroniza sozinho (dá para desligar). Se os dois aparelhos mudarem coisas diferentes antes de sincronizar, o app pergunta qual versão manter, e a versão descartada neste aparelho fica nas cópias automáticas. O backup em arquivo continua valendo como proteção extra. A senha não é guardada no aparelho, só a sessão.

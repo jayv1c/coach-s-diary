@@ -516,7 +516,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.12.0';
+const APP_VERSION='1.13.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -545,7 +545,7 @@ const nk=()=>{S.nk=(S.nk||1000)+1;return S.nk};
 loadCur();
 function goSeason(s){if(!S.data[s]){S.data[s]=ns();S.order.push(s);S.order.sort()}S.cur=s;draft={};editK=null;save();render()}
 const persist=()=>{try{localStorage.setItem(keyOf(IX.cur),JSON.stringify(S));if(bkm.startsWith('Falha ao salvar'))bkm='';return true}catch(e){bkm='Falha ao salvar neste aparelho. O armazenamento pode estar cheio; exporte um backup e remova imagens grandes.';if(document.getElementById('app'))setTimeout(render,0);return false}};
-const save=()=>{RKC=null;S.ts=Date.now();return persist()};
+const save=()=>{RKC=null;S.ts=Date.now();cloudMark();return persist()};
 const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num=v=>Number(String(v).replace(',','.'))||0;
 const fm=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:2});
@@ -842,7 +842,7 @@ function addSug(i){if(SUG[i])setResC(SUG[i].c,SUG[i].r)}
 const fp=(i,x,f,l)=>`<label>${l}<input type="number" min="0" value="${x[f]??''}" onchange="pm(${i},'${f}',this.value===''?null:+this.value)"></label>`;
 
 function allJson(){
-  const o={v:2,ix:IX,data:{},clubDb:CLUB_DB};
+  const o={v:2,ix:Object.assign({},IX,{cloudAuth:undefined,cloudBase:undefined,cloudDirty:undefined,cloudLastAt:undefined}),data:{},clubDb:CLUB_DB};
   IX.list.forEach(c=>{if(c.id===IX.cur)o.data[c.id]=S;else try{o.data[c.id]=JSON.parse(localStorage.getItem(keyOf(c.id))||'null')}catch(e){}});
   return JSON.stringify(o);
 }
@@ -1060,6 +1060,70 @@ function vCal(){
 function vPartidas(){return pills('pm',[['r','Registrar'],['c','Calendário']],'r')+(sub.pm==='c'?vCal():vPartidasBase())}
 function vRank(){return vRankBase()+tierBox()}
 function isGone(k){const ref=[...S.order].reverse().find(s=>S.data[s].p.length);return !ref||!S.data[ref].p.some(p=>p.k===k&&!p.out)}
+var CL={busy:false,msg:'',err:false,timer:null,conflict:null,last:0};
+const CLOUD_DEFAULT={key:'',db:''};
+const cloudCfg=()=>{const c=IX.cloud||{};return{key:String(c.key||CLOUD_DEFAULT.key||'').trim(),db:String(c.db||CLOUD_DEFAULT.db||'').trim().replace(/\/+$/,'')}};
+const cloudReady=()=>{const c=cloudCfg();return !!(c.key&&c.db)};
+const cloudIn=()=>!!(IX.cloudAuth&&IX.cloudAuth.rf);
+const cloudKeep=()=>{const k={};['cloud','cloudAuth','cloudAuto','cloudEmail'].forEach(f=>{if(IX[f]!==undefined)k[f]=IX[f]});return k};
+const CL_ERR={EMAIL_EXISTS:'Este e-mail já tem conta. Use Entrar.',EMAIL_NOT_FOUND:'E-mail ou senha incorretos.',INVALID_PASSWORD:'E-mail ou senha incorretos.',INVALID_LOGIN_CREDENTIALS:'E-mail ou senha incorretos.',WEAK_PASSWORD:'Senha fraca: use pelo menos 6 caracteres.',INVALID_EMAIL:'E-mail inválido.',MISSING_PASSWORD:'Digite a senha.',TOO_MANY_ATTEMPTS_TRY_LATER:'Muitas tentativas. Espere um pouco e tente de novo.',OPERATION_NOT_ALLOWED:'O login por e-mail e senha não está ativado no Firebase.','Permission denied':'O Firebase recusou o acesso. Confira as regras do banco (passo 4 do README).','API key not valid':'Chave da API inválida. Confira o código de conexão.',SESSION_EXPIRED:'Sessão expirada. Entre novamente.'};
+function cloudErr(e){const m=String(e&&e.message||e);if(/Failed to fetch|NetworkError|Load failed/i.test(m))return 'Sem conexão com a internet. Tente de novo mais tarde.';const k=Object.keys(CL_ERR).find(x=>m.indexOf(x)>=0);return k?CL_ERR[k]:'Erro: '+m.slice(0,140)}
+function cloudSay(m,err){CL.msg=m||'';CL.err=!!err;if(tab==='config'||MENU)render()}
+async function clFetch(url,opt){const r=await fetch(url,opt);let j=null;try{j=await r.json()}catch(e){}if(!r.ok){const m=j&&(j.error&&(j.error.message||j.error));throw new Error(String(m||('HTTP '+r.status)))}return j}
+const IDT='https://identitytoolkit.googleapis.com/v1/';
+async function cloudSign(mode,email,pw){const c=cloudCfg(),j=await clFetch(IDT+(mode==='up'?'accounts:signUp':'accounts:signInWithPassword')+'?key='+encodeURIComponent(c.key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw,returnSecureToken:true})});IX.cloudAuth={email:j.email||email,uid:j.localId,id:j.idToken,rf:j.refreshToken,exp:Date.now()+(+j.expiresIn-60)*1000};IX.cloudEmail=email;IX.cloudBase=null;IX.cloudDirty=false;saveIx()}
+async function cloudToken(){const a=IX.cloudAuth;if(!a)throw new Error('SESSION_EXPIRED');if(Date.now()<a.exp)return a;const c=cloudCfg();try{const j=await clFetch('https://securetoken.googleapis.com/v1/token?key='+encodeURIComponent(c.key),{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(a.rf)});Object.assign(a,{id:j.id_token,rf:j.refresh_token,exp:Date.now()+(+j.expires_in-60)*1000});saveIx();return a}catch(e){if(/INVALID_REFRESH_TOKEN|TOKEN_EXPIRED|USER_NOT_FOUND|USER_DISABLED/.test(String(e.message))){IX.cloudAuth=null;saveIx();throw new Error('SESSION_EXPIRED')}throw e}}
+async function dbReq(path,method,body,extra){const a=await cloudToken(),c=cloudCfg(),url=c.db+'/users/'+a.uid+path+'.json?auth='+encodeURIComponent(a.id)+(extra||'');return clFetch(url,{method,headers:body!==undefined?{'Content-Type':'application/json'}:undefined,body:body!==undefined?JSON.stringify(body):undefined})}
+async function sha1(s){if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}return(h1>>>0).toString(16)+(h2>>>0).toString(16)+s.length.toString(16)}
+const cloudDevice=()=>/Android/i.test(navigator.userAgent)?'Android':/iPhone|iPad/i.test(navigator.userAgent)?'iPhone':/Windows/i.test(navigator.userAgent)?'Windows':'Navegador';
+async function cloudPush(){
+  const obj=JSON.parse(allJson()),imgs={};
+  const sw=async m=>{if(!m||typeof m!=='object')return;for(const k of Object.keys(m)){const v=m[k];if(typeof v==='string'&&v.startsWith('data:image')){const h=await sha1(v);imgs[h]=v;m[k]='@img:'+h}}};
+  await sw(obj.clubDb&&obj.clubDb.images);for(const id in obj.data)if(obj.data[id])await sw(obj.data[id].img);
+  const remote=(await dbReq('/imgs','GET',undefined,'&shallow=true'))||{},miss=Object.keys(imgs).filter(h=>!remote[h]);
+  for(let i=0;i<miss.length;i+=4)await Promise.all(miss.slice(i,i+4).map(h=>dbReq('/imgs/'+h,'PUT',imgs[h])));
+  await dbReq('/core','PUT',JSON.stringify(obj));
+  const meta={ts:Date.now(),device:cloudDevice(),v:1};await dbReq('/meta','PUT',meta);
+  IX.cloudBase=meta.ts;IX.cloudDirty=false;saveIx();
+}
+async function cloudPull(meta){
+  const core=await dbReq('/core','GET');if(typeof core!=='string')throw new Error('Os dados na nuvem estão vazios ou inválidos.');
+  const obj=JSON.parse(core),hs=new Set(),scan=o=>{if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='string'&&v.startsWith('@img:'))hs.add(v.slice(5));else scan(v)}};scan(obj);
+  const imgs={},list=[...hs];for(let i=0;i<list.length;i+=6)await Promise.all(list.slice(i,i+6).map(async h=>{imgs[h]=await dbReq('/imgs/'+h,'GET')}));
+  const put=o=>{if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='string'&&v.startsWith('@img:'))o[k]=imgs[v.slice(5)]||'';else put(v)}};put(obj);
+  prepareRestore(JSON.stringify(obj));if(!pendingRestore)throw new Error('Os dados da nuvem não puderam ser lidos.');
+  commitRestore();IX.cloudBase=meta.ts;IX.cloudDirty=false;saveIx();
+}
+async function cloudSync(auto){
+  if(CL.busy||!cloudIn()||!cloudReady())return;
+  CL.busy=true;CL.last=Date.now();let msg='',err=false;
+  try{
+    const meta=await dbReq('/meta','GET'),has=!careerInfo(IX.cur).vazia||IX.list.length>1,first=IX.cloudBase==null,dirty=!!IX.cloudDirty||(first&&has);
+    if(!meta){if(has||dirty){await cloudPush();msg='Dados enviados para a nuvem.'}else msg='Conta pronta. Ainda não há dados para sincronizar.'}
+    else if(!first&&meta.ts===IX.cloudBase){if(IX.cloudDirty){await cloudPush();msg='Alterações enviadas para a nuvem.'}else msg='Tudo em dia.'}
+    else if(!dirty){await cloudPull(meta);msg='Dados da nuvem carregados neste aparelho.'}
+    else{CL.conflict={meta};msg='Este aparelho e a nuvem têm mudanças diferentes. Escolha qual versão manter.';err=true;if(auto)cloudToast('Sincronização: escolha qual versão manter.')}
+    if(!CL.conflict){IX.cloudLastAt=Date.now();saveIx()}
+  }catch(e){msg=cloudErr(e);err=true}
+  CL.busy=false;cloudSay(msg,err);
+}
+async function cloudResolve(useCloud){const c=CL.conflict;if(!c||CL.busy)return;CL.busy=true;let msg='',err=false;try{if(useCloud)await cloudPull(c.meta);else await cloudPush();CL.conflict=null;IX.cloudLastAt=Date.now();saveIx();msg=useCloud?'Dados da nuvem carregados neste aparelho.':'Os dados deste aparelho foram enviados para a nuvem.'}catch(e){msg=cloudErr(e);err=true}CL.busy=false;cloudSay(msg,err)}
+async function cloudLogin(mode){const e=((document.getElementById('cl-email')||{}).value||'').trim(),p=(document.getElementById('cl-pw')||{}).value||'';if(!e||!p){cloudSay('Digite e-mail e senha.',true);return}if(CL.busy)return;CL.busy=true;cloudSay('Conectando…');try{await cloudSign(mode,e,p);CL.busy=false;await cloudSync(false)}catch(x){CL.busy=false;cloudSay(cloudErr(x),true)}}
+async function cloudReset(){const e=((document.getElementById('cl-email')||{}).value||'').trim();if(!e){cloudSay('Digite seu e-mail para receber o link de nova senha.',true);return}try{await clFetch(IDT+'accounts:sendOobCode?key='+encodeURIComponent(cloudCfg().key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestType:'PASSWORD_RESET',email:e})});cloudSay('Enviamos um e-mail com o link para criar uma nova senha.')}catch(x){cloudSay(cloudErr(x),true)}}
+function cloudOut(){IX.cloudAuth=null;IX.cloudBase=null;IX.cloudDirty=false;CL.conflict=null;saveIx();cloudSay('Você saiu da conta. Os dados continuam neste aparelho.')}
+function cloudSaveCode(){const v=((document.getElementById('clcode')||{}).value||'').trim(),p=v.split(';').map(x=>x.trim()),k=p[0],d=p[1]||'';if(!k||!/^https:\/\/[^\s;]+$/.test(d)||!/(firebaseio\.com|firebasedatabase\.app)/.test(d)){cloudSay('Código inválido. Use o formato chave;endereço-do-banco (veja o README).',true);return}IX.cloud={key:k,db:d.replace(/\/+$/,'')};saveIx();cloudSay('Código salvo. Agora entre ou crie a sua conta.')}
+function cloudMark(){if(!cloudIn())return;if(!IX.cloudDirty){IX.cloudDirty=true;saveIx()}if(IX.cloudAuto!==false){clearTimeout(CL.timer);CL.timer=setTimeout(()=>cloudSync(true),45000)}}
+function cloudToast(t){const el=document.createElement('div');el.className='hl-toast';el.innerHTML=`<div style="flex:1;min-width:0"><small>☁ Sincronização</small><b>${esc(t)}</b></div><button type="button" class="chip2" onclick="openCloud();this.closest('.hl-toast').remove()">Abrir</button><button type="button" class="chip2" aria-label="Fechar" onclick="this.closest('.hl-toast').remove()">×</button>`;document.body.appendChild(el);setTimeout(()=>el.remove(),9000)}
+function openCloud(){MENU=false;document.body.classList.remove('menu-on');tab='config';render();setTimeout(()=>{const s=[...document.querySelectorAll('summary')].find(x=>/Sincronizar com a nuvem/.test(x.textContent));if(s){s.parentElement.open=true;s.scrollIntoView({block:'center'})}},200)}
+function cloudBox(){
+  const cfg=cloudReady(),inn=cloudIn(),a=IX.cloudAuth||{};
+  const msg=CL.msg&&!CL.conflict?`<p class="sub"${CL.err?' style="color:var(--loss)"':''}>${esc(CL.msg)}</p>`:'';
+  let body;
+  if(!cfg)body=`<p class="sub">Entre com e-mail e senha para ter a mesma carreira em vários aparelhos. Primeiro conecte o app ao seu Firebase gratuito (passo a passo no README).</p><label>Código de conexão<input id="clcode" autocomplete="off" placeholder="chave;endereço-do-banco"></label><button type="button" class="btn" onclick="cloudSaveCode()">Salvar código</button>`;
+  else if(!inn)body=`<label>E-mail<input id="cl-email" type="email" autocomplete="username" value="${esc(IX.cloudEmail||'')}"></label><label>Senha<input id="cl-pw" type="password" autocomplete="current-password"></label><div class="backup-actions"><button type="button" class="btn" onclick="cloudLogin('in')">Entrar</button><button type="button" class="chip2" onclick="cloudLogin('up')">Criar conta</button><button type="button" class="chip2" onclick="cloudReset()">Esqueci a senha</button></div><p class="sub"><a href="#" onclick="IX.cloud=null;saveIx();render();return false">Trocar o código de conexão</a></p>`;
+  else body=`<p class="sub">Conectado como <b>${esc(a.email||'')}</b>${IX.cloudLastAt?'<br>Última sincronização: '+new Date(IX.cloudLastAt).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):''}${IX.cloudDirty?'<br>Há alterações aguardando envio.':''}</p>${CL.conflict?`<div class="rk-me"><p>Este aparelho e a nuvem têm mudanças diferentes. Qual versão manter?</p><div class="backup-actions"><button type="button" class="btn" onclick="cloudResolve(true)">Usar a nuvem</button><button type="button" class="chip2" onclick="cloudResolve(false)">Usar este aparelho</button></div><p class="sub">Se usar a nuvem, o que está neste aparelho fica guardado nas cópias automáticas. Se usar este aparelho, a nuvem é substituída.</p></div>`:''}<div class="backup-actions"><button type="button" class="btn" onclick="cloudSync(false)">Sincronizar agora</button><button type="button" class="chip2" onclick="cloudOut()">Sair</button></div><label class="mn-skip"><input type="checkbox" ${IX.cloudAuto===false?'':'checked'} onchange="IX.cloudAuto=this.checked;saveIx()"><span>Sincronizar automaticamente</span></label>`;
+  return `<details class="bkd"${CL.conflict?' open':''}><summary>Sincronizar com a nuvem</summary>${msg}${body}</details>`;
+}
 function pruneNews(){let ch=false;S.order.forEach(s=>{const d=S.data[s];if(s!==S.cur&&d&&Array.isArray(d.news)&&d.news.length){d.news=[];ch=true}});return ch}
 const jc=x=>String(x==null?'':x).replace(/\s*\(formato antigo\)/gi,'');
 function careerSeq(){const out=[];S.order.forEach(s=>{const ms=(S.data[s].m||[]).map((m,i)=>({m,season:s,i}));if(ms.length&&ms.every(x=>x.m.date))ms.sort((a,b)=>a.m.date<b.m.date?-1:a.m.date>b.m.date?1:a.i-b.i);out.push(...ms)});return out}
@@ -1162,7 +1226,7 @@ function downloadBk(){
 }
 function restoreFile(file){if(!file)return;const rd=new FileReader();rd.onerror=()=>{bkm='Não foi possível ler o arquivo de backup.';render()};rd.onload=()=>restoreText(String(rd.result||''));rd.readAsText(file)}
 function restoreText(text){const box=document.getElementById('bk');if(box)box.value=text;return prepareRestore(text)}
-function vConfig(){return `<h2>Configurações</h2>${appearBox()}${assetLibraryBox()}${matchBox()}${careersBox()}${backupBox()}<p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p>`}
+function vConfig(){return `<h2>Configurações</h2>${appearBox()}${assetLibraryBox()}${matchBox()}${careersBox()}${backupBox()}${cloudBox()}<p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p>`}
 function assetClubNames(){
  const names=new Set([...Object.keys(CLUB_BADGES),...(CLUB_DB.clubs||[]),...(S.assetClubs||[]),String(S.nome||S.club||'').trim()].filter(Boolean));
  S.order.forEach(se=>S.data[se].m.forEach(m=>{if(m.adv)names.add(String(m.adv).trim())}));
@@ -2071,7 +2135,7 @@ function prepareRestore(raw){
       if(!d.ix||!Array.isArray(d.ix.list)||!d.ix.list.length||!d.ix.list.some(c=>c&&c.id===d.ix.cur)||!d.data||typeof d.data!=='object')throw new Error('invalid');
       for(const c of d.ix.list){const value=d.data[c.id];if(!normalizeCareerData(value))throw new Error('invalid');incoming[keyOf(c.id)]=JSON.stringify(value)}
       if(d.clubDb&&typeof d.clubDb==='object')incoming[CLUB_DB_KEY]=JSON.stringify({clubs:Array.isArray(d.clubDb.clubs)?d.clubDb.clubs:[],images:d.clubDb.images&&typeof d.clubDb.images==='object'?d.clubDb.images:{},ts:Date.now()});
-      incoming['carreiras-v1']=JSON.stringify(d.ix);
+      d.ix=Object.assign({},d.ix,cloudKeep());incoming['carreiras-v1']=JSON.stringify(d.ix);
     }else{legacy=mig(d);if(!normalizeCareerData(legacy))throw new Error('invalid');incoming[keyOf(IX.cur)]=JSON.stringify(legacy)}
     pendingRestore={d,incoming,legacy};bkm='Backup reconhecido. Confira e confirme a restauração abaixo.';render();return false;
   }catch(e){pendingRestore=null;bkm=e&&e.message==='invalid'?'Backup incompatível ou incompleto. Nenhum dado foi alterado.':'Não foi possível ler este backup. Confira se o texto JSON está completo.';render();return false}
@@ -2092,6 +2156,8 @@ if(IX.skipMenu&&!careerInfo(IX.cur).vazia)MENU=false;
 render();
 protectStorage();
 setTimeout(bootSnap,3000);
+setTimeout(()=>{if(cloudIn()&&IX.cloudAuto!==false)cloudSync(true)},5000);
+document.addEventListener('visibilitychange',()=>{if(!cloudIn()||IX.cloudAuto===false)return;if(document.hidden){if(IX.cloudDirty)cloudSync(true)}else if(!IX.cloudDirty&&Date.now()-CL.last>60000)cloudSync(true)});
 
 // Instalação PWA e cache offline do aplicativo.
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {

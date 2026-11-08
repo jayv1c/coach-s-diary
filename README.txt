@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.13.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.14.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -22,14 +22,18 @@ ATUALIZAR UMA VERSÃO
 
 DADOS E BACKUPS
 - A carreira fica no armazenamento local do navegador. Publicar uma versão nova no GitHub não transfere os dados entre aparelhos.
-- Em Configurações > Backup dos dados, baixe um JSON ou copie o texto do backup.
-- Para levar a carreira a outro aparelho, abra o app no destino e restaure o JSON ou cole o conteúdo do backup.
-- O backup inclui os dados da carreira e imagens personalizadas. A sincronização em nuvem foi removida; use o backup para transferir seus dados.
+- Em Configurações > Backup dos dados, baixe o arquivo JSON do backup.
+- Para levar a carreira a outro aparelho, abra o app no destino e restaure o arquivo JSON (ou use a sincronização com a nuvem, descrita no fim deste arquivo).
+- O backup inclui os dados da carreira e imagens personalizadas. Para usar a mesma carreira em vários aparelhos, prefira a sincronização com a nuvem; o backup em arquivo continua valendo como cópia extra.
 
 RECURSOS DESTA VERSÃO
 - Sincronização com a nuvem por e-mail e senha (opcional): a mesma carreira em vários aparelhos, usando um Firebase gratuito. Veja o passo a passo na seção SINCRONIZAÇÃO COM A NUVEM, no fim deste arquivo.
 - Mata-mata de ida e volta: ao escolher a competição no registro, o adversário e o mando do jogo de volta já vêm preenchidos.
-- Cópias automáticas dentro do app (Configurações > Backup): uma ao abrir e uma por dia, dos últimos 7 dias, com botão Restaurar. Ficam neste aparelho e não substituem o backup em arquivo.
+- Nova carreira: escolha o tipo de temporada (europeia, de agosto a maio, como 2026/27, ou brasileira, ano corrido, como 2026) e a temporada em que a carreira começa. As carreiras antigas continuam europeias.
+- Finanças: em Transferências há a sub-aba Finanças, onde você lança por temporada a verba de transferência, a verba de salário, o gasto com salário, outras receitas e outros gastos. O app calcula a verba restante, a sobra ou o estouro da folha e o resultado da temporada, e mostra uma tabela com todas as temporadas. Há botão para copiar as verbas da temporada anterior.
+- Campeões das competições: agora dá para registrar também o vice, que pontua no ranking de clubes.
+- Removidos nesta versão: o seletor de carreira da barra do topo (para trocar de carreira use o ☰, Minhas carreiras), as Cópias automáticas e a opção de colar o texto do backup (restaure sempre pelo arquivo JSON).
+- Limpeza geral: removidas funções que não eram mais usadas, corrigido o link "Fonte IFFHS" do ranking (o endereço estava errado) e revisado o fluxo da nuvem, sem erros nos testes.
 - Ranking com pontos para vice e coluna de reputação; no registro de partida aparece favorito, azarão ou equilibrado; em Estatísticas há o desempenho por nível do adversário; o Jornal cita carrasco e azarão.
 - Calendário mensal em Partidas: toque no dia para abrir uma janela e marcar os jogos; cada dia mostra o escudo do adversário, V/E/D e C/F (casa ou fora); use Registrar para preencher a partida.
 - Balanço da temporada (edição especial): aparece ao fechar a temporada e pelo botão Balanço em Estatísticas > Temporadas. Mostra campanha, competições, artilheiro, assistências, craque, time da temporada (4-3-3 pelas notas), mercado e momentos. É calculado a partir dos dados, sem guardar notícias, e pode ser salvo ou compartilhado como imagem.
@@ -37,7 +41,7 @@ RECURSOS DESTA VERSÃO
 - Avisos de destaque: ao registrar algo importante aparece um aviso com o botão Ler; títulos abrem uma edição extra. Uma bolinha em Resumo indica novidades. Em Jornal, no rodapé, escolha entre só destaques, todas as notícias ou desligado.
 - Menu inicial ao abrir o app: Continuar carreira, Iniciar nova carreira, Minhas carreiras, Configurações (as mesmas de dentro do jogo), atalho de backup e instalação do app. Em Configurações do menu há a opção de pular o menu ao abrir. Dentro do jogo, o botão ☰ no topo volta ao menu.
 - O Jornal publica automaticamente uma matéria curta por partida. As notícias destacam placar e fatos relevantes, como hat-trick, goleada, vitória inesperada, sequência de resultados ou uma atuação individual marcante, sem listar todos os participantes.
-- O registro de partida permite informar a data. Ela acompanha o intervalo da temporada (1º de julho a 30 de junho), aparece no jornal e organiza as matérias por data. A próxima data sugerida é calculada a partir dos jogos já registrados; as datas antigas ficam opcionais para preservar registros anteriores.
+- O registro de partida permite informar a data. Ela acompanha o intervalo da temporada (temporada europeia: 1º de julho a 30 de junho; brasileira: 1º de janeiro a 31 de dezembro), aparece no jornal e organiza as matérias por data. A próxima data sugerida é calculada a partir dos jogos já registrados; as datas antigas ficam opcionais para preservar registros anteriores.
 - Títulos e transferências de impacto também geram notícias. O jornal tem aparência de página esportiva, mostra seis matérias por página e permite navegar pelo histórico. Entrevistas não são mais exibidas.
 - Ao abrir o jornal pela primeira vez, partidas antigas recebem matérias retrospectivas automaticamente.
 - Em Estatísticas > Temporadas > Campeões das competições, registre o vencedor de um torneio mesmo quando seu time não participou. Isso influencia o ranking interno.
@@ -47,7 +51,7 @@ RECURSOS DESTA VERSÃO
 - Escudos de clubes, logos de competições e imagens de taças são armazenados separadamente.
 
 FONTES DO RANKING
-- IFFHS, ranking mundial de clubes de outubro de 2026: https://isfhs.com/rankings/club-world-ranking-2026-the-top-500-2/
+- IFFHS, ranking mundial de clubes de outubro de 2026: https://www.iffhs.com/
 - CONCACAF, atualização de 9 de setembro de 2026: https://www.concacaf.com/competitions/champions-cup/news/toluca-fc-leads-the-latest-concacaf-club-rankings
 - Opta explica seu ranking global Elo, disponível em https://theanalyst.com/articles/power-rankings-your-club-ranked. O ranking do app usa os snapshots publicados acima e não busca a classificação diária da Opta.
 

@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.14.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.15.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -34,6 +34,10 @@ RECURSOS DESTA VERSÃO
 - Campeões das competições: agora dá para registrar também o vice, que pontua no ranking de clubes.
 - Removidos nesta versão: o seletor de carreira da barra do topo (para trocar de carreira use o ☰, Minhas carreiras), as Cópias automáticas e a opção de colar o texto do backup (restaure sempre pelo arquivo JSON).
 - Limpeza geral: removidas funções que não eram mais usadas, corrigido o link "Fonte IFFHS" do ranking (o endereço estava errado) e revisado o fluxo da nuvem, sem erros nos testes.
+- Ranking de clubes refeito: base própria com nota para todos os clubes do app. Agora Real Madrid, Barcelona, Bayern, Manchester City, PSG, Liverpool, Arsenal e Inter de Milão têm reputação Mundial, e clubes como o Aston Villa ficam como Continental. Os títulos e vices continuam subindo a reputação.
+- Cartão Continuar carreira: o número de jogos agora soma todas as temporadas, inclusive os totais lançados à mão, igual à aba Temporadas.
+- Jornal: notícias de fatos que não existem mais (por exemplo, um título apagado) saem sozinhas. Novos marcos: jogos e participações em gols por jogador, assistências, sequência de jogos marcando, gols e vitórias do clube, jogos sem sofrer gols, sequência de ataque e pior derrota da carreira.
+- Calendário: a semana começa no domingo, cada competição tem um fundo suave de cor própria e há uma legenda das cores embaixo do calendário.
 - Ranking com pontos para vice e coluna de reputação; no registro de partida aparece favorito, azarão ou equilibrado; em Estatísticas há o desempenho por nível do adversário; o Jornal cita carrasco e azarão.
 - Calendário mensal em Partidas: toque no dia para abrir uma janela e marcar os jogos; cada dia mostra o escudo do adversário, V/E/D e C/F (casa ou fora); use Registrar para preencher a partida.
 - Balanço da temporada (edição especial): aparece ao fechar a temporada e pelo botão Balanço em Estatísticas > Temporadas. Mostra campanha, competições, artilheiro, assistências, craque, time da temporada (4-3-3 pelas notas), mercado e momentos. É calculado a partir dos dados, sem guardar notícias, e pode ser salvo ou compartilhado como imagem.
@@ -45,14 +49,14 @@ RECURSOS DESTA VERSÃO
 - Títulos e transferências de impacto também geram notícias. O jornal tem aparência de página esportiva, mostra seis matérias por página e permite navegar pelo histórico. Entrevistas não são mais exibidas.
 - Ao abrir o jornal pela primeira vez, partidas antigas recebem matérias retrospectivas automaticamente.
 - Em Estatísticas > Temporadas > Campeões das competições, registre o vencedor de um torneio mesmo quando seu time não participou. Isso influencia o ranking interno.
-- A nota-base do ranking vem dos pontos do ranking mundial IFFHS de outubro de 2026 combinados com a CONCACAF de setembro de 2026, ajustada para no máximo 85. Títulos e vice-campeonatos registrados somam um bônus de até 15 pontos (vice vale 40% do título), então a nota máxima é 100. A reputação (Local, Regional, Nacional, Continental, Mundial) combina a nota-base com os títulos e vices, que pesam mais nela, e evolui ao longo da carreira. São dados offline e não se atualizam sozinhos.
+- A nota-base do ranking é uma estimativa própria do app para a grandeza e a força atual de cada clube (de 0 a 100, ajustada para no máximo 85), feita com referência em rankings reais, na tradição do clube e no nível da liga. Todos os clubes da base do app têm nota própria. Títulos e vice-campeonatos registrados somam um bônus de até 15 pontos (vice vale 40% do título), então a nota máxima é 100. A reputação (Local, Regional, Nacional, Continental, Mundial) combina a nota-base com os títulos e vices, que pesam mais nela, e evolui ao longo da carreira. São dados offline e não se atualizam sozinhos.
 - O ranking inclui os clubes da base do app e equipes adicionais da CONCACAF, com busca e colunas para nota-base, bônus, nota total e títulos.
 - Estatísticas por temporada, competição e mando, gráficos recolhíveis, retrospecto de adversários com busca e importação de jogadores de temporadas anteriores.
 - Escudos de clubes, logos de competições e imagens de taças são armazenados separadamente.
 
 FONTES DO RANKING
-- IFFHS, ranking mundial de clubes de outubro de 2026: https://www.iffhs.com/
-- CONCACAF, atualização de 9 de setembro de 2026: https://www.concacaf.com/competitions/champions-cup/news/toluca-fc-leads-the-latest-concacaf-club-rankings
+- Referência: IFFHS, ranking mundial de clubes: https://www.iffhs.com/
+- Referência: CONCACAF, atualização de 9 de setembro de 2026: https://www.concacaf.com/competitions/champions-cup/news/toluca-fc-leads-the-latest-concacaf-club-rankings
 - Opta explica seu ranking global Elo, disponível em https://theanalyst.com/articles/power-rankings-your-club-ranked. O ranking do app usa os snapshots publicados acima e não busca a classificação diária da Opta.
 
 OBSERVAÇÕES SOBRE O USO OFFLINE

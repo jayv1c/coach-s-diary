@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.15.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.16.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -38,6 +38,9 @@ RECURSOS DESTA VERSÃO
 - Cartão Continuar carreira: o número de jogos agora soma todas as temporadas, inclusive os totais lançados à mão, igual à aba Temporadas.
 - Jornal: notícias de fatos que não existem mais (por exemplo, um título apagado) saem sozinhas. Novos marcos: jogos e participações em gols por jogador, assistências, sequência de jogos marcando, gols e vitórias do clube, jogos sem sofrer gols, sequência de ataque e pior derrota da carreira.
 - Calendário: a semana começa no domingo, cada competição tem um fundo suave de cor própria e há uma legenda das cores embaixo do calendário.
+- Registro de partida, dados do jogador: o 0 de gols, assistências e cartões agora é só uma dica apagada (não precisa apagar nem confirmar; se não preencher, vale 0). Na nota o ponto entra sozinho depois do primeiro número (65 vira 6.5); começando com 1 vale 10. A nota mínima aceita é 3.
+- Registro de partida, fases de copa: ao registrar a primeira fase de uma copa, as fases anteriores ficam bloqueadas e a próxima já vem sugerida. Ao ser eliminado (derrota, agregado perdido ou pênaltis), as fases seguintes ficam bloqueadas; se você apagar o jogo, elas voltam.
+- Estatísticas > Histórico: novo menu Por competição, com jogos, gols, assistências e G+A de cada jogador por competição, por temporada ou somando todas. Em uma temporada, o ✎ permite lançar os números à mão; o valor lançado substitui o das partidas e entra nos totais do jogador. "Voltar ao automático" desfaz.
 - Ranking com pontos para vice e coluna de reputação; no registro de partida aparece favorito, azarão ou equilibrado; em Estatísticas há o desempenho por nível do adversário; o Jornal cita carrasco e azarão.
 - Calendário mensal em Partidas: toque no dia para abrir uma janela e marcar os jogos; cada dia mostra o escudo do adversário, V/E/D e C/F (casa ou fora); use Registrar para preencher a partida.
 - Balanço da temporada (edição especial): aparece ao fechar a temporada e pelo botão Balanço em Estatísticas > Temporadas. Mostra campanha, competições, artilheiro, assistências, craque, time da temporada (4-3-3 pelas notas), mercado e momentos. É calculado a partir dos dados, sem guardar notícias, e pode ser salvo ou compartilhado como imagem.

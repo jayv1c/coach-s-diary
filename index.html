@@ -136,7 +136,7 @@ nav#tabs>button{white-space:normal;text-align:center;line-height:1.05}nav#tabs>b
 .rs{font:700 13px Barlow,sans-serif}.rs.V{color:var(--win)}.rs.D{color:var(--loss)}.rs.E{color:var(--mute)}
 .mrow details.ed{margin:0;padding:0 12px 8px;border-top:1px solid var(--line)}
 .mrow details.ed>summary{padding-top:8px}
-.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 12px}
 .qa button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:86px;box-sizing:border-box;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px 4px;color:var(--ink);font:600 13px Barlow,sans-serif;cursor:pointer;text-align:center}
 .qa svg{width:24px;height:24px;color:var(--acc)}
 .hero{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:var(--board);color:var(--boardink);border-radius:14px;padding:16px 18px;margin:0 0 12px}
@@ -502,6 +502,29 @@ body.menu-on #top,body.menu-on #tabs{display:none}
 .cal-modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:14px}
 .cal-sheet{position:relative;width:100%;max-width:460px;max-height:86vh;overflow:auto;margin:0;box-shadow:0 12px 40px rgba(0,0,0,.45)}.cal-x{position:absolute;top:8px;right:8px}
 .gone-n{opacity:.4}details.gone .hn{opacity:.4}
+
+.info-btn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:8px;padding:0;border:1.5px solid var(--acc);border-radius:50%;background:transparent;color:var(--acc);font:italic 700 13px/1 Georgia,serif;vertical-align:middle;cursor:pointer}.info-btn[aria-expanded=true]{background:var(--acc);color:var(--onacc)}.sub[hidden]{display:none}
+.hrow.hc{grid-template-columns:minmax(168px,2.4fr) repeat(5,minmax(44px,1fr))}.hclist{min-width:520px}.hc.gone{opacity:.55}.hc-sort{display:flex;align-items:center;gap:10px;margin:8px 0}.hc-edit{padding:8px 0}
+.menu{position:relative;isolation:isolate;--surf:#131c33;--ink:#f4f1e6;--mute:#9aa6bd;--line:#2b3654;--gold:#e8b830;color:var(--ink);min-height:100vh}
+.menu::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 50% 15%,#1d2b50 0,#0b1226 62%,#060a15 100%)}
+.mn-hero::before{content:'★';display:block;color:var(--gold);font-size:24px;margin-bottom:-4px}
+.mn-hero h1{color:#fff;font-size:38px}.mn-hero p{display:flex;align-items:center;justify-content:center;gap:10px;color:#cfd6e6}
+.mn-hero p::before,.mn-hero p::after{content:'';width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}.mn-hero p::after{transform:scaleX(-1)}
+.mn-btn{position:relative;padding-left:58px;background:rgba(19,28,51,.9);border-color:var(--line);color:#fff}
+.mn-btn::before{position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:22px;color:var(--gold)}
+.mn-btn[onclick*="'new'"]::before{content:'⊕'}.mn-btn[onclick*="'config'"]::before{content:'⚙'}.mn-btn[onclick*="'careers'"]::before{content:'☰'}
+.mn-btn.main{background:linear-gradient(180deg,#f4c64f,#d8a11e);border-color:#f6d77f;color:#1a1405}.mn-btn.main small{color:#3a2d08}.mn-btn.main::before{color:#1a1405}.mn-btn.main[onclick*="menuOpen"]::before{content:'▶'}
+.mn-foot{position:relative;z-index:1}.mn-deco{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;pointer-events:none;opacity:.5;z-index:-1}
+
+.info-btn{width:15px;height:15px;min-width:0;min-height:0;margin-left:6px;border-width:1.2px;font-size:10px}
+.hpc-sel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.hpc-sel label{min-width:0;font-size:13px}
+.hpc-sel select{width:100%;min-height:36px;padding:6px 28px 6px 10px;font-size:14px;background-position:right 10px center}
+@media(max-width:380px){.hpc-sel{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pens{grid-template-columns:repeat(2,minmax(0,1fr))}.pens label{min-width:0}.pens input{width:100%;box-sizing:border-box;min-height:36px;padding:6px 10px;font-size:14px}
+.ei{width:1.15em;height:1.15em;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#tabs svg,.qa svg{fill:currentColor;fill-opacity:.1;stroke-width:1.6}
+#app h2::before{content:'★';color:#e8b830;font-size:.5em;margin-right:7px;vertical-align:.35em}
+.empty::before{content:'';display:block;width:84px;height:56px;margin:0 auto 8px;opacity:.5;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 56' fill='none' stroke='%238d97ad' stroke-width='1.6'><rect x='2' y='2' width='80' height='52' rx='6'/><path d='M42 2v52M2 28h8M74 28h8'/><circle cx='42' cy='28' r='8'/><path d='M20 14l7 7M27 14l-7 7M58 36l7 7M65 36l-7 7'/><circle cx='60' cy='16' r='4'/><circle cx='24' cy='42' r='4'/></svg>") center/contain no-repeat}.empty{text-align:center}
 </style>
 </head>
 <body>
@@ -518,7 +541,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.16.0';
+const APP_VERSION='1.18.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -549,7 +572,13 @@ loadCur();
 function goSeason(s){if(!S.data[s]){S.data[s]=ns();S.order.push(s);S.order.sort()}S.cur=s;draft={};editK=null;save();render()}
 const persist=()=>{try{const clone=Object.assign({},S,{img:{}});localStorage.setItem(keyOf(IX.cur),JSON.stringify(clone));if(bkm.startsWith('Falha ao salvar'))bkm='';return true}catch(e){bkm='Falha ao salvar neste aparelho: '+((e&&e.message)||'armazenamento cheio');if(document.getElementById('app'))setTimeout(render,0);return false}};
 const save=()=>{RKC=null;S.ts=Date.now();try{reconcileNews()}catch(e){}cloudMark();return persist()};
-const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Base de clubes compartilhada: declarada aqui para existir antes de qualquer função que a use.
+const CLUB_DB_KEY='diario-club-database-v1';
+let CLUB_DB={clubs:[],images:{}};
+try{const raw=localStorage.getItem(CLUB_DB_KEY);if(raw){const parsed=JSON.parse(raw);CLUB_DB={clubs:Array.isArray(parsed.clubs)?parsed.clubs:[],images:parsed.images&&typeof parsed.images==='object'?parsed.images:{}}}}catch(e){}
+function saveClubDb(){try{CLUB_DB.ts=Date.now();const light={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:{},ts:CLUB_DB.ts};localStorage.setItem(CLUB_DB_KEY,JSON.stringify(light))}catch(e){console.warn('Falha leve ao salvar base de clubes:',e)}}
+
 const num=v=>Number(String(v).replace(',','.'))||0;
 const fm=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:2});
 const D=()=>S.data[S.cur];
@@ -860,7 +889,10 @@ function newCareer(f){
 }
 function delCareer(id){
   try{localStorage.removeItem(keyOf(id))}catch(e){}
+  if(CAREER_IMGS&&CAREER_IMGS[id])delete CAREER_IMGS[id];
   IX.list=IX.list.filter(c=>c.id!==id);confC=null;
+  // A lista nunca pode ficar vazia: sem carreira, o app não teria onde salvar.
+  if(!IX.list.length)IX.list.push({id:'c1',name:'Meu clube'});
   if(IX.cur===id){IX.cur=IX.list[0].id;loadCur();draft={};editK=null;openM=null}
   saveIx();render();
 }
@@ -890,7 +922,7 @@ window.addEventListener('appinstalled',()=>{deferredInstall=null;if(MENU)render(
 function renderMenu(){
   applyAcc();document.body.classList.add('menu-on');
   document.getElementById('top').innerHTML='';document.getElementById('tabs').innerHTML='';
-  document.getElementById('app').innerHTML=vMenu();renderedTab=null;
+  document.getElementById('app').innerHTML=vMenu();renderedTab=null;applyInfo();
   queueMicrotask(()=>{ui();armPickers();flashNow();bkOpen=false});
 }
 function vMenu(){
@@ -908,7 +940,7 @@ function vMenu(){
    <button class="mn-btn" onclick="menuGo('config')"><span>Configurações</span><small>Aparência, backup e mais</small></button>
   </div>
   ${deferredInstall?`<div class="mn-tiles"><button class="mn-tile" onclick="menuInstall()"><span>Instalar app</span><small>Abrir pela tela inicial, mesmo sem internet</small></button></div>`:''}
-  <p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p></div>`;
+  <p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p><div class="mn-deco" aria-hidden="true">${MN_DECO}</div></div>`;
 }
 let NEWS_QUIET=false,SEQC=null,HLQ=[],hlTimer=null,EDCACHE=[];
 const T3=(pt,en,es)=>({pt,en,es})[appLanguage()]||pt;
@@ -1070,6 +1102,7 @@ async function dbReq(path,method,body,extra){const a=await cloudToken(),c=cloudC
 async function sha1(s){if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}return(h1>>>0).toString(16)+(h2>>>0).toString(16)+s.length.toString(16)}
 const cloudDevice=()=>/Android/i.test(navigator.userAgent)?'Android':/iPhone|iPad/i.test(navigator.userAgent)?'iPhone':/Windows/i.test(navigator.userAgent)?'Windows':'Navegador';
 async function cloudPush(){
+  try{await waitMediaReady()}catch(_){}
   const obj=JSON.parse(allJson()),imgs={};
   const sw=async m=>{if(!m||typeof m!=='object')return;for(const k of Object.keys(m)){const v=m[k];if(typeof v==='string'&&v.startsWith('data:image')){const h=await sha1(v);imgs[h]=v;m[k]='@img:'+h}}};
   await sw(obj.clubDb&&obj.clubDb.images);for(const id in obj.data)if(obj.data[id])await sw(obj.data[id].img);
@@ -1101,7 +1134,14 @@ async function cloudSync(auto){
   CL.busy=false;cloudSay(msg,err);
 }
 async function cloudResolve(useCloud){const c=CL.conflict;if(!c||CL.busy)return;CL.busy=true;let msg='',err=false;try{if(useCloud)await cloudPull(c.meta);else await cloudPush();CL.conflict=null;IX.cloudLastAt=Date.now();saveIx();msg=useCloud?'Dados da nuvem carregados neste aparelho.':'Os dados deste aparelho foram enviados para a nuvem.'}catch(e){msg=cloudErr(e);err=true}CL.busy=false;cloudSay(msg,err)}
-async function cloudLogin(mode){const e=((document.getElementById('cl-email')||{}).value||'').trim(),p=(document.getElementById('cl-pw')||{}).value||'';if(!e||!p){cloudSay('Digite e-mail e senha.',true);return}if(CL.busy)return;CL.busy=true;cloudSay('Conectando…');try{await cloudSign(mode,e,p);CL.busy=false;await cloudSync(false)}catch(x){CL.busy=false;cloudSay(cloudErr(x),true)}}
+async function cloudLogin(mode){
+  // Lê o DOM antes de qualquer render: cloudSay() reconstrói a tela e zeraria os campos.
+  const e=((document.getElementById('cl-email')||{}).value||'').trim(),p=(document.getElementById('cl-pw')||{}).value||'';
+  if(!e||!p){cloudSay('Digite e-mail e senha.',true);return}
+  if(CL.busy)return;
+  CL.busy=true;CL.msg='';CL.err=false;render();
+  try{await cloudSign(mode,e,p);CL.busy=false;await cloudSync(false)}catch(x){CL.busy=false;cloudSay(cloudErr(x),true)}
+}
 async function cloudReset(){const e=((document.getElementById('cl-email')||{}).value||'').trim();if(!e){cloudSay('Digite seu e-mail para receber o link de nova senha.',true);return}try{await clFetch(IDT+'accounts:sendOobCode?key='+encodeURIComponent(cloudCfg().key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestType:'PASSWORD_RESET',email:e})});cloudSay('Enviamos um e-mail com o link para criar uma nova senha.')}catch(x){cloudSay(cloudErr(x),true)}}
 function cloudOut(){IX.cloudAuth=null;IX.cloudBase=null;IX.cloudDirty=false;CL.conflict=null;saveIx();cloudSay('Você saiu da conta. Os dados continuam neste aparelho.')}
 function cloudSaveCode(){const v=((document.getElementById('clcode')||{}).value||'').trim(),p=v.split(';').map(x=>x.trim()),k=p[0],d=p[1]||'';if(!k||!/^https:\/\/[^\s;]+$/.test(d)||!/(firebaseio\.com|firebasedatabase\.app)/.test(d)){cloudSay('Código inválido. Use o formato chave;endereço-do-banco (veja o README).',true);return}IX.cloud={key:k,db:d.replace(/\/+$/,'')};saveIx();cloudSay('Código salvo. Agora entre ou crie a sua conta.')}
@@ -1113,8 +1153,8 @@ function cloudBox(){
   const msg=CL.msg&&!CL.conflict?`<p class="sub"${CL.err?' style="color:var(--loss)"':''}>${esc(CL.msg)}</p>`:'';
   let body;
   if(!cfg)body=`<p class="sub">Entre com e-mail e senha para ter a mesma carreira em vários aparelhos. Primeiro conecte o app ao seu Firebase gratuito (passo a passo no README).</p><label>Código de conexão<input id="clcode" autocomplete="off" placeholder="chave;endereço-do-banco"></label><button type="button" class="btn" onclick="cloudSaveCode()">Salvar código</button>`;
-  else if(!inn)body=`<label>E-mail<input id="cl-email" type="email" autocomplete="username" value="${esc(IX.cloudEmail||'')}"></label><label>Senha<input id="cl-pw" type="password" autocomplete="current-password"></label><div class="backup-actions"><button type="button" class="btn" onclick="cloudLogin('in')">Entrar</button><button type="button" class="chip2" onclick="cloudLogin('up')">Criar conta</button><button type="button" class="chip2" onclick="cloudReset()">Esqueci a senha</button></div><p class="sub"><a href="#" onclick="IX.cloud=null;saveIx();render();return false">Trocar o código de conexão</a></p>`;
-  else body=`<p class="sub">Conectado como <b>${esc(a.email||'')}</b>${IX.cloudLastAt?'<br>Última sincronização: '+new Date(IX.cloudLastAt).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):''}${IX.cloudDirty?'<br>Há alterações aguardando envio.':''}</p>${CL.conflict?`<div class="rk-me"><p>Este aparelho e a nuvem têm mudanças diferentes. Qual versão manter?</p><div class="backup-actions"><button type="button" class="btn" onclick="cloudResolve(true)">Usar a nuvem</button><button type="button" class="chip2" onclick="cloudResolve(false)">Usar este aparelho</button></div><p class="sub">Se usar a nuvem, o que está neste aparelho fica guardado nas cópias automáticas. Se usar este aparelho, a nuvem é substituída.</p></div>`:''}<div class="backup-actions"><button type="button" class="btn" onclick="cloudSync(false)">Sincronizar agora</button><button type="button" class="chip2" onclick="cloudOut()">Sair</button></div><label class="mn-skip"><input type="checkbox" ${IX.cloudAuto===false?'':'checked'} onchange="IX.cloudAuto=this.checked;saveIx()"><span>Sincronizar automaticamente</span></label>`;
+  else if(!inn)body=`<label>E-mail<input id="cl-email" type="email" autocomplete="username" value="${esc(IX.cloudEmail||'')}"></label><label>Senha<input id="cl-pw" type="password" autocomplete="current-password" oninput="pwDraft=this.value" value="${esc(pwDraft||'')}"></label><div class="backup-actions"><button type="button" class="btn" onclick="cloudLogin('in')">Entrar</button><button type="button" class="chip2" onclick="cloudLogin('up')">Criar conta</button><button type="button" class="chip2" onclick="cloudReset()">Esqueci a senha</button></div><p class="sub"><a href="#" onclick="IX.cloud=null;saveIx();render();return false">Trocar o código de conexão</a></p>`;
+  else body=`<p class="sub">Conectado como <b>${esc(a.email||'')}</b>${IX.cloudLastAt?'<br>Última sincronização: '+new Date(IX.cloudLastAt).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):''}${IX.cloudDirty?'<br>Há alterações aguardando envio.':''}</p>${CL.conflict?`<div class="rk-me"><p>Este aparelho e a nuvem têm mudanças diferentes. Qual versão manter?</p><div class="backup-actions"><button type="button" class="btn" onclick="cloudResolve(true)">Usar a nuvem</button><button type="button" class="chip2" onclick="cloudResolve(false)">Usar este aparelho</button></div><p class="sub">Se usar a nuvem, o que está neste aparelho é substituído. Se usar este aparelho, a nuvem é substituída.</p></div>`:''}<div class="backup-actions"><button type="button" class="btn" onclick="cloudSync(false)">Sincronizar agora</button><button type="button" class="chip2" onclick="cloudOut()">Sair</button></div><label class="mn-skip"><input type="checkbox" ${IX.cloudAuto===false?'':'checked'} onchange="IX.cloudAuto=this.checked;saveIx()"><span>Sincronizar automaticamente</span></label>`;
   return `<details class="bkd"${CL.conflict?' open':''}><summary>Sincronizar com a nuvem</summary>${msg}${body}</details>`;
 }
 function reconcileNews(){const d=S.data[S.cur];if(!d||!Array.isArray(d.news)||!d.news.length)return false;const ids=new Set((d.m||[]).map(m=>String(m.id))),tid=new Set((d.t||[]).map(t=>String(t.id))),chs=new Set(seasonChampions(S.cur).map(c=>norm(c.competition)));const keep=d.news.filter(x=>{const k=String(x.key||'');if(k.indexOf('champion:')===0)return chs.has(k.slice(9));if(k.indexOf('match:')===0)return ids.has(k.slice(6));if(k.indexOf('ms:')===0)return ids.has(k.split(':')[1]);if(k.indexOf('transfer:')===0)return tid.has(k.slice(9));return true});if(keep.length===d.news.length)return false;d.news=keep;return true}
@@ -1127,9 +1167,9 @@ function milestoneNews(match,season){
   const seq=SEQC||careerSeq(),idx=seq.findIndex(x=>x.m===match);if(idx<0)return;
   const club=S.club,cur=match,past=seq.slice(0,idx),W=x=>x.gp>x.gc,Lz=x=>x.gp<x.gc;
   const add=(t,imp,T,B)=>addNews(season,{key:pre+t,kind:'milestone',matchDate:match.date||'',importance:imp,title:T[0],titleByLang:{pt:T[0],en:T[1],es:T[2]},body:B[0],bodyByLang:{pt:B[0],en:B[1],es:B[2]},competition:match.c||''});
-  const n=idx+1,wins=seq.slice(0,n).filter(x=>W(x.m)).length,pc=Math.round(wins/n*100);
-  if([25,50,100,150,200,250,300,400,500].includes(n))add('games',n>=100?76:70,[`Marco: ${n} jogos no comando do ${club}`,`Milestone: ${n} matches in charge of ${club}`,`Hito: ${n} partidos al mando del ${club}`],[`${club} chega a ${n} partidas sob o seu comando, com ${wins} vitórias (${pc}%).`,`${club} reach ${n} matches under your command, with ${wins} wins (${pc}%).`,`${club} llega a ${n} partidos bajo tu mando, con ${wins} victorias (${pc}%).`]);
-  const nameOf=(s,k)=>{const p=(S.data[s].p||[]).find(q=>String(q.k)===String(k));return p?p.n:null},goals={};
+  const hb=histBase(),n=idx+1,wins=seq.slice(0,n).filter(x=>W(x.m)).length,pc=Math.round(wins/n*100);
+  {const n=idx+1+hb.tj,w2=wins+hb.tv,pc=Math.round(w2/n*100);if([25,50,100,150,200,250,300,400,500].includes(n))add('games',n>=100?76:70,[`Marco: ${n} jogos no comando do ${club}`,`Milestone: ${n} matches in charge of ${club}`,`Hito: ${n} partidos al mando del ${club}`],[`${club} chega a ${n} partidas sob o seu comando, com ${w2} vitórias (${pc}%).`,`${club} reach ${n} matches under your command, with ${w2} wins (${pc}%).`,`${club} llega a ${n} partidos bajo tu mando, con ${w2} victorias (${pc}%).`]);}
+  const nameOf=(s,k)=>{const p=(S.data[s].p||[]).find(q=>String(q.k)===String(k));return p?p.n:null},goals={};Object.entries(hb.p).forEach(([k,v])=>{goals[k]=(goals[k]||0)+v.g});
   past.forEach(x=>Object.entries(x.m.pl||{}).forEach(([k,v])=>{const nm=nameOf(x.season,k);if(nm&&+v.g>0)goals[nm]=(goals[nm]||0)+(+v.g)}));
   Object.entries(cur.pl||{}).forEach(([k,v])=>{const nm=nameOf(season,k),g=+v.g||0;if(!nm||!g)return;const b=goals[nm]||0,m=[10,25,50,75,100,150,200,250,300].find(z=>b<z&&b+g>=z);if(m)add('g:'+nm+':'+m,m>=50?78:72,[`${nm} chega aos ${m} gols pelo ${club}`,`${nm} reaches ${m} goals for ${club}`,`${nm} llega a los ${m} goles con el ${club}`],[`O gol número ${m} de ${nm} saiu contra o ${cur.adv}.`,`${nm} scored goal number ${m} against ${cur.adv}.`,`${nm} marcó el gol número ${m} ante ${cur.adv}.`])});
   const mg=cur.gp-cur.gc;
@@ -1142,7 +1182,7 @@ function milestoneNews(match,season){
   const vs=past.filter(x=>nrm(x.m.adv)===nrm(cur.adv));
   if(W(cur)&&vs.length>=3&&!vs.some(x=>W(x.m)))add('h2h',76,[`Enfim! ${club} vence o ${cur.adv} após ${vs.length} jogos`,`At last! ${club} beat ${cur.adv} after ${vs.length} games`,`¡Por fin! ${club} vence al ${cur.adv} tras ${vs.length} partidos`],[`Era a primeira vitória sobre o ${cur.adv} na carreira.`,`It was the first win over ${cur.adv} of the career.`,`Era la primera victoria sobre el ${cur.adv} de la carrera.`]);
   {const ad=(t,imp,ti,bo)=>add(t,imp,[ti,ti,ti],[bo,bo,bo]),pk=(a,sd)=>a[[...String(sd)].reduce((x,c)=>x+c.charCodeAt(0),0)%a.length],full=seq.slice(0,idx+1),nmx=(x,k)=>nameOf(x.season,k),st={};
-  past.forEach(x=>Object.entries(x.m.pl||{}).forEach(([k,v])=>{const q=nmx(x,k);if(!q)return;const e=st[q]||(st[q]={j:0,g:0,a:0});e.j++;e.g+=+v.g||0;e.a+=+v.a||0}));
+  past.forEach(x=>Object.entries(x.m.pl||{}).forEach(([k,v])=>{const q=nmx(x,k);if(!q)return;const e=st[q]||(st[q]={j:0,g:0,a:0});e.j++;e.g+=+v.g||0;e.a+=+v.a||0}));Object.entries(hb.p).forEach(([q,v])=>{const e=st[q]||(st[q]={j:0,g:0,a:0});e.j+=v.j;e.g+=v.g;e.a+=v.a});
   const cr=(arr,from,to)=>arr.find(z=>from<z&&to>=z);
   Object.entries(cur.pl||{}).forEach(([k,v])=>{const q=nameOf(season,k);if(!q)return;const b=st[q]||{j:0,g:0,a:0},g=+v.g||0,a=+v.a||0;
     const mj=cr([10,25,50,75,100,150,200,250,300],b.j,b.j+1);if(mj)ad('j:'+q+':'+mj,mj>=50?70:64,pk([`${q} chega aos ${mj} jogos pelo ${club}`,`${mj} jogos: ${q} já faz parte da história do ${club}`],q+mj),`${q} entrou em campo pela ${mj}ª vez com a camisa do ${club}, diante do ${cur.adv}.`);
@@ -1230,15 +1270,25 @@ async function protectStorage(){try{if(navigator.storage&&navigator.storage.pers
 const storageNote=()=>storagePersisted===true?'<p class="sub">Armazenamento protegido: o navegador não deve apagar estes dados sozinho.</p>':storagePersisted===false?'<p class="sub">O navegador não garantiu proteção contra limpeza automática. Instale o app na tela inicial e faça backups com frequência.</p>':'';
 function restoreFromPastedText(){
   const el=document.getElementById('bk-paste-text');
-  const val=el?el.value.trim():'';
-  if(!val){alert('Cole o texto do arquivo JSON na caixa antes de carregar.');return}
+  const val=((el&&el.value)||pasteDraft||'').trim();
+  if(!val){bkm='Cole o texto do arquivo JSON na caixa antes de carregar.';render();return}
+  pasteDraft=val;
   prepareRestore(val);
 }
-function backupBox(){return '<details class="bkd"><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.03);border:1px dashed var(--bd,#333);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--bd,#333);background:var(--bg,#111);color:inherit;resize:vertical;box-sizing:border-box"></textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
+let pasteDraft='',pwDraft='';
+function backupBox(){return '<details class="bkd"'+(pendingRestore||pasteDraft?' open':'')+'><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.03);border:1px dashed var(--bd,#333);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" oninput="pasteDraft=this.value" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--bd,#333);background:var(--bg,#111);color:inherit;resize:vertical;box-sizing:border-box">'+(pasteDraft?esc(pasteDraft):'')+'</textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
 function markBackup(){IX.lastBk=new Date().toISOString();saveIx()}
-function downloadBk(){
-  try{const blob=new Blob([allJson()],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='diario-do-tecnico-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);markBackup();bkm='Backup baixado. Guarde o arquivo em um local seguro.';render()}
-  catch(e){bkm='Não foi possível baixar o backup. Use a opção Copiar backup.';render()}
+async function downloadBk(){
+  try{
+    // Garante que as imagens do IndexedDB já estejam em memória antes de montar o JSON.
+    if(typeof waitMediaReady==='function'){try{await waitMediaReady()}catch(_){}}
+    const blob=new Blob([allJson()],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='diario-do-tecnico-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    markBackup();bkm='Backup baixado. Guarde o arquivo em um local seguro.';render();
+  }
+  catch(e){bkm='Não foi possível baixar o backup: '+((e&&e.message)||'erro desconhecido')+'. Tente novamente.';render()}
 }
 function restoreFile(file){if(!file)return;const rd=new FileReader();rd.onerror=()=>{bkm='Não foi possível ler o arquivo de backup.';render()};rd.onload=()=>restoreText(String(rd.result||''));rd.readAsText(file)}
 function restoreText(text){const box=document.getElementById('bk');if(box)box.value=text;return prepareRestore(text)}
@@ -1372,14 +1422,24 @@ function tbSet(f,v){
 function setResC(c,v){const d=D(),x=d.res.find(y=>y.c===c);if(x){x.r=v.trim();delete x.auto}else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)));save();FL=()=>[...document.querySelectorAll('.cc[data-cc]')].find(z=>z.dataset.cc===c);render()}
 function delRes(c){mark('Campeonato removido');const d=D();d.res=d.res.filter(y=>y.c!==c);save();render()}
 const NAVI={
- home:'<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
- partidas:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5l3.6 2.6-1.4 4.2H9.8L8.4 10.1z"/><path d="M12 3v4.5M15.6 10.1L20 8.7M14.2 14.3l2.6 3.7M9.8 14.3L7.2 18M8.4 10.1L4 8.7"/>',
- elenco:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.2c2.9.1 4.8 2.2 4.8 5.3"/>',
- transf:'<path d="M4 8h13M13.5 4.5L17 8l-3.5 3.5M20 16H7M10.5 12.5L7 16l3.5 3.5"/>',
- rank:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
- fim:'<path d="M5 21V4M5 4h12l-2 4 2 4H5"/>',
- config:'<circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.8 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.8-1l-1.7.7-1.4-2.4 1.4-1.1a7 7 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.8-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.8 1l1.7-.7 1.4 2.4-1.4 1.1a7 7 0 0 1 0 2z"/>'
+ home:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/>',
+ partidas:'<circle cx="12" cy="12" r="9"/><path d="m12 8 3.8 2.8-1.4 4.4H9.6l-1.4-4.4zM12 3v5M20.5 9.5l-4.7 1.3M17.5 19.5l-3.1-4.3M6.5 19.5l3.1-4.3M3.5 9.5l4.7 1.3"/>',
+ elenco:'<circle cx="9" cy="8" r="3.2"/><path d="M3 19.5c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17.5 14.2c2.2.3 3.5 2 3.5 4.3"/>',
+ transf:'<path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/>',
+ rank:'<rect x="4" y="11" width="4" height="9" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="16" y="14" width="4" height="6" rx="1"/>',
+ fim:'<path d="M5 21V4M5 4h12l-2.5 4L17 12H5"/>',
+ config:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>'
 };
+
+const INFO_PFX=['A nota-base é uma estimativa', 'Pela posição do adversário', 'Marque os jogos de cada mês', 'Entre com e-mail e senha', 'Se usar a nuvem', 'Suas alterações são salvas', 'A base de clubes é compartilhada', 'Os escudos personalizados', 'Cada carreira guarda', 'Temporada filtra todo o painel', 'O craque da temporada aparece', 'Digite os totais da temporada', 'Soma todas as temporadas', 'Os títulos vêm dos resultados', 'Escolha um tom suave', 'Em verde, o melhor valor', 'Desligado: a partida guarda', 'Um passo só:', 'A idade já vem com +1', 'Só os campeonatos desta lista', 'Para números de antes do app', 'As notas seguem faixas', 'Para desfazer uma saída', 'Compra e empréstimo recebido', 'Valores em milhões', 'Resultado = vendas', 'Jogos, gols e assistências de cada jogador', 'Registre o campeão e'],infoOpen=new Set();
+
+const EI_MAP={"✕": "<path d=\"M18 6 6 18M6 6l12 12\"/>", "✎": "<path d=\"M12 20h9\"/><path d=\"M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z\"/>", "🏆": "<path d=\"M6 4h12v5a6 6 0 0 1-12 0z\"/><path d=\"M6 6H3v1a4 4 0 0 0 3 3.9M18 6h3v1a4 4 0 0 1-3 3.9M12 15v3M8 21h8M9.5 18h5\"/>", "🏅": "<circle cx=\"12\" cy=\"15\" r=\"5\"/><path d=\"m8.5 11-2-7h4l1.5 4M15.5 11l2-7h-4L12 8\"/>", "📰": "<path d=\"M4 5h13v14H6a2 2 0 0 1-2-2z\"/><path d=\"M17 9h3v8a2 2 0 0 1-2 2M7.5 9h6M7.5 12.5h6M7.5 16h4\"/>", "☁": "<path d=\"M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z\"/>", "💰": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M14.8 9.2c-.6-.8-1.6-1.2-2.8-1.2-1.7 0-2.8.8-2.8 2s1 1.7 2.8 2 2.8.8 2.8 2-1.1 2-2.8 2c-1.2 0-2.2-.4-2.8-1.2M12 6.5V8m0 8v1.5\"/>", "⚽": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m12 8 3.8 2.8-1.4 4.4H9.6l-1.4-4.4zM12 3v5M20.5 9.5l-4.7 1.3M17.5 19.5l-3.1-4.3M6.5 19.5l3.1-4.3M3.5 9.5l4.7 1.3\"/>", "⚙": "<path d=\"M4 7h9M17 7h3M4 17h3M11 17h9\"/><circle cx=\"15\" cy=\"7\" r=\"2\"/><circle cx=\"9\" cy=\"17\" r=\"2\"/>", "💡": "<path d=\"M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z\"/>"},EI_RE=new RegExp('['+Object.keys(EI_MAP).join('')+']');
+function applyEmoji(){const w=document.createTreeWalker(document.getElementById('app')||document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode()){if(EI_RE.test(n.data)&&!n.parentElement.closest('option,textarea,script,style,datalist'))L.push(n)}L.forEach(n=>{const f=document.createDocumentFragment();n.data.split(new RegExp('('+Object.keys(EI_MAP).map(k=>k).join('|')+')')).forEach(p=>{if(EI_MAP[p]){const t=document.createElement('template');t.innerHTML='<svg class="ei" viewBox="0 0 24 24" aria-hidden="true">'+EI_MAP[p]+'</svg>';f.appendChild(t.content.firstChild)}else if(p)f.appendChild(document.createTextNode(p))});n.replaceWith(f)})}
+function histBase(){const o={tj:0,tv:0,p:{}};S.order.forEach(s=>{const d=S.data[s]||{},r=rec(d),b=d.tb||{};o.tj+=Math.max(0,r.j-(d.m||[]).length);o.tv+=+b.v||0;(d.p||[]).forEach(p=>{const q=p.base||{};if(!(q.j||q.g||q.a))return;const e=o.p[p.n]||(o.p[p.n]={j:0,g:0,a:0});e.j+=+q.j||0;e.g+=+q.g||0;e.a+=+q.a||0})});return o}
+const fa=x=>String(x==null?'':x).replace(/\s*\(formato antigo\)/gi,' (FA)');
+function applyInfo(){try{applyEmoji()}catch(e){}document.querySelectorAll('#app .sub').forEach(p=>{if(p.dataset.info)return;const t=(p.textContent||'').trim(),k=INFO_PFX.find(x=>t.startsWith(x));if(!k)return;p.dataset.info=k;p.hidden=!infoOpen.has(k);const b=document.createElement('button');b.type='button';b.className='info-btn';b.textContent='i';b.setAttribute('aria-label','Mais informações');b.setAttribute('aria-expanded',String(infoOpen.has(k)));b.onclick=()=>{const o=!infoOpen.has(k);o?infoOpen.add(k):infoOpen.delete(k);p.hidden=!o;b.setAttribute('aria-expanded',String(o))};const h=p.previousElementSibling;if(h&&/^H[1-4]$/.test(h.tagName))h.appendChild(b);else p.before(b)})}
+NAVI.trof='<path d="M6 4h12v5a6 6 0 0 1-12 0z"/><path d="M6 6H3v1a4 4 0 0 0 3 3.9M18 6h3v1a4 4 0 0 1-3 3.9M12 15v3M8 21h8M9.5 18h5"/>';
+const MN_DECO='<svg viewBox="0 0 400 150" width="100%" preserveAspectRatio="xMidYMax meet"><g fill="none" stroke="#8d97ad" stroke-width="1.6" opacity=".7"><g transform="translate(20 40) rotate(-8)"><rect width="150" height="100" rx="8"/><path d="M75 0v100M0 50h20M130 50h20"/><circle cx="75" cy="50" r="14"/><path d="M40 25l10 10M50 25L40 35M105 70l10 10M115 70l-10 10"/><circle cx="110" cy="30" r="6"/><circle cx="45" cy="75" r="6"/></g><g transform="translate(270 70)"><circle cx="40" cy="40" r="26"/><rect x="40" y="14" width="62" height="20" rx="8" transform="rotate(8 40 24)"/><circle cx="40" cy="40" r="7"/></g></g></svg>';
 const ico=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAVI[k]}</svg>`;
 const NAVB=[['home','Resumo'],['partidas','Partidas'],['elenco','Elenco'],['transf','Mercado'],['rank','Estatísticas'],['config','Configurações']];
 function go(k){tab=k;render();const e=document.getElementById('app');if(e&&e.classList){e.classList.remove('tin');void e.offsetWidth;e.classList.add('tin')}if(typeof window!=='undefined'&&window.scrollTo)window.scrollTo(0,0)}
@@ -1403,9 +1463,9 @@ function vHome(){
   const cc=names.map(c=>{
     const ms=d.m.filter(x=>x.c===c),q=recM({m:ms}),x=d.res.find(y=>y.c===c);
     const place=OLD_EURO.has(c)?x?.inheritedFrom?`<p class="group-route" data-route="${esc(c)}">${oldEuroRoute(c,x?.groupPlace,x?.inheritedFrom)}</p>`:`<label class="group-place">Posição final no grupo<select data-c="${esc(c)}" onchange="setGroupPlace(this.dataset.c,this.value)"><option value="">Selecione</option>${[1,2,3,4].map(n=>`<option value="${n}" ${+x?.groupPlace===n?'selected':''}>${n}º lugar</option>`).join('')}</select></label><p class="group-route" data-route="${esc(c)}">${oldEuroRoute(c,x?.groupPlace,x?.inheritedFrom)}</p>`:'';
-    return `<div class="cc" data-cc="${esc(c)}"><div class="cn">${compLogo(c,26)} ${esc(c)}</div><div class="cs">${ms.length} jogos · ${q.v}V ${q.e}E ${q.l}D · ${q.gp}:${q.gc} gols</div><div class="cr"><input list="dl-res" data-c="${esc(c)}" value="${esc(x?x.r:'')}" placeholder="Resultado (campeão, 3º lugar…)" aria-label="Resultado em ${esc(c)}" onchange="setResC(this.dataset.c,this.value)">${x?`<button class="x" aria-label="Remover ${esc(c)}" data-c="${esc(c)}" onclick="delRes(this.dataset.c)">✕</button>`:''}</div>${place}</div>`;
+    return `<div class="cc" data-cc="${esc(c)}"><div class="cn">${compLogo(c,26)} ${esc(fa(c))}</div><div class="cs">${ms.length} J · ${q.v}V ${q.e}E ${q.l}D · ${q.gp}:${q.gc} G</div><div class="cr"><input list="dl-res" data-c="${esc(c)}" value="${esc(x?x.r:'')}" placeholder="Resultado (campeão, 3º lugar…)" aria-label="Resultado em ${esc(c)}" onchange="setResC(this.dataset.c,this.value)">${x?`<button class="x" aria-label="Remover ${esc(c)}" data-c="${esc(c)}" onclick="delRes(this.dataset.c)">✕</button>`:''}</div>${place}</div>`;
   }).join('');
-  return `${firstRun?`<details class="quick-guide"><summary>Primeiros passos</summary><ol><li>Adicione as competições em <b>Resumo → Campeonatos</b>.</li><li>Cadastre o elenco, se quiser acompanhar notas e números individuais.</li><li>Registre cada jogo na aba <b>Partidas</b>; o app calcula os totais.</li><li>Faça um backup em <b>Configurações</b> para levar sua carreira a outro aparelho.</li></ol></details>`:''}<div class="qa"><button onclick="go('partidas')">${ico('partidas')}<span>Registrar partida</span></button><button onclick="go('elenco')">${ico('elenco')}<span>Central do elenco</span></button><button onclick="sub.st='s';statsDetailOpenRequest='Fechar temporada';go('rank')">${ico('fim')}<span>Fechar temporada</span></button></div>
+  return `${firstRun?`<details class="quick-guide"><summary>Primeiros passos</summary><ol><li>Adicione as competições em <b>Resumo → Campeonatos</b>.</li><li>Cadastre o elenco, se quiser acompanhar notas e números individuais.</li><li>Registre cada jogo na aba <b>Partidas</b>; o app calcula os totais.</li><li>Faça um backup em <b>Configurações</b> para levar sua carreira a outro aparelho.</li></ol></details>`:''}<div class="qa"><button onclick="go('partidas')">${ico('partidas')}<span>Registrar partida</span></button><button onclick="go('elenco')">${ico('elenco')}<span>Central do elenco</span></button><button onclick="sub.st='s';statsDetailOpenRequest='Fechar temporada';go('rank')">${ico('fim')}<span>Fechar temporada</span></button><button onclick="sub.st='s';statsDetailOpenRequest='Troféus e prêmios';go('rank')">${ico('trof')}<span>Sala de troféus</span></button></div>
   ${pills('home',[['t','Esta temporada'],['c','Carreira toda'],['n','Jornal']],'t')}
   <div class="hero" style="${heroStyle()}"><div><span class="sub2">Aproveitamento${car?' na carreira':''}</span><b class="big">${aprov}%</b></div><div class="hr">${car?'':`<span class="sub2">Últimos jogos</span><div class="dots">${dots||'<span class="sub2">Nenhum jogo ainda</span>'}</div>`}<span class="sub2">Saldo de gols <b class="sd">${saldo>0?'+':''}${saldo}</b></span></div></div>
   <div class="ch0"><h3>${car?'Números da carreira':'Números de '+esc(S.cur)}</h3>${car?'':`<button class="sm" onclick="editT=!editT;render()">${editT?'Concluir':'✎ Editar'}</button>`}</div>
@@ -1416,7 +1476,7 @@ function vHome(){
   ${cc||'<p class="empty">Nenhum campeonato ainda. Adicione abaixo ou registre partidas.</p>'}
   ${sugHtml()}
   <details class="add" ${fo.c||!names.length?'open':''} ontoggle="fo.c=this.open"><summary>+ Adicionar campeonato</summary><form onsubmit="return add('r',this)"><label>Competição<input name="c" list="dl-comps" autocomplete="off" placeholder="Digite e escolha" required></label><label>Resultado (opcional)<input name="r" list="dl-res" autocomplete="off" placeholder="Campeão, 3º lugar…"></label><button class="btn">Adicionar</button></form></details>
-  <form onsubmit="return false"><label>Observações da temporada<input value="${esc(d.obs)}" onchange="D().obs=this.value;save()"></label></form>`;
+  `;
 }
 
 const RANK_KEY=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -1595,7 +1655,7 @@ function vCmp(){
 function totalSeasons(){
   const a=S.order.reduce((t,s)=>{const q=rec(S.data[s]);t.j+=q.j;t.v+=q.v;t.e+=q.e;t.l+=q.l;t.gp+=q.gp;t.gc+=q.gc;t.t+=S.data[s].res.filter(x=>x.r==='Campeão').length;return t},{j:0,v:0,e:0,l:0,gp:0,gc:0,t:0});
   const sd=a.gp-a.gc,ap=a.j?Math.round((a.v*3+a.e)/(a.j*3)*100):0;
-  return `<div class="cc"><div class="cn">Total da carreira</div><div class="cs">${S.order.length} temporada${S.order.length>1?'s':''} · ${a.j} jogos · ${a.v}V ${a.e}E ${a.l}D · ${a.gp}:${a.gc} gols (saldo ${sd>0?'+':''}${sd}) · aproveitamento ${ap}%${a.t?' · 🏆 '+a.t+' título'+(a.t>1?'s':''):''}</div></div>`;
+  return `<div class="cc"><div class="cn">Total da carreira</div><div class="cs">${S.order.length} temporada${S.order.length>1?'s':''} · ${a.j} J · ${a.v}V ${a.e}E ${a.l}D · ${a.gp}:${a.gc} G (saldo ${sd>0?'+':''}${sd}) · aproveitamento ${ap}%${a.t?' · 🏆 '+a.t+' título'+(a.t>1?'s':''):''}</div></div>`;
 }
 const lineupOn=()=>S.lu===undefined?true:!!S.lu;
 function matchBox(){
@@ -1695,6 +1755,11 @@ async function loadCareerImgs(cid) {
   return CAREER_IMGS[cid];
 }
 
+let mediaReadyPromise=null;
+function waitMediaReady(){
+  if(!mediaReadyPromise)mediaReadyPromise=initMediaStorageAndMigrate().catch(()=>{});
+  return mediaReadyPromise;
+}
 async function initMediaStorageAndMigrate() {
   try {
     const all = await idbGetAllImgs();
@@ -1773,10 +1838,6 @@ async function initMediaStorageAndMigrate() {
   }
 }
 
-const CLUB_DB_KEY='diario-club-database-v1';
-let CLUB_DB={clubs:[],images:{}};
-try{const raw=localStorage.getItem(CLUB_DB_KEY);if(raw){const parsed=JSON.parse(raw);CLUB_DB={clubs:Array.isArray(parsed.clubs)?parsed.clubs:[],images:parsed.images&&typeof parsed.images==='object'?parsed.images:{}}}}catch(e){}
-function saveClubDb(){try{CLUB_DB.ts=Date.now();const light={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:{},ts:CLUB_DB.ts};localStorage.setItem(CLUB_DB_KEY,JSON.stringify(light))}catch(e){console.warn('Falha leve ao salvar base de clubes:',e)}}
 function databaseClubNames(){return [...new Set([...TIMES,...RANK_EXTRA_CLUBS,...Object.keys(CLUB_BADGES),...(CLUB_DB.clubs||[]),...(S.assetClubs||[])].filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"))}
 // Migra escudos personalizados antigos da carreira ativa para a base compartilhada.
 if(S.img&&typeof S.img==='object'){let migratedClubImage=false;for(const [k,v] of Object.entries(S.img)){if(k.startsWith('club:')){if(typeof v==='string'&&v.startsWith('data:image/')&&!CLUB_DB.images[k.slice(5)])CLUB_DB.images[k.slice(5)]=v;delete S.img[k];migratedClubImage=true}}if(migratedClubImage){saveClubDb();persist()}}
@@ -2018,7 +2079,7 @@ function vPartidasBase(){
   const groups=names.map(c=>[c,l.filter(([x])=>(x.c||'')===c)]).filter(([c,ms])=>ms.length);
   const grp=([c,ms])=>{
     const q=recM({m:ms.map(z=>z[0])}),k=ek(c);
-    return `<details class="grp" ${fg[k]===true?'open':''} ontoggle="fg['${k}']=this.open"><summary>${c?compLogo(c,22):''} ${esc(c||'Sem competição')} <span class="sub">· ${ms.length} jogos · ${q.v}V ${q.e}E ${q.l}D · ${q.gp}:${q.gc}</span></summary>${tieSec(c)}${ms.map(rowF).join('')}</details>`;
+    return `<details class="grp" ${fg[k]===true?'open':''} ontoggle="fg['${k}']=this.open"><summary>${c?compLogo(c,22):''} ${esc(fa(c||'Sem competição'))} <span class="sub">· ${ms.length} J · ${q.v}V ${q.e}E ${q.l}D · ${q.gp}:${q.gc}</span></summary>${tieSec(c)}${ms.map(rowF).join('')}</details>`;
   };
   return `<h2>Partidas de ${esc(S.cur)}</h2>
   ${comps.length?`<details class="add" ${fo.m||!d.m.length?'open':''} ontoggle="fo.m=this.open"><summary>+ Registrar partida</summary>
@@ -2163,8 +2224,8 @@ function vTransfBase(){
    <button class="btn">Registrar</button></form></details>
   <p class="sub">Compra e empréstimo recebido adicionam o jogador ao elenco e saem do caixa. Venda e empréstimo cedido tiram o jogador do elenco e entram no caixa. Empréstimo sem taxa: valor 0.</p>
   ${profitHtml()}
-  ${D().t.length>1?sortSel('t',[['rec','Mais recentes'],['ant','Mais antigas'],['valor','Maior valor'],['nome','Jogador (A–Z)'],['tipo','Tipo']],'rec'):''}
-  ${l.length?l.map(([t,i])=>`<div class="mrow"><div class="row"><span class="sc ${sg(t)>0?'pos':'neg'}">${sg(t)>0?'+':'−'}${fm(t.v)}</span><div><div>${esc(t.j)}</div><div class="sub">${TL[t.tipo]||''} ${esc(t.cl||'—')}</div></div><span></span><button class="x" aria-label="Apagar transferência" onclick="delT(${i})">✕</button></div><details class="ed" ${openT===i?'open':''}><summary>Editar</summary><div class="ef">${tfld(i,t,'j','Jogador')}${tfld(i,t,'cl','Clube','list="dl-times" autocomplete="off"')}<label>Valor (milhões)<input type="number" step="any" min="0" value="${t.v}" onchange="te(${i},'v',num(this.value))"></label></div></details></div>`).join(''):'<p class="empty">Nenhuma transferência nesta temporada.</p>'}`;
+  ${l.length?`<details class="add" ${fo.tl===false?'':'open'} ontoggle="fo.tl=this.open"><summary>Transferências da temporada</summary>`:''}${D().t.length>1?sortSel('t',[['rec','Mais recentes'],['ant','Mais antigas'],['valor','Maior valor'],['nome','Jogador (A–Z)'],['tipo','Tipo']],'rec'):''}
+  ${l.length?l.map(([t,i])=>`<div class="mrow"><div class="row"><span class="sc ${sg(t)>0?'pos':'neg'}">${sg(t)>0?'+':'−'}${fm(t.v)}</span><div><div>${esc(t.j)}</div><div class="sub">${TL[t.tipo]||''} ${esc(t.cl||'—')}</div></div><span></span><button class="x" aria-label="Apagar transferência" onclick="delT(${i})">✕</button></div><details class="ed" ${openT===i?'open':''}><summary>Editar</summary><div class="ef">${tfld(i,t,'j','Jogador')}${tfld(i,t,'cl','Clube','list="dl-times" autocomplete="off"')}<label>Valor (milhões)<input type="number" step="any" min="0" value="${t.v}" onchange="te(${i},'v',num(this.value))"></label></div></details></div>`).join(''):'<p class="empty">Nenhuma transferência nesta temporada.</p>'}${l.length?'</details>':''}`;
 }
 
 const finOf=d=>d.fin||{};
@@ -2206,16 +2267,16 @@ function vHistComp(){
   const comps=hpcComps();if(!comps.length)return '<h2>Por competição</h2><p class="empty">Registre partidas ou competições da temporada para ver os números por competição.</p>';
   if(!comps.some(([k])=>k===HPC.c))HPC.c=comps[0][0];if(HPC.s!=='all'&&!S.order.includes(HPC.s))HPC.s=S.cur;
   const all=HPC.s==='all',seasons=all?S.order:[HPC.s],H={};
-  seasons.forEach(q=>{const d=S.data[q];(d.p||[]).forEach(p=>{const au=compAuto(p,d)[HPC.c]||{j:0,g:0,a:0},mv=d.pc&&d.pc[p.k]&&d.pc[p.k][HPC.c],v=mv?{j:+mv.j||0,g:+mv.g||0,a:+mv.a||0}:au,h=H[p.k]=H[p.k]||{k:p.k,n:p.n,pos:p.pos,j:0,g:0,a:0,man:false,au:{j:0,g:0,a:0}};h.n=p.n;h.pos=p.pos;h.j+=v.j;h.g+=v.g;h.a+=v.a;if(mv)h.man=true;h.au=au})});
+  seasons.forEach(q=>{const d=S.data[q];(d.p||[]).forEach(p=>{const au=compAuto(p,d)[HPC.c]||{j:0,g:0,a:0},mv=d.pc&&d.pc[p.k]&&d.pc[p.k][HPC.c],v=mv?{j:+mv.j||0,g:+mv.g||0,a:+mv.a||0}:au,h=H[p.k]=H[p.k]||{k:p.k,n:p.n,pos:p.pos,j:0,g:0,a:0,man:false,out:p.out,p:p,au:{j:0,g:0,a:0}};h.n=p.n;h.pos=p.pos;h.out=p.out;h.p=p;h.j+=v.j;h.g+=v.g;h.a+=v.a;if(mv)h.man=true;h.au=au})});
   let rows=Object.values(H);if(all)rows=rows.filter(h=>h.j||h.g||h.a);
-  rows.sort((a,b)=>(b.g+b.a)-(a.g+a.a)||b.j-a.j||a.n.localeCompare(b.n,'pt-BR'));
+  const o=HPC.o||'pg',pj=h=>h.j?(h.g+h.a)/h.j:0;rows.sort((a,b)=>(o==='nome'?0:o==='j'?b.j-a.j:o==='g'?b.g-a.g:o==='a'?b.a-a.a:o==='pgj'?pj(b)-pj(a):0)||(b.g+b.a)-(a.g+a.a)||b.j-a.j||a.n.localeCompare(b.n,'pt-BR'));
   const T=rows.reduce((t,h)=>({j:t.j+h.j,g:t.g+h.g,a:t.a+h.a}),{j:0,g:0,a:0});
   const row=h=>{const ed=PCE===String(h.k)&&!all;
-    if(ed)return `<tr><td colspan="5"><form class="hpc-form" onsubmit="return hpcSave(${h.k},this)"><b>${esc(h.n)}</b><label>Jogos<input name="j" type="number" min="0" inputmode="numeric" placeholder="${h.au.j}" value="${h.j||''}"></label><label>Gols<input name="g" type="number" min="0" inputmode="numeric" placeholder="${h.au.g}" value="${h.g||''}"></label><label>Assistências<input name="a" type="number" min="0" inputmode="numeric" placeholder="${h.au.a}" value="${h.a||''}"></label><button class="btn">Salvar</button><button type="button" class="sm" onclick="hpcEdit(${h.k})">Cancelar</button>${h.man?`<button type="button" class="sm" onclick="hpcClear(${h.k})">Voltar ao automático</button>`:''}</form></td></tr>`;
-    return `<tr class="${h.j||h.g||h.a?'':'gone-n'}"><td>${all?'':`<button type="button" class="sm hpc-pen" aria-label="Editar ${esc(h.n)}" onclick="hpcEdit(${h.k})">✎</button>`}${esc(h.n)}${h.man?' <small title="Lançado à mão">·</small>':''}</td><td>${h.j}</td><td>${h.g}</td><td>${h.a}</td><td>${h.g+h.a}</td></tr>`};
+    if(ed)return `<div class="hc-edit"><form class="hpc-form" onsubmit="return hpcSave(${h.k},this)"><b>${esc(h.n)}</b><label>Jogos<input name="j" type="number" min="0" inputmode="numeric" placeholder="${h.au.j}" value="${h.j||''}"></label><label>Gols<input name="g" type="number" min="0" inputmode="numeric" placeholder="${h.au.g}" value="${h.g||''}"></label><label>Assistências<input name="a" type="number" min="0" inputmode="numeric" placeholder="${h.au.a}" value="${h.a||''}"></label><button class="btn">Salvar</button><button type="button" class="sm" onclick="hpcEdit(${h.k})">Cancelar</button>${h.man?`<button type="button" class="sm" onclick="hpcClear(${h.k})">Voltar ao automático</button>`:''}</form></div>`;
+    return `<div class="hrow hc${h.out?' gone':''}${h.j||h.g||h.a?'':' gone-n'}"><span class="hn">${all?'':`<button type="button" class="sm hpc-pen" aria-label="Editar ${esc(h.n)}" onclick="hpcEdit(${h.k})">✎</button>`}${posBadge(h.pos)} ${esc(h.n)}${(()=>{try{return natSub({rows:[{p:h.p}],out:h.out})}catch(e){return ''}})()}${h.man?' <small title="Lançado à mão">·</small>':''}</span><span>${h.j}</span><span>${h.g}</span><span>${h.a}</span><span>${h.g+h.a}</span><span>${fm2(pj(h))}</span></div>`};
   return `<h2>Por competição</h2><p class="sub">Jogos, gols e assistências de cada jogador em uma competição. Em uma temporada, toque no ✎ para lançar os números à mão (por exemplo, no fim da temporada); o valor lançado substitui o das partidas e entra nos totais do jogador.</p>
-  <div class="hpc-sel"><label>Competição<select onchange="hpcSel('c',this.value)">${comps.map(([k,n])=>`<option value="${esc(k)}"${k===HPC.c?' selected':''}>${esc(n)}</option>`).join('')}</select></label><label>Temporada<select onchange="hpcSel('s',this.value)"><option value="all"${all?' selected':''}>Todas as temporadas</option>${S.order.slice().reverse().map(q=>`<option${q===HPC.s?' selected':''}>${esc(q)}</option>`).join('')}</select></label></div>
-  ${rows.length?`<div class="scroll"><table class="hpc-t"><thead><tr><th>Jogador</th><th>J</th><th>Gols</th><th>Ass.</th><th>G+A</th></tr></thead><tbody>${rows.map(row).join('')}<tr><td><b>Total</b></td><td><b>${T.j}</b></td><td><b>${T.g}</b></td><td><b>${T.a}</b></td><td><b>${T.g+T.a}</b></td></tr></tbody></table></div>`:'<p class="empty">Nenhum jogador com números nesta competição.</p>'}`;
+  <div class="hpc-sel"><label>Competição<select onchange="hpcSel('c',this.value)">${comps.map(([k,n])=>`<option value="${esc(k)}"${k===HPC.c?' selected':''}>${esc(n)}</option>`).join('')}</select></label><label>Temporada<select onchange="hpcSel('s',this.value)"><option value="all"${all?' selected':''}>Todas as temporadas</option>${S.order.slice().reverse().map(q=>`<option${q===HPC.s?' selected':''}>${esc(q)}</option>`).join('')}</select></label>${rows.length?`<label>Ordenar por<select onchange="hpcSel('o',this.value)">${[['pg','G+A'],['j','Jogos'],['g','Gols'],['a','Assistências'],['pgj','G+A por jogo'],['nome','Nome (A–Z)']].map(([k,n])=>`<option value="${k}"${o===k?' selected':''}>${n}</option>`).join('')}</select></label>`:''}</div>
+  ${rows.length?`<div class="scroll"><div class="hlist hclist"><div class="hrow hc hh"><span></span><span>Jogos</span><span>Gols</span><span>Ass.</span><span title="Participações em gol: gols + assistências">G+A</span><span title="Participações em gol por jogo">G+A/J</span></div><div class="hrow hc ht"><span class="hn">${all?'Total':'Total da competição'}</span><span>${T.j}</span><span>${T.g}</span><span>${T.a}</span><span>${T.g+T.a}</span><span>${fm2(pj(T))}</span></div>${rows.map(row).join('')}</div></div>`:'<p class="empty">Nenhum jogador com números nesta competição.</p>'}`;
 }
 function vHist(){return pills('hv',[['g','Geral'],['c','Por competição']],'g')+(sub.hv==='c'?vHistComp():vHistBase())}
 function vHistBase(){
@@ -2273,10 +2334,10 @@ function vChampions(){const season=sub.champSeason&&S.order.includes(sub.champSe
 function vTemp(){
   const d=D();
   return `<h2>Temporadas</h2>
-  <h3>Todas as temporadas</h3>
+  <details class="add" ${fo.ts===false?'':'open'} ontoggle="fo.ts=this.open"><summary>Todas as temporadas</summary>
   ${sortSel('s',RECANT,'rec')}
   ${totalSeasons()}
-  ${(so.s==='ant'?[...S.order]:[...S.order].reverse()).map(s=>{const x=S.data[s],r=rec(x),ch=seasonChampions(s).filter(c=>norm(c.club)===norm(S.club));return `<div class="row"><span class="sc">${esc(s)}</span><div><div>${r.j} jogos · ${r.v}V ${r.e}E ${r.l}D · ${r.gp}:${r.gc} gols${ch.length?' · '+ch.map(c=>trophy(c.competition,24)).join(' '):''}</div><div class="sub">${esc(x.obs)}</div></div><button class="sm" onclick="showBalance('${esc(s)}')">Balanço</button> <button class="sm" onclick="tab='partidas';goSeason('${esc(s)}')">Abrir</button>${S.order.length>1?(seasonDeleteConfirm===s?`<span class="season-delete-confirm"><button class="sm" onclick="delSeason('${esc(s)}')">Apagar mesmo</button> <button class="sm" onclick="seasonDeleteConfirm=null;render()">Cancelar</button></span>`:`<button class="x" aria-label="Apagar temporada ${esc(s)}" onclick="delSeason('${esc(s)}')">✕</button>`):'<span></span>'}</div>`}).join('')}
+  ${(so.s==='ant'?[...S.order]:[...S.order].reverse()).map(s=>{const x=S.data[s],r=rec(x),ch=seasonChampions(s).filter(c=>norm(c.club)===norm(S.club));return `<div class="row"><span class="sc">${esc(s)}</span><div><div>${r.j} J · ${r.v}V ${r.e}E ${r.l}D · ${r.gp}:${r.gc} G${ch.length?' · '+ch.map(c=>trophy(c.competition,24)).join(' '):''}</div></div><button class="sm" onclick="showBalance('${esc(s)}')">Balanço</button> <button class="sm" onclick="tab='partidas';goSeason('${esc(s)}')">Abrir</button>${S.order.length>1?(seasonDeleteConfirm===s?`<span class="season-delete-confirm"><button class="sm" onclick="delSeason('${esc(s)}')">Apagar mesmo</button> <button class="sm" onclick="seasonDeleteConfirm=null;render()">Cancelar</button></span>`:`<button class="x" aria-label="Apagar temporada ${esc(s)}" onclick="delSeason('${esc(s)}')">✕</button>`):'<span></span>'}</div>`}).join('')}</details>
   ${vChampions()}
   ${vClubRank()}
   <details class="stats-extra"><summary>Fechar temporada</summary>${vClose()}</details>
@@ -2297,7 +2358,7 @@ function render(){
   app.innerHTML=banner()+v;
   const saved=detailStates[tab]||{},counts={};app.querySelectorAll('details').forEach(el=>{const title=detailKey(el),n=counts[title]||0;counts[title]=n+1;const key=title+'#'+n;el.open=Object.prototype.hasOwnProperty.call(saved,key)?saved[key]===true:false;el.dataset.detailState=key;el.addEventListener('toggle',()=>{const state=detailStates[renderedTab]||(detailStates[renderedTab]={});state[el.dataset.detailState]=el.open})});
   if(statsDetailOpenRequest){if(statsDetailOpenRequest.startsWith('comp-season:')){const season=statsDetailOpenRequest.slice(12);app.querySelectorAll('.comp-season-group').forEach(el=>{if(detailKey(el)===season)el.open=true})}else app.querySelectorAll('details').forEach(el=>{if(detailKey(el)===statsDetailOpenRequest)el.open=true});statsDetailOpenRequest=null}
-  renderedTab=tab;
+  renderedTab=tab;applyInfo();
 }
 
 function add(k,f,event){
@@ -2342,7 +2403,7 @@ function prepareRestore(raw){
     pendingRestore={d,incoming,legacy};bkm='Backup reconhecido. Confira e confirme a restauração abaixo.';render();return false;
   }catch(e){pendingRestore=null;bkm=e&&e.message==='invalid'?'Backup incompatível ou incompleto. Nenhum dado foi alterado.':'Não foi possível ler este backup. Confira se o texto JSON está completo.';render();return false}
 }
-function cancelRestore(){pendingRestore=null;bkm='Restauração cancelada; os dados atuais foram mantidos.';render()}
+function cancelRestore(){pendingRestore=null;pasteDraft='';bkm='Restauração cancelada; os dados atuais foram mantidos.';render()}
 async function commitRestore(){
   if(!pendingRestore)return false;const {d,incoming,legacy}=pendingRestore;pendingRestore=null;
   const previous=new Map(Object.keys(incoming).map(k=>[k,localStorage.getItem(k)]));
@@ -2409,7 +2470,7 @@ async function commitRestore(){
     }else{
       S=legacy;fix();syncName();
     }
-    draft={};editK=null;openM=null;bkm='Backup restaurado com sucesso! Imagens salvas no IndexedDB.';render();return false;
+    draft={};editK=null;openM=null;pasteDraft='';bkm='Backup restaurado com sucesso! Imagens salvas no IndexedDB.';render();return false;
   }catch(e){
     bkm=e&&e.name==='QuotaExceededError'?'O armazenamento deste navegador está cheio. Exporte os dados atuais antes de liberar espaço e tente novamente.':'Não foi possível concluir a restauração: '+((e&&e.message)||'Erro desconhecido');
     render();return false;
@@ -2419,7 +2480,8 @@ applyTema();
 if(IX.skipMenu&&!careerInfo(IX.cur).vazia)MENU=false;
 render();
 protectStorage();
-initMediaStorageAndMigrate();
+try{if(S&&S.hxv!==1){const d=S.data[S.cur];NEWS_QUIET=true;SEQC=careerSeq();(d.m||[]).forEach(m=>{if(m.id)milestoneNews(m,S.cur)});SEQC=null;NEWS_QUIET=false;S.hxv=1;save()}}catch(e){NEWS_QUIET=false;SEQC=null}
+waitMediaReady();
 setTimeout(()=>{if(cloudIn()&&IX.cloudAuto!==false)cloudSync(true)},5000);
 document.addEventListener('visibilitychange',()=>{if(!cloudIn()||IX.cloudAuto===false)return;if(document.hidden){if(IX.cloudDirty)cloudSync(true)}else if(!IX.cloudDirty&&Date.now()-CL.last>60000)cloudSync(true)});
 

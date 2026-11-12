@@ -95,3 +95,8 @@ Passo a passo (faça uma vez, de preferência no computador):
 8. Em outro aparelho: instale o app, cole o mesmo código, escolha Entrar com o mesmo e-mail e senha. Os dados da carreira aparecem sozinhos.
 
 Como funciona: ao abrir o app e depois de alterações, ele sincroniza sozinho (dá para desligar). Se os dois aparelhos mudarem coisas diferentes antes de sincronizar, o app pergunta qual versão manter, e a versão descartada neste aparelho fica nas cópias automáticas. O backup em arquivo continua valendo como proteção extra. A senha não é guardada no aparelho, só a sessão.
+
+
+ATUALIZAÇÃO v1.16.0+ (INDEXEDDB & RESTAURAÇÃO POR TEXTO):
+- Escudos e imagens personalizadas são armazenados no IndexedDB nativo do navegador, eliminando o limite de 5 MB do localStorage.
+- Caixa de texto direta para restauração de backups (.json): permite colar o código diretamente no app caso o seletor de arquivos apresente limitações no aparelho.

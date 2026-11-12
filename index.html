@@ -547,7 +547,7 @@ const nk=()=>{S.nk=(S.nk||1000)+1;return S.nk};
  function fix(){S.order.forEach(s=>{const d=S.data[s];d.m=d.m||[];d.m.forEach(m=>{if(!m.date&&/^\d{4}-\d{2}-\d{2}$/.test(m.d||''))m.date=m.d});d.res=d.res||[];d.aw=d.aw||[];d.champs=Array.isArray(d.champs)?d.champs:[];d.news=Array.isArray(d.news)?d.news:[];if(d.pos){d.res.push({c:'Liga nacional',r:d.pos});d.pos=''}if(d.tit){d.res.push({c:d.tit,r:'Campeão'});d.tit=''}d.p.forEach(p=>{if(!p.k)p.k=nk();if(p.ovr){const a=auto(p,d),b={};['j','g','a','y','r'].forEach(f=>{if(p.ovr[f]!=null&&p.ovr[f]-a[f])b[f]=p.ovr[f]-a[f]});if(p.ovr.n!=null)b.n=p.ovr.n;if(Object.keys(b).length)p.base=b;delete p.ovr}})});S.order.sort();if(S.order.length===1&&S.order[0]==='2026/27'){const d=S.data['2026/27'];if(!d.m.length&&!d.p.length&&!d.t.length&&!d.res.length){S.data={'2021/22':d};S.order=['2021/22'];S.cur='2021/22'}}}
 loadCur();
 function goSeason(s){if(!S.data[s]){S.data[s]=ns();S.order.push(s);S.order.sort()}S.cur=s;draft={};editK=null;save();render()}
-const persist=()=>{try{localStorage.setItem(keyOf(IX.cur),JSON.stringify(S));if(bkm.startsWith('Falha ao salvar'))bkm='';return true}catch(e){bkm='Falha ao salvar neste aparelho. O armazenamento pode estar cheio; exporte um backup e remova imagens grandes.';if(document.getElementById('app'))setTimeout(render,0);return false}};
+const persist=()=>{try{const clone=Object.assign({},S,{img:{}});localStorage.setItem(keyOf(IX.cur),JSON.stringify(clone));if(bkm.startsWith('Falha ao salvar'))bkm='';return true}catch(e){bkm='Falha ao salvar neste aparelho: '+((e&&e.message)||'armazenamento cheio');if(document.getElementById('app'))setTimeout(render,0);return false}};
 const save=()=>{RKC=null;S.ts=Date.now();try{reconcileNews()}catch(e){}cloudMark();return persist()};
 const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num=v=>Number(String(v).replace(',','.'))||0;
@@ -831,12 +831,21 @@ function addSug(i){if(SUG[i])setResC(SUG[i].c,SUG[i].r)}
 const fp=(i,x,f,l)=>`<label>${l}<input type="number" min="0" value="${x[f]??''}" onchange="pm(${i},'${f}',this.value===''?null:+this.value)"></label>`;
 
 function allJson(){
-  const o={v:2,ix:Object.assign({},IX,{cloudAuth:undefined,cloudBase:undefined,cloudDirty:undefined,cloudLastAt:undefined}),data:{},clubDb:CLUB_DB};
-  IX.list.forEach(c=>{if(c.id===IX.cur)o.data[c.id]=S;else try{o.data[c.id]=JSON.parse(localStorage.getItem(keyOf(c.id))||'null')}catch(e){}});
+  const fullClubDb={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:CLUB_DB.images||{},ts:CLUB_DB.ts||Date.now()};
+  const o={v:2,ix:Object.assign({},IX,{cloudAuth:undefined,cloudBase:undefined,cloudDirty:undefined,cloudLastAt:undefined}),data:{},clubDb:fullClubDb};
+  IX.list.forEach(c=>{
+    let careerData=null;
+    if(c.id===IX.cur)careerData=Object.assign({},S,{img:Object.assign({},S.img||{},CAREER_IMGS[c.id]||{})});
+    else{
+      try{careerData=JSON.parse(localStorage.getItem(keyOf(c.id))||'null')}catch(e){}
+      if(careerData)careerData.img=Object.assign({},careerData.img||{},CAREER_IMGS[c.id]||{});
+    }
+    if(careerData)o.data[c.id]=careerData;
+  });
   return JSON.stringify(o);
 }
 let confC=null;
-function switchCareer(id,t){save();IX.cur=id;saveIx();loadCur();draft={};editK=null;openM=null;confC=null;tab=t||'partidas';enterGame()}
+async function switchCareer(id,t){save();IX.cur=id;saveIx();loadCur();await loadCareerImgs(id);if(CAREER_IMGS[id])S.img=Object.assign({},CAREER_IMGS[id]);draft={};editK=null;openM=null;confC=null;tab=t||'partidas';enterGame();render()}
 function ncSeasonOpts(t,sel){const d=sel||sLabel(2026,t);return yrList(t).map(q=>`<option ${q===d?'selected':''}>${q}</option>`).join('')}
 function ncTipo(sel){const q=sel.form&&sel.form.elements.s;if(q)q.innerHTML=ncSeasonOpts(sel.value,sLabel(parseInt(q.value)||2026,sel.value))}
 const ncFields=()=>`<label>Tipo de temporada<select name="tipo" onchange="ncTipo(this)"><option value="eu">Europeia (agosto a maio, ex.: 2026/27)</option><option value="br">Brasileira (janeiro a dezembro, ex.: 2026)</option></select></label><label>Temporada em que a carreira começa<select name="s">${ncSeasonOpts('eu')}</select></label>`;
@@ -1219,7 +1228,13 @@ function openHl(key){document.querySelectorAll('.hl-toast,.hl-modal').forEach(x=
 let storagePersisted=null;
 async function protectStorage(){try{if(navigator.storage&&navigator.storage.persist){storagePersisted=(await navigator.storage.persisted())||(await navigator.storage.persist())}}catch(e){}}
 const storageNote=()=>storagePersisted===true?'<p class="sub">Armazenamento protegido: o navegador não deve apagar estes dados sozinho.</p>':storagePersisted===false?'<p class="sub">O navegador não garantiu proteção contra limpeza automática. Instale o app na tela inicial e faça backups com frequência.</p>':'';
-function backupBox(){return '<details class="bkd"><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho. O backup serve só para guardar uma cópia em arquivo ou levar a carreira a outro aparelho. O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, entrevistas, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração"><p role="status">Backup reconhecido. A confirmação abaixo vai substituir as carreiras correspondentes neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
+function restoreFromPastedText(){
+  const el=document.getElementById('bk-paste-text');
+  const val=el?el.value.trim():'';
+  if(!val){alert('Cole o texto do arquivo JSON na caixa antes de carregar.');return}
+  prepareRestore(val);
+}
+function backupBox(){return '<details class="bkd"><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.03);border:1px dashed var(--bd,#333);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--bd,#333);background:var(--bg,#111);color:inherit;resize:vertical;box-sizing:border-box"></textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
 function markBackup(){IX.lastBk=new Date().toISOString();saveIx()}
 function downloadBk(){
   try{const blob=new Blob([allJson()],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='diario-do-tecnico-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);markBackup();bkm='Backup baixado. Guarde o arquivo em um local seguro.';render()}
@@ -1589,10 +1604,179 @@ function matchBox(){
 
 const norm=s=>String(s==null?'':s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 // Cadastro global de clubes: compartilhado por todas as carreiras neste navegador.
+
+// --- GERENCIADOR DE IMAGENS EM INDEXEDDB (Elimina o limite de 5MB do localStorage) ---
+const IDB_MEDIA_NAME = 'diario-media-v1';
+const IDB_MEDIA_STORE = 'images';
+let idbMediaConn = null;
+
+function getIdbMedia() {
+  if (idbMediaConn) return Promise.resolve(idbMediaConn);
+  return new Promise(resolve => {
+    if (typeof window === 'undefined' || !window.indexedDB) return resolve(null);
+    try {
+      const req = indexedDB.open(IDB_MEDIA_NAME, 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(IDB_MEDIA_STORE)) {
+          db.createObjectStore(IDB_MEDIA_STORE);
+        }
+      };
+      req.onsuccess = () => { idbMediaConn = req.result; resolve(idbMediaConn); };
+      req.onerror = () => resolve(null);
+    } catch(e) { resolve(null); }
+  });
+}
+
+async function idbPutImg(key, val) {
+  const db = await getIdbMedia();
+  if (!db) return false;
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction(IDB_MEDIA_STORE, 'readwrite');
+      tx.objectStore(IDB_MEDIA_STORE).put(val, key);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    } catch(e) { resolve(false); }
+  });
+}
+
+async function idbDelImg(key) {
+  const db = await getIdbMedia();
+  if (!db) return false;
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction(IDB_MEDIA_STORE, 'readwrite');
+      tx.objectStore(IDB_MEDIA_STORE).delete(key);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    } catch(e) { resolve(false); }
+  });
+}
+
+async function idbGetAllImgs() {
+  const db = await getIdbMedia();
+  if (!db) return {};
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction(IDB_MEDIA_STORE, 'readonly');
+      const store = tx.objectStore(IDB_MEDIA_STORE);
+      const res = {};
+      const req = store.openCursor();
+      req.onsuccess = e => {
+        const cursor = e.target.result;
+        if (cursor) {
+          res[cursor.key] = cursor.value;
+          cursor.continue();
+        } else {
+          resolve(res);
+        }
+      };
+      req.onerror = () => resolve(res);
+    } catch(e) { resolve({}); }
+  });
+}
+
+// Armazenamento em memória de imagens por carreira
+const CAREER_IMGS = {};
+
+async function loadCareerImgs(cid) {
+  if (CAREER_IMGS[cid]) return CAREER_IMGS[cid];
+  CAREER_IMGS[cid] = {};
+  const db = await getIdbMedia();
+  if (!db) return CAREER_IMGS[cid];
+  const all = await idbGetAllImgs();
+  const prefix = 'c:' + cid + ':';
+  for (const [k, v] of Object.entries(all)) {
+    if (k.startsWith(prefix)) {
+      CAREER_IMGS[cid][k.slice(prefix.length)] = v;
+    }
+  }
+  return CAREER_IMGS[cid];
+}
+
+async function initMediaStorageAndMigrate() {
+  try {
+    const all = await idbGetAllImgs();
+    let reRenderNeeded = false;
+    
+    // 1. Carregar escudos de clubes do IndexedDB
+    CLUB_DB.images = CLUB_DB.images || {};
+    for (const [k, v] of Object.entries(all)) {
+      if (k.startsWith('club:')) {
+        const cKey = k.slice(5);
+        if (!CLUB_DB.images[cKey]) {
+          CLUB_DB.images[cKey] = v;
+          reRenderNeeded = true;
+        }
+      } else if (k.startsWith('c:' + IX.cur + ':')) {
+        const sKey = k.slice(('c:' + IX.cur + ':').length);
+        S.img = S.img || {};
+        if (!S.img[sKey]) {
+          S.img[sKey] = v;
+          reRenderNeeded = true;
+        }
+      }
+    }
+
+    // 2. Migrar CLUB_DB antigo do localStorage para IndexedDB e liberar espaço
+    const rawClub = localStorage.getItem(CLUB_DB_KEY);
+    if (rawClub) {
+      try {
+        const pClub = JSON.parse(rawClub);
+        if (pClub && pClub.images && Object.keys(pClub.images).length) {
+          for (const [k, v] of Object.entries(pClub.images)) {
+            if (typeof v === 'string' && v.startsWith('data:image/')) {
+              CLUB_DB.images[k] = v;
+              await idbPutImg('club:' + k, v);
+            }
+          }
+          saveClubDb();
+        }
+      } catch(e){}
+    }
+
+    // 3. Migrar imagens das carreiras antigas do localStorage para IndexedDB
+    for (const c of (IX.list || [])) {
+      const rawC = localStorage.getItem(keyOf(c.id));
+      if (rawC) {
+        try {
+          const parsedC = JSON.parse(rawC);
+          if (parsedC && parsedC.img && Object.keys(parsedC.img).length) {
+            let hadImg = false;
+            CAREER_IMGS[c.id] = CAREER_IMGS[c.id] || {};
+            for (const [k, v] of Object.entries(parsedC.img)) {
+              if (typeof v === 'string' && v.startsWith('data:image/')) {
+                CAREER_IMGS[c.id][k] = v;
+                if (c.id === IX.cur) {
+                  S.img = S.img || {};
+                  S.img[k] = v;
+                }
+                await idbPutImg('c:' + c.id + ':' + k, v);
+                hadImg = true;
+              }
+            }
+            if (hadImg) {
+              parsedC.img = {};
+              localStorage.setItem(keyOf(c.id), JSON.stringify(parsedC));
+            }
+          }
+        } catch(e){}
+      }
+    }
+
+    if (reRenderNeeded && typeof render === 'function') {
+      render();
+    }
+  } catch(e) {
+    console.warn('Erro ao inicializar IndexedDB:', e);
+  }
+}
+
 const CLUB_DB_KEY='diario-club-database-v1';
 let CLUB_DB={clubs:[],images:{}};
 try{const raw=localStorage.getItem(CLUB_DB_KEY);if(raw){const parsed=JSON.parse(raw);CLUB_DB={clubs:Array.isArray(parsed.clubs)?parsed.clubs:[],images:parsed.images&&typeof parsed.images==='object'?parsed.images:{}}}}catch(e){}
-function saveClubDb(){try{CLUB_DB.ts=Date.now();localStorage.setItem(CLUB_DB_KEY,JSON.stringify(CLUB_DB))}catch(e){alert('Não foi possível salvar a base global de clubes. O armazenamento do navegador pode estar cheio.')}}
+function saveClubDb(){try{CLUB_DB.ts=Date.now();const light={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:{},ts:CLUB_DB.ts};localStorage.setItem(CLUB_DB_KEY,JSON.stringify(light))}catch(e){console.warn('Falha leve ao salvar base de clubes:',e)}}
 function databaseClubNames(){return [...new Set([...TIMES,...RANK_EXTRA_CLUBS,...Object.keys(CLUB_BADGES),...(CLUB_DB.clubs||[]),...(S.assetClubs||[])].filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"))}
 // Migra escudos personalizados antigos da carreira ativa para a base compartilhada.
 if(S.img&&typeof S.img==='object'){let migratedClubImage=false;for(const [k,v] of Object.entries(S.img)){if(k.startsWith('club:')){if(typeof v==='string'&&v.startsWith('data:image/')&&!CLUB_DB.images[k.slice(5)])CLUB_DB.images[k.slice(5)]=v;delete S.img[k];migratedClubImage=true}}if(migratedClubImage){saveClubDb();persist()}}
@@ -1695,16 +1879,15 @@ function setImg(c,file){
       cv.width=Math.max(1,Math.round(im.width*s));cv.height=Math.max(1,Math.round(im.height*s));
       cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
       const data=cv.toDataURL('image/png');
-      if(c.startsWith('club:')){const nameKey=c.slice(5);CLUB_DB.images=CLUB_DB.images||{};CLUB_DB.images[nameKey]=data;saveClubDb();save();render();return}
-      if(JSON.stringify(S).length+data.length>4200000){alert('O armazenamento local está próximo do limite. Remova imagens antigas ou use arquivos PNG menores.');return}
-      S.img=S.img||{};S.img[c]=data;save();render();
+      if(c.startsWith('club:')){const nameKey=c.slice(5);CLUB_DB.images=CLUB_DB.images||{};CLUB_DB.images[nameKey]=data;idbPutImg('club:'+nameKey,data);saveClubDb();save();render();return}
+      S.img=S.img||{};S.img[c]=data;CAREER_IMGS[IX.cur]=CAREER_IMGS[IX.cur]||{};CAREER_IMGS[IX.cur][c]=data;idbPutImg('c:'+IX.cur+':'+c,data);save();render();
     };
     im.src=rd.result;
   };
   rd.readAsDataURL(file);
 }
-function delImg(c){if(c.startsWith('club:')){if(CLUB_DB.images)delete CLUB_DB.images[c.slice(5)];saveClubDb();render();return}if(S.img){delete S.img[c];save();render()}}
-function delTrophyImg(c){if(S.img){delete S.img['trophy:'+norm(c)];delete S.img[c];save();render()}}
+function delImg(c){if(c.startsWith('club:')){const k=c.slice(5);if(CLUB_DB.images)delete CLUB_DB.images[k];idbDelImg('club:'+k);saveClubDb();render();return}if(S.img){delete S.img[c];if(CAREER_IMGS[IX.cur])delete CAREER_IMGS[IX.cur][c];idbDelImg('c:'+IX.cur+':'+c);save();render()}}
+function delTrophyImg(c){const k1='trophy:'+norm(c),k2=c;if(S.img){delete S.img[k1];delete S.img[k2];if(CAREER_IMGS[IX.cur]){delete CAREER_IMGS[IX.cur][k1];delete CAREER_IMGS[IX.cur][k2]}idbDelImg('c:'+IX.cur+':'+k1);idbDelImg('c:'+IX.cur+':'+k2);save();render()}}
 
 const compNames=d=>[...new Set([...d.m.map(x=>x.c).filter(Boolean),...d.res.map(x=>x.c)])];
 function vClose(){
@@ -2160,20 +2343,83 @@ function prepareRestore(raw){
   }catch(e){pendingRestore=null;bkm=e&&e.message==='invalid'?'Backup incompatível ou incompleto. Nenhum dado foi alterado.':'Não foi possível ler este backup. Confira se o texto JSON está completo.';render();return false}
 }
 function cancelRestore(){pendingRestore=null;bkm='Restauração cancelada; os dados atuais foram mantidos.';render()}
-function commitRestore(){
+async function commitRestore(){
   if(!pendingRestore)return false;const {d,incoming,legacy}=pendingRestore;pendingRestore=null;
   const previous=new Map(Object.keys(incoming).map(k=>[k,localStorage.getItem(k)]));
   try{
-    try{for(const [k,v] of Object.entries(incoming))localStorage.setItem(k,v)}catch(e){for(const [k,v] of previous){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(_){}}throw e}
-    if(d&&d.v===2){if(d.clubDb&&incoming[CLUB_DB_KEY])CLUB_DB=JSON.parse(incoming[CLUB_DB_KEY]);IX=d.ix;loadCur()}else{S=legacy;fix();syncName()}
-    draft={};editK=null;openM=null;bkm='Backup restaurado. Confira os dados e faça um novo backup.';render();return false;
-  }catch(e){bkm=e&&e.name==='QuotaExceededError'?'O armazenamento deste navegador está cheio. Exporte os dados atuais antes de liberar espaço e tente novamente.':'Não foi possível concluir a restauração. Confira o espaço de armazenamento e tente novamente.';render();return false}
+    // Salva imagens no IndexedDB e em memória para não inflar o localStorage
+    if(d&&d.v===2){
+      if(d.clubDb&&d.clubDb.images&&typeof d.clubDb.images==='object'){
+        CLUB_DB.images=CLUB_DB.images||{};
+        for(const [k,v] of Object.entries(d.clubDb.images)){
+          if(typeof v==='string'&&v.startsWith('data:image/')){
+            CLUB_DB.images[k]=v;
+            await idbPutImg('club:'+k,v);
+          }
+        }
+      }
+      if(d.data&&typeof d.data==='object'){
+        for(const [cid,cval] of Object.entries(d.data)){
+          if(cval&&cval.img&&typeof cval.img==='object'){
+            CAREER_IMGS[cid]=CAREER_IMGS[cid]||{};
+            for(const [ik,iv] of Object.entries(cval.img)){
+              if(typeof iv==='string'&&iv.startsWith('data:image/')){
+                CAREER_IMGS[cid][ik]=iv;
+                await idbPutImg('c:'+cid+':'+ik,iv);
+                if(cid===d.ix.cur){S.img=S.img||{};S.img[ik]=iv}
+              }
+            }
+          }
+        }
+      }
+    }else if(legacy&&legacy.img){
+      S.img=S.img||{};
+      for(const [ik,iv] of Object.entries(legacy.img)){
+        if(typeof iv==='string'&&iv.startsWith('data:image/')){
+          S.img[ik]=iv;
+          await idbPutImg('c:'+IX.cur+':'+ik,iv);
+        }
+      }
+    }
+
+    // Salva no localStorage com imagens limpas para garantir cota livre
+    try{
+      for(const [k,v] of Object.entries(incoming)){
+        if(k===CLUB_DB_KEY){
+          try{const parsed=JSON.parse(v);localStorage.setItem(k,JSON.stringify({clubs:parsed.clubs||[],images:{},ts:Date.now()}))}catch(_){localStorage.setItem(k,v)}
+        }else if(k.startsWith('carreira-')||k===KEY){
+          try{const parsed=JSON.parse(v);parsed.img={};localStorage.setItem(k,JSON.stringify(parsed))}catch(_){localStorage.setItem(k,v)}
+        }else{
+          localStorage.setItem(k,v);
+        }
+      }
+    }catch(e){
+      for(const [k,v] of previous){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(_){}}
+      throw e;
+    }
+
+    if(d&&d.v===2){
+      if(d.clubDb){
+        CLUB_DB.clubs=Array.isArray(d.clubDb.clubs)?d.clubDb.clubs:[];
+        CLUB_DB.images=CLUB_DB.images||(d.clubDb.images||{});
+      }
+      IX=d.ix;
+      loadCur();
+      if(CAREER_IMGS[IX.cur])S.img=Object.assign({},S.img||{},CAREER_IMGS[IX.cur]);
+    }else{
+      S=legacy;fix();syncName();
+    }
+    draft={};editK=null;openM=null;bkm='Backup restaurado com sucesso! Imagens salvas no IndexedDB.';render();return false;
+  }catch(e){
+    bkm=e&&e.name==='QuotaExceededError'?'O armazenamento deste navegador está cheio. Exporte os dados atuais antes de liberar espaço e tente novamente.':'Não foi possível concluir a restauração: '+((e&&e.message)||'Erro desconhecido');
+    render();return false;
+  }
 }
 applyTema();
 if(IX.skipMenu&&!careerInfo(IX.cur).vazia)MENU=false;
 render();
 protectStorage();
-try{if(window.indexedDB)indexedDB.deleteDatabase('diario-copias')}catch(e){}
+initMediaStorageAndMigrate();
 setTimeout(()=>{if(cloudIn()&&IX.cloudAuto!==false)cloudSync(true)},5000);
 document.addEventListener('visibilitychange',()=>{if(!cloudIn()||IX.cloudAuto===false)return;if(document.hidden){if(IX.cloudDirty)cloudSync(true)}else if(!IX.cloudDirty&&Date.now()-CL.last>60000)cloudSync(true)});
 

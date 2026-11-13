@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.18.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.20.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.

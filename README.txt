@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.20.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.22.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -27,6 +27,7 @@ DADOS E BACKUPS
 - O backup inclui os dados da carreira e imagens personalizadas. Para usar a mesma carreira em vários aparelhos, prefira a sincronização com a nuvem; o backup em arquivo continua valendo como cópia extra.
 
 RECURSOS DESTA VERSÃO
+- Versões 1.17 a 1.21: sub-aba Escalação (campinho tático) em Partidas, com os titulares já selecionados ao registrar uma partida nova; campos MIN e DEF e coluna G+A/90; melhor da partida (★) e capitão da temporada; ícone de informação (i) nos textos explicativos; Por competição com as mesmas colunas do Histórico geral.
 - Sincronização com a nuvem por e-mail e senha (opcional): a mesma carreira em vários aparelhos, usando um Firebase gratuito. Veja o passo a passo na seção SINCRONIZAÇÃO COM A NUVEM, no fim deste arquivo.
 - Mata-mata de ida e volta: ao escolher a competição no registro, o adversário e o mando do jogo de volta já vêm preenchidos.
 - Nova carreira: escolha o tipo de temporada (europeia, de agosto a maio, como 2026/27, ou brasileira, ano corrido, como 2026) e a temporada em que a carreira começa. As carreiras antigas continuam europeias.

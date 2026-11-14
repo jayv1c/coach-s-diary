@@ -504,7 +504,7 @@ body.menu-on #top,body.menu-on #tabs{display:none}
 .gone-n{opacity:.4}details.gone .hn{opacity:.4}
 
 .info-btn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:8px;padding:0;border:1.5px solid var(--acc);border-radius:50%;background:transparent;color:var(--acc);font:italic 700 13px/1 Georgia,serif;vertical-align:middle;cursor:pointer}.info-btn[aria-expanded=true]{background:var(--acc);color:var(--onacc)}.sub[hidden]{display:none}
-.hrow.hc{grid-template-columns:minmax(168px,2.4fr) repeat(5,minmax(44px,1fr))}.hclist{min-width:520px}.hc.gone{opacity:.55}.hc-sort{display:flex;align-items:center;gap:10px;margin:8px 0}.hc-edit{padding:8px 0}
+.hc.gone{opacity:.55}.hc-sort{display:flex;align-items:center;gap:10px;margin:8px 0}.hc-edit{padding:8px 0}
 .menu{position:relative;isolation:isolate;--surf:#131c33;--ink:#f4f1e6;--mute:#9aa6bd;--line:#2b3654;--gold:#e8b830;color:var(--ink);min-height:100vh}
 .menu::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 50% 15%,#1d2b50 0,#0b1226 62%,#060a15 100%)}
 .mn-hero::before{content:'★';display:block;color:var(--gold);font-size:24px;margin-bottom:-4px}
@@ -526,18 +526,19 @@ body.menu-on #top,body.menu-on #tabs{display:none}
 #app h2::before{content:'★';color:#e8b830;font-size:.5em;margin-right:7px;vertical-align:.35em}
 .empty::before{content:'';display:block;width:84px;height:56px;margin:0 auto 8px;opacity:.5;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 56' fill='none' stroke='%238d97ad' stroke-width='1.6'><rect x='2' y='2' width='80' height='52' rx='6'/><path d='M42 2v52M2 28h8M74 28h8'/><circle cx='42' cy='28' r='8'/><path d='M20 14l7 7M27 14l-7 7M58 36l7 7M65 36l-7 7'/><circle cx='60' cy='16' r='4'/><circle cx='24' cy='42' r='4'/></svg>") center/contain no-repeat}.empty{text-align:center}
 
-.hlist:not(.hclist) .hrow{grid-template-columns:minmax(168px,2.4fr) repeat(10,minmax(38px,1fr))}.hlist:not(.hclist){min-width:880px}
+
 .cap{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#e8b830;color:#1a1405;font:700 11px/1 Barlow,sans-serif;vertical-align:middle}
 .mv{color:#e8b830;font-weight:700;font-size:.85em;white-space:nowrap}
 .cap-sel{display:flex;align-items:center;gap:10px;margin:8px 0}.cap-sel select{min-height:36px;padding:6px 28px 6px 10px;font-size:14px}
 
-.hlist .hrow{grid-template-columns:minmax(150px,2.2fr) repeat(10,minmax(38px,1fr))}.hlist{min-width:860px}
-.hlist .hrow>.hn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:sticky;left:0;z-index:2;background:var(--bg,#0f141a)}
-.hlist .hrow.ht>.hn{background:inherit}.hpc-pen{min-height:0;padding:2px 7px;margin-right:6px;font-size:12px}
+
+
+
+.hpc-pen{min-height:0;padding:2px 7px;margin-right:6px;font-size:12px}
 .tools .so{flex:1 1 calc(50% - 4px);min-width:0}.tools .so select{width:100%}
 
 .hlist .hrow{grid-template-columns:minmax(124px,1.6fr) repeat(10,minmax(38px,1fr))}
-.hlist .hrow>:first-child{position:sticky;left:0;z-index:2;background:var(--bg);align-self:stretch;display:flex;align-items:center;min-width:0;overflow:hidden;white-space:nowrap}
+
 .hc.gone,.hc.gone-n,.gone-n,details.gone .hn{opacity:1}
 .hlist .gone>.hn,.hlist .gone-n>.hn,details.gone .hn{color:var(--mute)}.hlist .gone>span:not(.hn),.hlist .gone-n>span:not(.hn){opacity:.55}
 .hpc-pen{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;min-height:0;padding:0;margin-right:6px}.hpc-pen .ei{width:14px;height:14px;flex:none}
@@ -554,6 +555,9 @@ body.menu-on #top,body.menu-on #tabs{display:none}
 
 .slot.edit{touch-action:none;cursor:grab}.slot.edit i{outline:2px dashed #e8b830;outline-offset:2px}
 .lp-r{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.lp-r .sm.on{background:var(--acc);color:var(--onacc)}
+
+#app .hlist .hrow{grid-template-columns:minmax(168px,2.4fr) repeat(10,minmax(38px,1fr))}#app .hlist{min-width:880px}
+#app .hclist .hrow{grid-template-columns:minmax(220px,2.4fr) repeat(10,minmax(38px,1fr))}#app .hclist{min-width:940px}
 </style>
 </head>
 <body>
@@ -570,7 +574,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.22.0';
+const APP_VERSION='1.23.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -918,10 +922,10 @@ function newCareer(f){
 }
 function delCareer(id){
   try{localStorage.removeItem(keyOf(id))}catch(e){}
-  if(CAREER_IMGS&&CAREER_IMGS[id])delete CAREER_IMGS[id];
+  if(CAREER_IMGS&&CAREER_IMGS[id])delete CAREER_IMGS[id];idbDelPrefix('c:'+id+':');
   IX.list=IX.list.filter(c=>c.id!==id);confC=null;
   // A lista nunca pode ficar vazia: sem carreira, o app não teria onde salvar.
-  if(!IX.list.length)IX.list.push({id:'c1',name:'Meu clube'});
+  if(!IX.list.length)IX.list.push({id:'c'+Date.now(),name:'Meu clube'});
   if(IX.cur===id){IX.cur=IX.list[0].id;loadCur();draft={};editK=null;openM=null}
   saveIx();render();
 }
@@ -1147,7 +1151,7 @@ async function cloudPull(meta){
   const imgs={},list=[...hs];for(let i=0;i<list.length;i+=6)await Promise.all(list.slice(i,i+6).map(async h=>{imgs[h]=await dbReq('/imgs/'+h,'GET')}));
   const put=o=>{if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='string'&&v.startsWith('@img:'))o[k]=imgs[v.slice(5)]||'';else put(v)}};put(obj);
   prepareRestore(JSON.stringify(obj));if(!pendingRestore)throw new Error('Os dados da nuvem não puderam ser lidos.');
-  commitRestore();IX.cloudBase=meta.ts;IX.cloudDirty=false;saveIx();
+  await commitRestore();if(!RESTORE_OK)throw new Error(bkm||'Não foi possível aplicar os dados da nuvem.');IX.cloudBase=meta.ts;IX.cloudDirty=false;saveIx();
 }
 async function cloudSync(auto){
   if(CL.busy||!cloudIn()||!cloudReady())return;
@@ -1305,7 +1309,7 @@ function restoreFromPastedText(){
   prepareRestore(val);
 }
 let pasteDraft='',pwDraft='';
-function backupBox(){return '<details class="bkd"'+(pendingRestore||pasteDraft?' open':'')+'><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.03);border:1px dashed var(--bd,#333);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" oninput="pasteDraft=this.value" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--bd,#333);background:var(--bg,#111);color:inherit;resize:vertical;box-sizing:border-box">'+(pasteDraft?esc(pasteDraft):'')+'</textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
+function backupBox(){return '<details class="bkd"'+(pendingRestore||pasteDraft?' open':'')+'><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button> <button class="sm" type="button" onclick="exportCSV()">Exportar CSV</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.03);border:1px dashed var(--bd,#333);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" oninput="pasteDraft=this.value" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--bd,#333);background:var(--bg,#111);color:inherit;resize:vertical;box-sizing:border-box">'+(pasteDraft?esc(pasteDraft):'')+'</textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
 function markBackup(){IX.lastBk=new Date().toISOString();saveIx()}
 async function downloadBk(){
   try{
@@ -1504,6 +1508,10 @@ function lnClear(){const l=lnGet();l.s=l.s.map(()=>null);lnChanged()}
 const PITCH_SVG='<svg class="pitch-bg" viewBox="0 0 100 130" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="130" fill="#2b6b47"/><g fill="#2f7650" opacity=".55"><rect y="0" width="100" height="13"/><rect y="26" width="100" height="13"/><rect y="52" width="100" height="13"/><rect y="78" width="100" height="13"/><rect y="104" width="100" height="13"/></g><g fill="none" stroke="#e9f2ec" stroke-width=".6" opacity=".8"><rect x="4" y="4" width="92" height="122"/><path d="M4 65h92"/><circle cx="50" cy="65" r="10"/><rect x="26" y="4" width="48" height="18"/><rect x="38" y="4" width="24" height="7"/><rect x="26" y="108" width="48" height="18"/><rect x="38" y="119" width="24" height="7"/></g></svg>';
 function lpHtml(){if(lpSlot==null)return '';const l=lnGet(),s=fEff(l)[lpSlot];if(!s)return '';const all=D().p.filter(p=>!p.out),inl=new Set(l.s.filter(k=>k!=null).map(String)),item=p=>`<button type="button" class="lp-i" onclick="lpPick(${p.k})">${posBadge(p.pos)}<span>${esc(p.n)}</span>${inl.has(String(p.k))?'<em>em campo</em>':''}</button>`,A=all.filter(p=>p.pos===s.pos).sort(posCmp),B=all.filter(p=>p.pos!==s.pos).sort(posCmp);return `<div class="lp" onclick="if(event.target===this)lpClose()"><div class="lp-c"><div class="lp-h"><b>Escalar em ${s.pos}</b><button type="button" class="sm" onclick="lpClose()">Fechar</button></div>${l.s[lpSlot]!=null?`<button type="button" class="sm" onclick="lpRemove()">Remover desta posição</button>`:''}<p class="lp-s">Função desta posição</p><div class="lp-r">${POS.map(r=>`<button type="button" class="sm${r===s.pos?' on':''}" onclick="lpRole('${r}')">${r}</button>`).join('')}</div>${A.length?`<p class="lp-s">Jogadores de ${s.pos}</p>${A.map(item).join('')}`:''}${B.length?`<p class="lp-s">${A.length?'Outras posições':'Todos os jogadores'}</p>${B.map(item).join('')}`:''}${all.length?'':'<p class="empty">Cadastre jogadores no Elenco primeiro.</p>'}</div></div>`}
 function vLineup(){const l=lnGet(),sl=fEff(l),n=l.s.filter(k=>lpPl(k)).length,edited=!!((l.r&&Object.keys(l.r).length)||(l.o&&Object.keys(l.o).length));const slots=sl.map((q,i)=>{const p=lpPl(l.s[i]);return `<button type="button" class="slot${p?' on':''}${lnEdit?' edit':''}" data-i="${i}" style="left:${q.x}%;top:${q.y}%" onclick="lnTap(${i})" aria-label="${p?esc(p.n):'Escalar '+q.pos}"><i>${p?esc(q.pos):'+'}</i><b>${p?esc(p.n):q.pos}</b></button>`}).join('');return `<h2>Escalação</h2><p class="sub">Toque no + de cada posição para escolher o jogador. A lista mostra primeiro quem joga naquela posição, mas você pode usar qualquer um. Os titulares escalados já vêm selecionados ao registrar uma partida nova, e você pode desmarcar qualquer um na hora.</p><div class="tools"><label class="so">Formação<select onchange="lnForm(this.value)">${Object.keys(FORMS).map(f=>`<option${f===l.f?' selected':''}>${f}</option>`).join('')}</select></label><button type="button" class="sm" onclick="lnClear()">Limpar</button><button type="button" class="sm" onclick="lnEdit=!lnEdit;render()">${lnEdit?'Concluir edição':'Editar posições'}</button>${edited?`<button type="button" class="sm" onclick="lnReset()">Restaurar formação</button>`:''}</div>${lnEdit?'<p class="sub">Arraste cada posição para ajustar no campo. Toque nela para trocar o jogador ou a função (ex.: MC para VOL).</p>':''}<p class="sub ln-c">${n}/11 escalados${edited?' · formação editada':''}</p><div class="pitch">${PITCH_SVG}${slots}</div>`}
+
+function exportCSV(){const q=v=>{v=v==null?'':String(v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v},rows=[['Temporada','Jogador','Posição','Jogos','Gols','Assistências','G+A','MIN','Defesas','Amarelos','Vermelhos','Nota média','Melhor da partida']];
+S.order.forEach(sn=>{const d=S.data[sn]||{};(d.p||[]).forEach(p=>{const t=stats(p,d),nt=t.nt==null||t.nt==='–'||t.nt===''?'':String(t.nt).replace('.',',');rows.push([sn,p.n,p.pos||'',t.j,t.g,t.a,t.g+t.a,t.mn,p.pos==='GOL'?t.df:'',t.y,t.r,nt,t.mv||0])})});
+const csv='\ufeff'+rows.map(r=>r.map(q).join(';')).join('\r\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='estatisticas-'+String(S.club||'carreira').replace(/[^\w-]+/g,'-').toLowerCase()+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
 function applyInfo(){try{applyEmoji()}catch(e){}document.querySelectorAll('#app .sub').forEach(p=>{if(p.dataset.info)return;const t=(p.textContent||'').trim(),k=INFO_PFX.find(x=>t.startsWith(x));if(!k)return;p.dataset.info=k;p.hidden=!infoOpen.has(k);const b=document.createElement('button');b.type='button';b.className='info-btn';b.textContent='i';b.setAttribute('aria-label','Mais informações');b.setAttribute('aria-expanded',String(infoOpen.has(k)));b.onclick=()=>{const o=!infoOpen.has(k);o?infoOpen.add(k):infoOpen.delete(k);p.hidden=!o;b.setAttribute('aria-expanded',String(o))};const h=p.previousElementSibling;if(h&&/^H[1-4]$/.test(h.tagName))h.appendChild(b);else p.before(b)})}
 NAVI.trof='<path d="M6 4h12v5a6 6 0 0 1-12 0z"/><path d="M6 6H3v1a4 4 0 0 0 3 3.9M18 6h3v1a4 4 0 0 1-3 3.9M12 15v3M8 21h8M9.5 18h5"/>';
 const MN_DECO='<svg viewBox="0 0 400 150" width="100%" preserveAspectRatio="xMidYMax meet"><g fill="none" stroke="#8d97ad" stroke-width="1.6" opacity=".7"><g transform="translate(20 40) rotate(-8)"><rect width="150" height="100" rx="8"/><path d="M75 0v100M0 50h20M130 50h20"/><circle cx="75" cy="50" r="14"/><path d="M40 25l10 10M50 25L40 35M105 70l10 10M115 70l-10 10"/><circle cx="110" cy="30" r="6"/><circle cx="45" cy="75" r="6"/></g><g transform="translate(270 70)"><circle cx="40" cy="40" r="26"/><rect x="40" y="14" width="62" height="20" rx="8" transform="rotate(8 40 24)"/><circle cx="40" cy="40" r="7"/></g></g></svg>';
@@ -1768,6 +1776,18 @@ async function idbPutImg(key, val) {
   });
 }
 
+async function idbDelPrefix(prefix) {
+  const db = await getIdbMedia();
+  if (!db) return false;
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction(IDB_MEDIA_STORE, 'readwrite');
+      tx.objectStore(IDB_MEDIA_STORE).delete(IDBKeyRange.bound(prefix, prefix + '\uffff'));
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = tx.onabort = () => resolve(false);
+    } catch(e) { resolve(false); }
+  });
+}
 async function idbDelImg(key) {
   const db = await getIdbMedia();
   if (!db) return false;
@@ -2340,7 +2360,7 @@ function vHistComp(){
   const T=rows.reduce((t,h)=>({j:t.j+h.j,g:t.g+h.g,a:t.a+h.a,mn:t.mn+h.mn,df:t.df+h.df,ns:t.ns+h.ns,nc:t.nc+h.nc}),{j:0,g:0,a:0,mn:0,df:0,ns:0,nc:0});
   const row=h=>{const ed=PCE===String(h.k)&&!all;
     if(ed)return `<div class="hc-edit"><form class="hpc-form" onsubmit="return hpcSave(${h.k},this)"><b>${esc(h.n)}</b><label>Jogos<input name="j" type="number" min="0" inputmode="numeric" placeholder="${h.au.j}" value="${h.j||''}"></label><label>Gols<input name="g" type="number" min="0" inputmode="numeric" placeholder="${h.au.g}" value="${h.g||''}"></label><label>Assistências<input name="a" type="number" min="0" inputmode="numeric" placeholder="${h.au.a}" value="${h.a||''}"></label><button class="btn">Salvar</button><button type="button" class="sm" onclick="hpcEdit(${h.k})">Cancelar</button>${h.man?`<button type="button" class="sm" onclick="hpcClear(${h.k})">Voltar ao automático</button>`:''}</form></div>`;
-    return `<div class="hrow hc${h.out?' gone':''}${h.j||h.g||h.a?'':' gone-n'}"><span class="hn">${all?'':`<button type="button" class="sm hpc-pen" aria-label="Editar ${esc(h.n)}" onclick="hpcEdit(${h.k})">✎</button>`}${posBadge(h.pos)} ${esc(h.n)}${(()=>{try{return natSub({rows:[{p:h.p}],out:h.out})}catch(e){return ''}})()}${!all&&isCap(h.p,HPC.s)?' <span class="cap" title="Capitão">C</span>':''}${h.mvp?` <span class="mv" title="Melhor da partida">★${h.mvp}</span>`:''}${h.man?' <small title="Lançado à mão">·</small>':''}</span><span>${all?h.ts:(h.ts?1:0)}</span><span><span class="rating ${ratingClass(h.nc?h.ns/h.nc:null)}">${h.nc?(h.ns/h.nc).toFixed(1):'–'}</span></span><span>${h.j}</span><span>${h.g}</span><span>${h.a}</span><span>${h.g+h.a}</span><span>${fm2(pj(h))}</span><span>${h.mn}</span><span>${h.pos==='GOL'?h.df:'–'}</span><span>${fm2(p9(h))}</span></div>`};
+    return `<div class="hrow hc${h.out?' gone':''}${h.j||h.g||h.a?'':' gone-n'}"><span class="hn">${all?'':`<button type="button" class="sm hpc-pen" aria-label="Editar ${esc(h.n)}" onclick="hpcEdit(${h.k})">✎</button>`}${posBadge(h.pos)} <span class="nm">${esc(h.n)}</span>${(()=>{try{return natSub({rows:[{p:h.p}],out:h.out})}catch(e){return ''}})()}${!all&&isCap(h.p,HPC.s)?' <span class="cap" title="Capitão">C</span>':''}${h.mvp?` <span class="mv" title="Melhor da partida">★${h.mvp}</span>`:''}${h.man?' <small title="Lançado à mão">·</small>':''}</span><span>${all?h.ts:(h.ts?1:0)}</span><span><span class="rating ${ratingClass(h.nc?h.ns/h.nc:null)}">${h.nc?(h.ns/h.nc).toFixed(1):'–'}</span></span><span>${h.j}</span><span>${h.g}</span><span>${h.a}</span><span>${h.g+h.a}</span><span>${fm2(pj(h))}</span><span>${h.mn}</span><span>${h.pos==='GOL'?h.df:'–'}</span><span>${fm2(p9(h))}</span></div>`};
   return `<h2>Por competição</h2><p class="sub">Jogos, gols e assistências de cada jogador em uma competição. Em uma temporada, toque no ✎ para lançar os números à mão (por exemplo, no fim da temporada); o valor lançado substitui o das partidas e entra nos totais do jogador.</p>
   <div class="hpc-sel"><label>Competição<select onchange="hpcSel('c',this.value)">${comps.map(([k,n])=>`<option value="${esc(k)}"${k===HPC.c?' selected':''}>${esc(n)}</option>`).join('')}</select></label><label>Temporada<select onchange="hpcSel('s',this.value)"><option value="all"${all?' selected':''}>Todas as temporadas</option>${S.order.slice().reverse().map(q=>`<option${q===HPC.s?' selected':''}>${esc(q)}</option>`).join('')}</select></label>${rows.length?`<label>Ordenar por<select onchange="hpcSel('o',this.value)">${[['pg','G+A'],['j','Jogos'],['g','Gols'],['a','Assistências'],['pgj','G+A por jogo'],['nota','Nota média'],['min','MIN'],['def','DEF'],['p90','G+A/90'],['nome','Nome (A–Z)']].map(([k,n])=>`<option value="${k}"${o===k?' selected':''}>${n}</option>`).join('')}</select></label>`:''}</div>
   ${rows.length?`<div class="scroll"><div class="hlist hclist"><div class="hrow hc hh"><span></span><span>Temp.</span><span>Nota</span><span>Jogos</span><span>Gols</span><span>Ass.</span><span title="Participações em gol: gols + assistências">G+A</span><span title="Participações em gol por jogo">G+A/J</span><span title="Minutos">MIN</span><span title="Defesas">DEF</span><span title="G+A por 90 minutos">G+A/90</span></div><div class="hrow hc ht"><span class="hn">Total</span><span>${all?S.order.length:1}</span><span><span class="rating ${ratingClass(T.nc?T.ns/T.nc:null)}">${T.nc?(T.ns/T.nc).toFixed(1):'–'}</span></span><span>${T.j}</span><span>${T.g}</span><span>${T.a}</span><span>${T.g+T.a}</span><span>${fm2(pj(T))}</span><span>${T.mn}</span><span>${T.df}</span><span>${fm2(p9(T))}</span></div>${rows.map(row).join('')}</div></div>`:'<p class="empty">Nenhum jogador com números nesta competição.</p>'}`;
@@ -2359,7 +2379,7 @@ function vHistBase(){
   const totRow=list.length?`<div class="hrow ht"><span class="hn">Total</span><span>${S.order.length}</span><span><span class="rating ${ratingClass(TT.nw?TT.ns/TT.nw:null)}">${TT.nw?(TT.ns/TT.nw).toFixed(1):'–'}</span></span><span>${tj}</span><span>${TT.g}</span><span>${TT.a}</span><span>${TT.g+TT.a}</span><span>${fm2(tj?(TT.g+TT.a)/tj:0)}</span><span>${TT.mn}</span><span>${TT.df}</span><span>${fm2(TT.mn?(TT.g+TT.a)*90/TT.mn:0)}</span></div>`:'';
   return `<h2>Histórico geral</h2><p class="sub">Soma todas as temporadas de cada jogador. Abra um nome para ver a evolução ano a ano.</p>
   ${sortSel('hist',[['j','Jogos'],['g','Gols'],['a','Assistências'],['pg','Participações em gol'],['pgj','G+A por jogo'],['nota','Nota média'],['temp','Temporadas'],['nome','Nome (A–Z)']],'j')}
-  ${list.length?'<div class="scroll"><div class="hlist"><div class="hrow hh"><span></span><span>Temp.</span><span>Nota</span><span>Jogos</span><span>Gols</span><span>Ass.</span><span title="Participações em gol: gols + assistências">G+A</span><span title="Participações em gol por jogo">G+A/J</span><span>MIN</span><span>DEF</span><span title="G+A por 90 minutos">G+A/90</span></div>'+totRow+list.map(h=>`<details class="ed hd${h.gone?' gone':''}"><summary class="hrow"><span class="hn"><i class="ar">▸</i>${posBadge(h.rows[h.rows.length-1].p.pos)} ${esc(h.n)}${natSub(h)}${h.t.mv?` <span class="mv" title="Melhor da partida">★${h.t.mv}</span>`:''}</span><span>${h.rows.length}</span><span><span class="rating ${ratingClass(h.nt)}">${h.nt}</span></span><span>${h.t.j}</span><span>${h.t.g}</span><span>${h.t.a}</span><span>${h.t.g+h.t.a}</span><span>${fm2(h.t.j?(h.t.g+h.t.a)/h.t.j:0)}</span><span>${h.t.mn}</span><span>${h.rows.some(r=>r.p.pos==='GOL')?h.t.df:'–'}</span><span>${fm2(h.t.mn?(h.t.g+h.t.a)*90/h.t.mn:0)}</span></summary><div class="scroll"><table><thead><tr><th>Temporada</th><th>Nota</th><th>Pos</th><th>Idade</th><th>Ovr</th><th>J</th><th>Gols</th><th>Ast.</th><th>G+A</th><th>G+A/J</th><th>MIN</th><th>DEF</th><th>G+A/90</th><th>🟨</th><th>🟥</th></tr></thead><tbody>${h.rows.map(({s,p,st})=>`<tr><td>${esc(s)}${isCap(p,s)?' <span class="cap" title="Capitão">C</span>':''}</td><td><span class="rating ${ratingClass(st.nt)}">${st.nt}</span></td><td>${posBadge(p.pos)}</td><td>${p.id||'–'}</td><td>${p.ov||'–'}</td><td>${st.j}</td><td>${st.g}</td><td>${st.a}</td><td>${st.g+st.a}</td><td>${fm2(st.j?(st.g+st.a)/st.j:0)}</td><td>${st.mn}</td><td>${p.pos==='GOL'?st.df:'–'}</td><td>${fm2(p90(st))}</td><td>${st.y}</td><td>${st.r}</td></tr>`).join('')}</tbody></table></div></details>`).join('')+'</div></div>':'<p class="empty">Sem jogadores ainda. O histórico aparece quando você cadastrar o elenco.</p>'}`;
+  ${list.length?'<div class="scroll"><div class="hlist"><div class="hrow hh"><span></span><span>Temp.</span><span>Nota</span><span>Jogos</span><span>Gols</span><span>Ass.</span><span title="Participações em gol: gols + assistências">G+A</span><span title="Participações em gol por jogo">G+A/J</span><span>MIN</span><span>DEF</span><span title="G+A por 90 minutos">G+A/90</span></div>'+totRow+list.map(h=>`<details class="ed hd${h.gone?' gone':''}"><summary class="hrow"><span class="hn"><i class="ar">▸</i>${posBadge(h.rows[h.rows.length-1].p.pos)} <span class="nm">${esc(h.n)}</span>${natSub(h)}${h.t.mv?` <span class="mv" title="Melhor da partida">★${h.t.mv}</span>`:''}</span><span>${h.rows.length}</span><span><span class="rating ${ratingClass(h.nt)}">${h.nt}</span></span><span>${h.t.j}</span><span>${h.t.g}</span><span>${h.t.a}</span><span>${h.t.g+h.t.a}</span><span>${fm2(h.t.j?(h.t.g+h.t.a)/h.t.j:0)}</span><span>${h.t.mn}</span><span>${h.rows.some(r=>r.p.pos==='GOL')?h.t.df:'–'}</span><span>${fm2(h.t.mn?(h.t.g+h.t.a)*90/h.t.mn:0)}</span></summary><div class="scroll"><table><thead><tr><th>Temporada</th><th>Nota</th><th>Pos</th><th>Idade</th><th>Ovr</th><th>J</th><th>Gols</th><th>Ast.</th><th>G+A</th><th>G+A/J</th><th>MIN</th><th>DEF</th><th>G+A/90</th><th>🟨</th><th>🟥</th></tr></thead><tbody>${h.rows.map(({s,p,st})=>`<tr><td>${esc(s)}${isCap(p,s)?' <span class="cap" title="Capitão">C</span>':''}</td><td><span class="rating ${ratingClass(st.nt)}">${st.nt}</span></td><td>${posBadge(p.pos)}</td><td>${p.id||'–'}</td><td>${p.ov||'–'}</td><td>${st.j}</td><td>${st.g}</td><td>${st.a}</td><td>${st.g+st.a}</td><td>${fm2(st.j?(st.g+st.a)/st.j:0)}</td><td>${st.mn}</td><td>${p.pos==='GOL'?st.df:'–'}</td><td>${fm2(p90(st))}</td><td>${st.y}</td><td>${st.r}</td></tr>`).join('')}</tbody></table></div></details>`).join('')+'</div></div>':'<p class="empty">Sem jogadores ainda. O histórico aparece quando você cadastrar o elenco.</p>'}`;
 }
 
 function nextName(){if(/^\d{4}$/.test(S.cur))return String(+S.cur+1);const m=S.cur.match(/^(\d{4})\/(\d{2})$/);if(!m)return '';const y=+m[1]+1;return y+'/'+String((+m[2]+1)%100).padStart(2,'0')}
@@ -2471,8 +2491,9 @@ function prepareRestore(raw){
   }catch(e){pendingRestore=null;bkm=e&&e.message==='invalid'?'Backup incompatível ou incompleto. Nenhum dado foi alterado.':'Não foi possível ler este backup. Confira se o texto JSON está completo.';render();return false}
 }
 function cancelRestore(){pendingRestore=null;pasteDraft='';bkm='Restauração cancelada; os dados atuais foram mantidos.';render()}
+let RESTORE_OK=false;
 async function commitRestore(){
-  if(!pendingRestore)return false;const {d,incoming,legacy}=pendingRestore;pendingRestore=null;
+  RESTORE_OK=false;if(!pendingRestore)return false;const {d,incoming,legacy}=pendingRestore;pendingRestore=null;
   const previous=new Map(Object.keys(incoming).map(k=>[k,localStorage.getItem(k)]));
   try{
     // Salva imagens no IndexedDB e em memória para não inflar o localStorage
@@ -2537,7 +2558,7 @@ async function commitRestore(){
     }else{
       S=legacy;fix();syncName();
     }
-    draft={};editK=null;openM=null;pasteDraft='';bkm='Backup restaurado com sucesso! Imagens salvas no IndexedDB.';render();return false;
+    draft={};editK=null;openM=null;pasteDraft='';bkm='Backup restaurado com sucesso! Imagens salvas no IndexedDB.';RESTORE_OK=true;render();return false;
   }catch(e){
     bkm=e&&e.name==='QuotaExceededError'?'O armazenamento deste navegador está cheio. Exporte os dados atuais antes de liberar espaço e tente novamente.':'Não foi possível concluir a restauração: '+((e&&e.message)||'Erro desconhecido');
     render();return false;
@@ -2548,6 +2569,7 @@ if(IX.skipMenu&&!careerInfo(IX.cur).vazia)MENU=false;
 render();
 protectStorage();
 try{if(S&&S.hxv!==1){const d=S.data[S.cur];NEWS_QUIET=true;SEQC=careerSeq();(d.m||[]).forEach(m=>{if(m.id)milestoneNews(m,S.cur)});SEQC=null;NEWS_QUIET=false;S.hxv=1;save()}}catch(e){NEWS_QUIET=false;SEQC=null}
+(async()=>{try{const all=await idbGetAllImgs(),ids=new Set(IX.list.map(c=>c.id));for(const k of Object.keys(all)){if(k.startsWith('c:')&&!ids.has(k.split(':')[1]))await idbDelImg(k)}}catch(e){}})();
 waitMediaReady();
 setTimeout(()=>{if(cloudIn()&&IX.cloudAuto!==false)cloudSync(true)},5000);
 document.addEventListener('visibilitychange',()=>{if(!cloudIn()||IX.cloudAuto===false)return;if(document.hidden){if(IX.cloudDirty)cloudSync(true)}else if(!IX.cloudDirty&&Date.now()-CL.last>60000)cloudSync(true)});

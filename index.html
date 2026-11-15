@@ -573,6 +573,9 @@ body.menu-on #top,body.menu-on #tabs{display:none}
 .ldr{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:8px 0}.ldc{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px}.ldc h4{margin:0 0 6px}.ldc ol{list-style:none;margin:0;padding:0}.ldc li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0}.lk{background:none;border:0;padding:0;min-height:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
 
 button.season-label{background:transparent;border:1px solid var(--line);border-radius:999px;color:inherit;font:inherit;padding:3px 10px;min-height:0;min-width:0;cursor:pointer}
+
+.ac{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}.ac b{display:block}.ac small{color:var(--mute)}.ac .sm{margin-top:6px}
+.chk{display:flex;align-items:center;gap:8px;margin:10px 0}
 </style>
 </head>
 <body>
@@ -589,7 +592,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.26.0';
+const APP_VERSION='1.27.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -907,7 +910,7 @@ function sugHtml(){
 function addSug(i){if(SUG[i])setResC(SUG[i].c,SUG[i].r)}
 const fp=(i,x,f,l)=>`<label>${l}<input type="number" min="0" value="${x[f]??''}" onchange="pm(${i},'${f}',this.value===''?null:+this.value)"></label>`;
 
-function allJson(){
+function allJson(noArch){
   const fullClubDb={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:CLUB_DB.images||{},ts:CLUB_DB.ts||Date.now()};
   const o={v:2,ix:Object.assign({},IX,{cloudAuth:undefined,cloudBase:undefined,cloudDirty:undefined,cloudLastAt:undefined}),data:{},clubDb:fullClubDb};
   IX.list.forEach(c=>{
@@ -919,6 +922,7 @@ function allJson(){
     }
     if(careerData)o.data[c.id]=careerData;
   });
+  if(noArch)o.ix.list=o.ix.list.filter(c=>!c.arch);else{o.arch={};IX.list.filter(c=>c.arch).forEach(c=>{const r=localStorage.getItem('arch-'+c.id);if(r)o.arch[c.id]=r})}
   return JSON.stringify(o);
 }
 let confC=null;
@@ -974,12 +978,12 @@ function renderMenu(){
   queueMicrotask(()=>{ui();armPickers();flashNow();bkOpen=false});
 }
 function vMenu(){
-  const all=IX.list.map(c=>Object.assign({id:c.id},careerInfo(c.id))).filter(c=>!c.vazia).sort((a,b)=>b.ts-a.ts),last=all[0];
+  const all=IX.list.filter(c=>!c.arch).map(c=>Object.assign({id:c.id},careerInfo(c.id))).filter(c=>!c.vazia).sort((a,b)=>b.ts-a.ts),last=all[0];
   const sum=c=>`<b>${c.jogos}</b> <span>jogos</span> · <b>${c.titulos}</b> <span>títulos</span> · <span>${esc(c.temp)}</span>`;
   const back=`<button type="button" class="mn-back" onclick="menuGo('home')">← Voltar</button>`;
   if(menuView==='config')return `<div class="menu"><div class="mn-top">${back}</div><label class="mn-skip"><input type="checkbox" ${IX.skipMenu?'checked':''} onchange="IX.skipMenu=this.checked;saveIx()"><span>Pular o menu ao abrir o app</span></label>${vConfig()}</div>`;
   if(menuView==='new')return `<div class="menu"><div class="mn-top">${back}<h2>Nova carreira</h2></div><form class="mn-new" onsubmit="return newCareer(this)"><label>Novo time para treinar<input name="n" list="dl-career-clubs" autocomplete="off" placeholder="Buscar ou digitar o clube" required></label><datalist id="dl-career-clubs">${databaseClubNames().map(n=>`<option value="${esc(n)}">`).join('')}</datalist>${ncFields()}<button class="btn">Criar carreira com este clube</button></form></div>`;
-  if(menuView==='careers')return `<div class="menu"><div class="mn-top">${back}<h2>Minhas carreiras</h2></div><div class="mn-actions">${all.map(c=>`<button class="mn-btn" onclick="menuOpen('${c.id}')"><span>${esc(c.name)}${c.id===IX.cur?' ●':''}</span><small>${sum(c)}</small></button>`).join('')}</div></div>`;
+  if(menuView==='careers')return `<div class="menu"><div class="mn-top">${back}<h2>Minhas carreiras</h2></div><div class="mn-actions">${all.map(c=>`<button class="mn-btn" onclick="menuOpen('${c.id}')"><span>${esc(c.name)}${c.id===IX.cur?' ●':''}</span><small>${sum(c)}</small></button>`).join('')}</div>${archMenu()}</div>`;
   return `<div class="menu"><div class="mn-hero">${LOGO_SVG}<h1>Diário do Técnico</h1><p>Registro do seu modo carreira</p></div>
   <div class="mn-actions">
    ${last?`<button class="mn-btn main" onclick="menuOpen('${last.id}')"><span>Continuar carreira</span><small><b>${esc(last.name)}</b> · ${sum(last)}</small></button>`:''}
@@ -1151,7 +1155,7 @@ async function sha1(s){if(window.crypto&&crypto.subtle){const b=await crypto.sub
 const cloudDevice=()=>/Android/i.test(navigator.userAgent)?'Android':/iPhone|iPad/i.test(navigator.userAgent)?'iPhone':/Windows/i.test(navigator.userAgent)?'Windows':'Navegador';
 async function cloudPush(){
   try{await waitMediaReady()}catch(_){}
-  const obj=JSON.parse(allJson()),imgs={};
+  const obj=JSON.parse(allJson(true)),imgs={};
   const sw=async m=>{if(!m||typeof m!=='object')return;for(const k of Object.keys(m)){const v=m[k];if(typeof v==='string'&&v.startsWith('data:image')){const h=await sha1(v);imgs[h]=v;m[k]='@img:'+h}}};
   await sw(obj.clubDb&&obj.clubDb.images);for(const id in obj.data)if(obj.data[id])await sw(obj.data[id].img);
   const remote=(await dbReq('/imgs','GET',undefined,'&shallow=true'))||{},miss=Object.keys(imgs).filter(h=>!remote[h]);
@@ -1368,8 +1372,8 @@ function addAssetItem(f){
  save();render();const d=document.getElementById('asset-library');if(d)d.open=true;return false;
 }
 function careersBox(){
-  return `<details class="bkd" open><summary>Carreiras (${IX.list.length})</summary><p class="sub">Cada carreira guarda seu próprio clube, temporadas, elenco e partidas.</p>${IX.list.map(c=>`<div class="row"><span>${c.id===IX.cur?'●':'○'}</span><div>${esc(c.name)}</div>${c.id===IX.cur?'<span class="sub">atual</span>':`<button class="sm" onclick="switchCareer('${c.id}')">Abrir</button>`}${IX.list.length>1?(confC===c.id?`<span><button class="sm" onclick="delCareer('${c.id}')">Apagar mesmo</button> <button class="sm" onclick="confC=null;render()">Não</button></span>`:`<button class="x" aria-label="Apagar carreira ${esc(c.name)}" onclick="confC='${c.id}';render()">✕</button>`):'<span></span>'}</div>`).join('')}
-  <form onsubmit="return newCareer(this)"><label>Novo time para treinar<input name="n" list="dl-career-clubs" autocomplete="off" placeholder="Buscar ou digitar o clube" required></label><datalist id="dl-career-clubs">${databaseClubNames().map(n=>`<option value="${esc(n)}">`).join('')}</datalist>${ncFields()}<button class="btn">Criar carreira com este clube</button></form></details>`;
+  return `<details class="bkd" open><summary>Carreiras (${IX.list.filter(c=>!c.arch).length})</summary><p class="sub">Cada carreira guarda seu próprio clube, temporadas, elenco e partidas.</p>${IX.list.filter(c=>!c.arch).map(c=>`<div class="row"><span>${c.id===IX.cur?'●':'○'}</span><div>${esc(c.name)}</div>${c.id===IX.cur?'<span class="sub">atual</span>':`<button class="sm" onclick="switchCareer('${c.id}')">Abrir</button>`}<button class="sm" onclick="archAsk('${c.id}')">Arquivar</button>${IX.list.length>1?(confC===c.id?`<span><button class="sm" onclick="delCareer('${c.id}')">Apagar mesmo</button> <button class="sm" onclick="confC=null;render()">Não</button></span>`:`<button class="x" aria-label="Apagar carreira ${esc(c.name)}" onclick="confC='${c.id}';render()">✕</button>`):'<span></span>'}</div>`).join('')}
+  <form onsubmit="return newCareer(this)"><label>Novo time para treinar<input name="n" list="dl-career-clubs" autocomplete="off" placeholder="Buscar ou digitar o clube" required></label><datalist id="dl-career-clubs">${databaseClubNames().map(n=>`<option value="${esc(n)}">`).join('')}</datalist>${ncFields()}<button class="btn">Criar carreira com este clube</button></form>${archBox()}</details>`;
 }
 
 let gid=0;
@@ -1564,6 +1568,20 @@ function seasonEdit(){let m=document.getElementById('se-root');if(!m){m=document
 function seClose(){const m=document.getElementById('se-root');if(m)m.remove()}
 function seApply(){const e=document.getElementById('se-sel'),v=e&&e.value;seClose();if(v&&v!==S.cur&&renameSeason(S.cur,v)){draft={};render()}}
 async function shareImgs(){try{const cid=IX.cur;IX.imgShared=IX.imgShared||{};if(IX.imgShared[cid])return;if(typeof waitMediaReady==='function')await waitMediaReady();const all=await idbGetAllImgs(),mine=S.img=S.img||{};let n=0;const best={};Object.keys(all).forEach(k=>{if(!k.startsWith('c:'))return;const p=k.split(':'),ik=p.slice(2).join(':');if(p[1]===cid||!ik||!all[k])return;if(best[ik]==null)best[ik]=all[k]});for(const ik of Object.keys(best)){if(mine[ik]==null||mine[ik]===''){mine[ik]=best[ik];await idbPutImg('c:'+cid+':'+ik,best[ik]);n++}}if(typeof CAREER_IMGS==='object'&&CAREER_IMGS)CAREER_IMGS[cid]=Object.assign({},CAREER_IMGS[cid]||{},mine);IX.imgShared[cid]=true;saveIx();if(n)render()}catch(e){}}
+
+let arcMsg='';
+const fmtBytes=b=>b>=1048576?(b/1048576).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(b/1024))+' KB';
+async function gz(str){const cs=new CompressionStream('gzip'),w=cs.writable.getWriter();w.write(new TextEncoder().encode(str));w.close();const buf=new Uint8Array(await new Response(cs.readable).arrayBuffer());let b='';for(let i=0;i<buf.length;i+=8192)b+=String.fromCharCode.apply(null,buf.subarray(i,i+8192));return btoa(b)}
+async function gunz(b64){const bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);const ds=new DecompressionStream('gzip'),w=ds.writable.getWriter();w.write(u);w.close();return await new Response(ds.readable).text()}
+function archSummary(d){let j=0,v=0,e=0,l=0,gp=0,gc=0,t=0;const G={},O=d.order||[];O.forEach(sn=>{const x=d.data[sn]||{},r=rec(x);j+=r.j;v+=r.v;e+=r.e;l+=r.l;gp+=r.gp;gc+=r.gc;t+=(x.res||[]).filter(q=>norm(q.r)==='campeao').length;(x.p||[]).forEach(p=>{const st=stats(p,x),h=G[p.k]=G[p.k]||{n:p.n,g:0};h.n=p.n;h.g+=st.g})});const top=Object.values(G).sort((a,b)=>b.g-a.g)[0];return{club:d.club||'Carreira',n:O.length,from:O[0]||'',to:O[O.length-1]||'',j,v,e,l,gp,gc,t,ap:j?Math.round((v*3+e)/(j*3)*100):0,top:top&&top.g>0?top.n+' ('+top.g+' gols)':''}}
+function archAsk(id){const c=IX.list.find(x=>x.id===id);if(!c)return;let m=document.getElementById('ar-root');if(!m){m=document.createElement('div');m.id='ar-root';document.body.appendChild(m)}m.innerHTML=`<div class="lp" onclick="if(event.target===this)archClose()"><div class="lp-c"><div class="lp-h"><b>Arquivar carreira</b><button type="button" class="sm" onclick="archClose()">Fechar</button></div><p class="sub">Arquivar <b>${esc(c.name)}</b> compacta os dados dessa carreira e apaga as imagens dela deste aparelho para liberar espaço. Você continua vendo o resumo e pode desarquivar quando quiser.</p><label class="chk"><input type="checkbox" id="ar-bk" checked><span>Baixar o backup completo antes (recomendado)</span></label><div class="rem-btns"><button type="button" class="sm" onclick="archClose()">Cancelar</button><button type="button" class="btn" onclick="archGo('${id}')">Arquivar</button></div></div></div>`}
+function archClose(){const m=document.getElementById('ar-root');if(m)m.remove()}
+async function archGo(id){const b=document.getElementById('ar-bk');if(b&&b.checked){try{downloadBk()}catch(e){}}archClose();await archCareer(id)}
+async function archCareer(id){const c=IX.list.find(x=>x.id===id);if(!c||c.arch)return;const others=IX.list.filter(x=>x.id!==id&&!x.arch);if(!others.length){arcMsg='Crie outra carreira antes de arquivar esta.';render();return}if(IX.cur===id){save();switchCareer(others[0].id)}const raw=localStorage.getItem(keyOf(id));if(!raw){arcMsg='Não encontrei os dados dessa carreira.';render();return}let imgBytes=0;try{const all=await idbGetAllImgs();Object.keys(all).forEach(k=>{if(k.startsWith('c:'+id+':'))imgBytes+=String(all[k]).length})}catch(e){}let sum;try{sum=archSummary(mig(JSON.parse(raw)))}catch(e){sum={club:c.name}}let blob,tag='raw:';try{blob=await gz(raw);tag='gz:'}catch(e){blob=raw}try{localStorage.setItem('arch-'+id,tag+blob)}catch(e){arcMsg='Não foi possível arquivar: o armazenamento está cheio.';render();return}localStorage.removeItem(keyOf(id));if(typeof CAREER_IMGS==='object'&&CAREER_IMGS)delete CAREER_IMGS[id];await idbDelPrefix('c:'+id+':');c.arch={ts:Date.now(),sum,freed:Math.max(0,raw.length+imgBytes-(tag.length+blob.length))};arcMsg='Carreira arquivada. Espaço liberado: cerca de '+fmtBytes(c.arch.freed)+'.';saveIx();render()}
+async function unarchCareer(id){const c=IX.list.find(x=>x.id===id);if(!c||!c.arch)return;const r=localStorage.getItem('arch-'+id);if(!r){arcMsg='Os dados dessa carreira arquivada não foram encontrados neste aparelho.';render();return}try{const raw=r.startsWith('gz:')?await gunz(r.slice(3)):r.slice(4);JSON.parse(raw);localStorage.setItem(keyOf(id),raw)}catch(e){arcMsg='Não foi possível desarquivar: '+((e&&e.message)||'dados inválidos')+'.';render();return}localStorage.removeItem('arch-'+id);delete c.arch;if(IX.imgShared)delete IX.imgShared[id];arcMsg='Carreira desarquivada. Ela voltou para a lista; as imagens são refeitas ao abri-la.';saveIx();render()}
+function archCard(c){const m=c.arch.sum||{};return `<div class="ac"><b>${esc(m.club||c.name)}</b><small>${esc(m.from||'')}${m.to&&m.to!==m.from?' a '+esc(m.to):''} · ${m.n||0} temporada${m.n>1?'s':''}</small><div class="sub">${m.j||0} J · ${m.v||0}V ${m.e||0}E ${m.l||0}D · ${m.gp||0}:${m.gc||0} G · aproveitamento ${m.ap||0}%${m.t?' · 🏆 '+m.t:''}${m.top?'<br>Artilheiro: '+esc(m.top):''}</div><div class="sub">Arquivada em ${new Date(c.arch.ts).toLocaleDateString('pt-BR')} · liberou cerca de ${fmtBytes(c.arch.freed||0)}</div><button type="button" class="sm" onclick="unarchCareer('${c.id}')">Desarquivar</button></div>`}
+function archBox(){const A=IX.list.filter(c=>c.arch);return `<h4>Arquivadas (${A.length})</h4>${A.length?A.map(archCard).join(''):'<p class="sub">Arquive carreiras que você terminou para liberar espaço no aparelho.</p>'}${arcMsg?`<p class="sub">${esc(arcMsg)}</p>`:''}`}
+function archMenu(){const A=IX.list.filter(c=>c.arch);return A.length?'<div class="mn-actions"><p class="sub">Arquivadas</p>'+A.map(archCard).join('')+'</div>':''}
 function applyInfo(){try{applyEmoji()}catch(e){}document.querySelectorAll('#app .sub').forEach(p=>{if(p.dataset.info)return;const t=(p.textContent||'').trim(),k=INFO_PFX.find(x=>t.startsWith(x));if(!k)return;p.dataset.info=k;p.hidden=!infoOpen.has(k);const b=document.createElement('button');b.type='button';b.className='info-btn';b.textContent='i';b.setAttribute('aria-label','Mais informações');b.setAttribute('aria-expanded',String(infoOpen.has(k)));b.onclick=()=>{const o=!infoOpen.has(k);o?infoOpen.add(k):infoOpen.delete(k);p.hidden=!o;b.setAttribute('aria-expanded',String(o))};const h=p.previousElementSibling;if(h&&/^H[1-4]$/.test(h.tagName))h.appendChild(b);else p.before(b)})}
 NAVI.trof='<path d="M6 4h12v5a6 6 0 0 1-12 0z"/><path d="M6 6H3v1a4 4 0 0 0 3 3.9M18 6h3v1a4 4 0 0 1-3 3.9M12 15v3M8 21h8M9.5 18h5"/>';
 const MN_DECO='<svg viewBox="0 0 400 150" width="100%" preserveAspectRatio="xMidYMax meet"><g fill="none" stroke="#8d97ad" stroke-width="1.6" opacity=".7"><g transform="translate(20 40) rotate(-8)"><rect width="150" height="100" rx="8"/><path d="M75 0v100M0 50h20M130 50h20"/><circle cx="75" cy="50" r="14"/><path d="M40 25l10 10M50 25L40 35M105 70l10 10M115 70l-10 10"/><circle cx="110" cy="30" r="6"/><circle cx="45" cy="75" r="6"/></g><g transform="translate(270 70)"><circle cx="40" cy="40" r="26"/><rect x="40" y="14" width="62" height="20" rx="8" transform="rotate(8 40 24)"/><circle cx="40" cy="40" r="7"/></g></g></svg>';
@@ -2604,7 +2622,8 @@ async function commitRestore(){
         CLUB_DB.clubs=Array.isArray(d.clubDb.clubs)?d.clubDb.clubs:[];
         CLUB_DB.images=CLUB_DB.images||(d.clubDb.images||{});
       }
-      IX=d.ix;
+      try{Object.entries(d.arch||{}).forEach(([id,r])=>localStorage.setItem('arch-'+id,r))}catch(_){}
+      const keepA=IX.list.filter(c=>c.arch);IX=d.ix;try{keepA.forEach(c=>{if(!IX.list.find(x=>x.id===c.id))IX.list.push(c)})}catch(_){}
       loadCur();
       if(CAREER_IMGS[IX.cur])S.img=Object.assign({},S.img||{},CAREER_IMGS[IX.cur]);
     }else{

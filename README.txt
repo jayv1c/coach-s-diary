@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.26.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.27.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -27,6 +27,7 @@ DADOS E BACKUPS
 - O backup inclui os dados da carreira e imagens personalizadas. Para usar a mesma carreira em vários aparelhos, prefira a sincronização com a nuvem; o backup em arquivo continua valendo como cópia extra.
 
 RECURSOS DESTA VERSÃO
+- Versão 1.27: Arquivar carreira (Configurações > Carreiras e Minhas carreiras): compacta os dados, apaga as imagens da carreira, mostra um resumo e permite desarquivar. As arquivadas entram no backup em arquivo, mas não na nuvem.
 - Versão 1.26: escudos e imagens de outras carreiras passam a aparecer nas novas carreiras; a temporada do cabeçalho agora pode ser corrigida (toque nela).
 - Versão 1.25: Perfil do jogador (evolução de nota e overall, melhores jogos e prêmios) e Destaques da temporada em Estatísticas (minutos, defesas, G+A/90, prêmios e nota média).
 - Versão 1.24: botão Prorrogação (só mata-mata, jogo de volta ou jogo único; minutos padrão 120), pênaltis só na volta, lembrete da escalação ao registrar partida (dá para desligar) e minutos como dica apagada.

@@ -576,6 +576,10 @@ button.season-label{background:transparent;border:1px solid var(--line);border-r
 
 .ac{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}.ac b{display:block}.ac small{color:var(--mute)}.ac .sm{margin-top:6px}
 .chk{display:flex;align-items:center;gap:8px;margin:10px 0}
+
+.hn .nm{flex:0 0 auto;min-width:0;overflow:visible;text-overflow:clip;white-space:nowrap}.hn>.sub{flex:0 100 auto;min-width:0;overflow:hidden;white-space:nowrap}
+#app .hlist .hrow{grid-template-columns:minmax(244px,2.6fr) repeat(10,minmax(38px,1fr))}#app .hlist{min-width:940px}
+#app .hclist .hrow{grid-template-columns:minmax(276px,2.6fr) repeat(10,minmax(38px,1fr))}#app .hclist{min-width:980px}
 </style>
 </head>
 <body>
@@ -592,13 +596,13 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.27.0';
+const APP_VERSION='1.27.2';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
 const sLabel=(y,t)=>t==='br'?String(y):y+'/'+String((y+1)%100).padStart(2,'0');
 function fresh(club,o){o=o||{};const t=o.tipo==='br'?'br':'eu',q=sLabel(o.y||2026,t),r={club,budget:50,cur:q,order:[q],data:{[q]:ns()}};if(t==='br')r.tipo='br';return r}
-let S=fresh('Meu clube');
+let S=fresh('Meu clube',{y:2021});
 function mig(o){
   if(!(o.matches||o.players||o.transfers||o.seasons))return o;
   const n={club:o.club||'Meu clube',budget:o.budget||0,cur:o.season||'2026/27',order:[],data:{}};
@@ -616,13 +620,14 @@ const keyOf=id=>id==='c1'?KEY:'carreira-'+id;
 const saveIx=()=>{try{localStorage.setItem('carreiras-v1',JSON.stringify(IX))}catch(e){}};
 let UNDO=null,undoT=null,openT=null,sub={};
 function syncName(){const c=IX.list.find(x=>x.id===IX.cur);if(c){c.name=S.club||'Carreira';saveIx()}}
-function loadCur(){S=fresh('Meu clube');try{const r=localStorage.getItem(keyOf(IX.cur));if(r)S=mig(JSON.parse(r))}catch(e){}fix();syncName()}
+function loadCur(){S=fresh('Meu clube',{y:2021});try{const r=localStorage.getItem(keyOf(IX.cur));if(r)S=mig(JSON.parse(r))}catch(e){}fix();syncName()}
 const nk=()=>{S.nk=(S.nk||1000)+1;return S.nk};
- function fix(){S.order.forEach(s=>{const d=S.data[s];d.m=d.m||[];d.m.forEach(m=>{if(!m.date&&/^\d{4}-\d{2}-\d{2}$/.test(m.d||''))m.date=m.d});d.res=d.res||[];d.aw=d.aw||[];d.champs=Array.isArray(d.champs)?d.champs:[];d.news=Array.isArray(d.news)?d.news:[];if(d.pos){d.res.push({c:'Liga nacional',r:d.pos});d.pos=''}if(d.tit){d.res.push({c:d.tit,r:'Campeão'});d.tit=''}d.p.forEach(p=>{if(!p.k)p.k=nk();if(p.ovr){const a=auto(p,d),b={};['j','g','a','y','r'].forEach(f=>{if(p.ovr[f]!=null&&p.ovr[f]-a[f])b[f]=p.ovr[f]-a[f]});if(p.ovr.n!=null)b.n=p.ovr.n;if(Object.keys(b).length)p.base=b;delete p.ovr}})});S.order.sort();if(S.order.length===1&&S.order[0]==='2026/27'){const d=S.data['2026/27'];if(!d.m.length&&!d.p.length&&!d.t.length&&!d.res.length){S.data={'2021/22':d};S.order=['2021/22'];S.cur='2021/22'}}}
+ function fix(){S.order.forEach(s=>{const d=S.data[s];d.m=d.m||[];d.m.forEach(m=>{if(!m.date&&/^\d{4}-\d{2}-\d{2}$/.test(m.d||''))m.date=m.d});d.res=d.res||[];d.aw=d.aw||[];d.champs=Array.isArray(d.champs)?d.champs:[];d.news=Array.isArray(d.news)?d.news:[];if(d.pos){d.res.push({c:'Liga nacional',r:d.pos});d.pos=''}if(d.tit){d.res.push({c:d.tit,r:'Campeão'});d.tit=''}d.p.forEach(p=>{if(!p.k)p.k=nk();if(p.ovr){const a=auto(p,d),b={};['j','g','a','y','r'].forEach(f=>{if(p.ovr[f]!=null&&p.ovr[f]-a[f])b[f]=p.ovr[f]-a[f]});if(p.ovr.n!=null)b.n=p.ovr.n;if(Object.keys(b).length)p.base=b;delete p.ovr}})});S.order.sort();}
 loadCur();
 function goSeason(s){if(s==='__ren'){render();seasonEdit();return}if(!S.data[s]){S.data[s]=ns();S.order.push(s);S.order.sort()}S.cur=s;draft={};editK=null;save();render()}
 const persist=()=>{try{const clone=Object.assign({},S,{img:{}});localStorage.setItem(keyOf(IX.cur),JSON.stringify(clone));if(bkm.startsWith('Falha ao salvar'))bkm='';return true}catch(e){bkm='Falha ao salvar neste aparelho: '+((e&&e.message)||'armazenamento cheio');if(document.getElementById('app'))setTimeout(render,0);return false}};
 const save=()=>{RKC=null;S.ts=Date.now();try{reconcileNews()}catch(e){}cloudMark();return persist()};
+const jq=t=>esc(String(t==null?'':t).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/[\r\n]/g,' '));
 const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Base de clubes compartilhada: declarada aqui para existir antes de qualquer função que a use.
 const CLUB_DB_KEY='diario-club-database-v1';
@@ -630,7 +635,7 @@ let CLUB_DB={clubs:[],images:{}};
 try{const raw=localStorage.getItem(CLUB_DB_KEY);if(raw){const parsed=JSON.parse(raw);CLUB_DB={clubs:Array.isArray(parsed.clubs)?parsed.clubs:[],images:parsed.images&&typeof parsed.images==='object'?parsed.images:{}}}}catch(e){}
 function saveClubDb(){try{CLUB_DB.ts=Date.now();const light={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:{},ts:CLUB_DB.ts};localStorage.setItem(CLUB_DB_KEY,JSON.stringify(light))}catch(e){console.warn('Falha leve ao salvar base de clubes:',e)}}
 
-const num=v=>Number(String(v).replace(',','.'))||0;
+const num=v=>{let s=String(v==null?'':v).trim().replace(/[^\d.,\-]/g,'');if(!s)return 0;const c=s.lastIndexOf(','),p=s.lastIndexOf('.');if(c>=0&&p>=0){s=c>p?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'')}else if(c>=0){s=(s.match(/,/g)||[]).length>1?s.replace(/,/g,''):s.replace(',','.')}else if((s.match(/\./g)||[]).length>1){s=s.replace(/\./g,'')}return Number(s)||0};
 const fm=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:2});
 const D=()=>S.data[S.cur];
 let tab='home';
@@ -912,7 +917,7 @@ const fp=(i,x,f,l)=>`<label>${l}<input type="number" min="0" value="${x[f]??''}"
 
 function allJson(noArch){
   const fullClubDb={clubs:Array.isArray(CLUB_DB.clubs)?CLUB_DB.clubs:[],images:CLUB_DB.images||{},ts:CLUB_DB.ts||Date.now()};
-  const o={v:2,ix:Object.assign({},IX,{cloudAuth:undefined,cloudBase:undefined,cloudDirty:undefined,cloudLastAt:undefined}),data:{},clubDb:fullClubDb};
+  const o={v:2,ix:Object.assign({},IX,{cloud:undefined,cloudEmail:undefined,cloudAuth:undefined,cloudBase:undefined,cloudDirty:undefined,cloudLastAt:undefined}),data:{},clubDb:fullClubDb};
   IX.list.forEach(c=>{
     let careerData=null;
     if(c.id===IX.cur)careerData=Object.assign({},S,{img:Object.assign({},S.img||{},CAREER_IMGS[c.id]||{})});
@@ -1033,7 +1038,7 @@ function vBalance(season){
 function showBalance(season){
   document.querySelectorAll('.bal-modal').forEach(x=>x.remove());
   const el=document.createElement('div');el.className='bal-modal';
-  el.innerHTML=`<div class="bal-wrap"><div class="bal-bar"><button type="button" class="btn" onclick="saveBalanceImage('${esc(season)}',false)">Salvar imagem</button>${navigator.share?`<button type="button" class="chip2" onclick="saveBalanceImage('${esc(season)}',true)">Compartilhar</button>`:''}<button type="button" class="chip2" onclick="this.closest('.bal-modal').remove()">Fechar</button></div>${vBalance(season)}</div>`;
+  el.innerHTML=`<div class="bal-wrap"><div class="bal-bar"><button type="button" class="btn" onclick="saveBalanceImage('${jq(season)}',false)">Salvar imagem</button>${navigator.share?`<button type="button" class="chip2" onclick="saveBalanceImage('${jq(season)}',true)">Compartilhar</button>`:''}<button type="button" class="chip2" onclick="this.closest('.bal-modal').remove()">Fechar</button></div>${vBalance(season)}</div>`;
   document.body.appendChild(el);
 }
 async function saveBalanceImage(season,share){
@@ -1106,7 +1111,7 @@ function calDel(id){const d=D();d.cal=(d.cal||[]).filter(x=>x.id!==id);save();re
 function calEdit(id){const e=(D().cal||[]).find(x=>x.id===id);if(!e)return;CALEDIT=id;CALSEL=e.date;render()}
 function calUse(id){const e=(D().cal||[]).find(x=>x.id===id);if(!e)return;CALDRAFT=e;sub.pm='r';fo.m=true;render();setTimeout(()=>{const f=document.getElementById('mf');if(f)f.scrollIntoView({block:'center'})},150)}
 function calDone(m,f){const d=D(),cid=f&&f.dataset?f.dataset.calId:'';d.cal=(d.cal||[]).filter(e=>e.id!==cid&&!(e.date===m.date&&norm(e.adv)===norm(m.adv)&&e.c===m.c))}
-function calChips(){const l=(D().cal||[]).slice().sort((a,b)=>a.date<b.date?-1:1).slice(0,4);return l.length?`<div class="cal-chips"><small>Agendados:</small>${l.map(e=>`<button type="button" class="chip2" onclick="calUse('${esc(e.id)}')">${e.date.slice(8,10)}/${e.date.slice(5,7)} ${esc(e.adv)}</button>`).join('')}</div>`:''}
+function calChips(){const l=(D().cal||[]).slice().sort((a,b)=>a.date<b.date?-1:1).slice(0,4);return l.length?`<div class="cal-chips"><small>Agendados:</small>${l.map(e=>`<button type="button" class="chip2" onclick="calUse('${jq(e.id)}')">${e.date.slice(8,10)}/${e.date.slice(5,7)} ${esc(e.adv)}</button>`).join('')}</div>`:''}
 function applyCal(){const e=CALDRAFT;if(!e)return;CALDRAFT=null;const f=document.getElementById('mf');if(!f)return;
   if(e.c&&[...f.elements.c.options].some(o=>o.value===e.c)&&f.elements.c.value!==e.c){f.elements.c.value=e.c;updStageCore()}
   if(e.ph&&[...f.elements.ph.options].some(o=>o.value===e.ph&&!o.disabled))f.elements.ph.value=e.ph;
@@ -1130,7 +1135,7 @@ function vCal(){
   const cells=Array.from({length:lead},()=>'<span class="cd blank"></span>').concat(Array.from({length:days},(_,i)=>cell(i+1))).join('');
   let panel='';
   if(CALSEL){const sc=d.cal.filter(e=>e.date===CALSEL),pl=d.m.filter(m=>m.date===CALSEL),ed=CALEDIT&&d.cal.find(e=>e.id===CALEDIT),c0=ed?ed.c:(comps[0]||'');
-    panel=`<div class="cal-modal" onclick="if(event.target===this)calPick('${CALSEL}')"><div class="rk-me cal-day cal-sheet"><button type="button" class="chip2 cal-x" onclick="calPick('${CALSEL}')">Fechar</button><h3 style="padding-right:84px">${CALSEL.slice(8,10)}/${CALSEL.slice(5,7)}/${CALSEL.slice(0,4)}</h3>${pl.map(m=>`<p class="sub">${m.gp>m.gc?'V':m.gp<m.gc?'D':'E'} ${m.gp}–${m.gc} · ${esc(m.adv)} · ${esc(jc(m.c||''))} (registrado)</p>`).join('')}${sc.map(e=>`<div class="cal-item"><div><b>${esc(e.adv)}</b><small>${esc(jc(e.c||'Sem competição'))}${e.ph?' · '+esc(e.ph):''} · ${esc(e.loc)}</small></div><button type="button" class="sm" onclick="calUse('${esc(e.id)}')">Registrar</button><button type="button" class="sm" onclick="calEdit('${esc(e.id)}')">Editar</button><button type="button" class="x" aria-label="Remover do calendário" onclick="calDel('${esc(e.id)}')">✕</button></div>`).join('')}
+    panel=`<div class="cal-modal" onclick="if(event.target===this)calPick('${CALSEL}')"><div class="rk-me cal-day cal-sheet"><button type="button" class="chip2 cal-x" onclick="calPick('${CALSEL}')">Fechar</button><h3 style="padding-right:84px">${CALSEL.slice(8,10)}/${CALSEL.slice(5,7)}/${CALSEL.slice(0,4)}</h3>${pl.map(m=>`<p class="sub">${m.gp>m.gc?'V':m.gp<m.gc?'D':'E'} ${m.gp}–${m.gc} · ${esc(m.adv)} · ${esc(jc(m.c||''))} (registrado)</p>`).join('')}${sc.map(e=>`<div class="cal-item"><div><b>${esc(e.adv)}</b><small>${esc(jc(e.c||'Sem competição'))}${e.ph?' · '+esc(e.ph):''} · ${esc(e.loc)}</small></div><button type="button" class="sm" onclick="calUse('${jq(e.id)}')">Registrar</button><button type="button" class="sm" onclick="calEdit('${jq(e.id)}')">Editar</button><button type="button" class="x" aria-label="Remover do calendário" onclick="calDel('${jq(e.id)}')">✕</button></div>`).join('')}
     <form class="cal-form" onsubmit="return calSave(this)"><input type="hidden" name="date" value="${CALSEL}"><input type="hidden" name="id" value="${ed?esc(ed.id):''}"><label>Competição<select name="c" onchange="calStages(this)">${comps.map(c=>`<option${c===c0?' selected':''}>${esc(c)}</option>`).join('')}</select></label><label>Rodada / fase<select name="ph">${calStageOpts(c0,ed?ed.ph:'')}</select></label><label>Adversário<input name="adv" list="dl-times" autocomplete="off" placeholder="Selecionar" value="${ed?esc(ed.adv):''}" required></label><label>Local<select name="loc">${['Casa','Fora','Neutro'].map(x=>`<option${ed&&ed.loc===x?' selected':''}>${x}</option>`).join('')}</select></label><button class="btn">${ed?'Salvar alteração':'Adicionar ao calendário'}</button></form></div></div>`}
   return `<h2>Calendário de ${esc(S.cur)}</h2><p class="sub">Marque os jogos de cada mês. Ao registrar a partida, adversário, competição e data já vêm preenchidos.</p><div class="cal-head"><button type="button" class="chip2" onclick="calNav(-1)" aria-label="Mês anterior">←</button><b>${MESES[mo-1][0].toUpperCase()+MESES[mo-1].slice(1)} de ${y}</b><button type="button" class="chip2" onclick="calNav(1)" aria-label="Próximo mês">→</button></div><div class="cal-grid">${['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(x=>`<small>${x}</small>`).join('')}${cells}</div><p class="sub cal-leg"><b class="lg w">V</b> vitória · <b class="lg e">E</b> empate · <b class="lg l">D</b> derrota · <b class="lg">C</b> casa · <b class="lg">F</b> fora · escudo sem letra de resultado: jogo agendado</p>${allC.length?`<p class="sub cal-leg">${allC.map(c=>`<span class="lgc" style="background:${colOf(c)}33;border-color:${colOf(c)}"></span>${esc(jc(c))}`).join(' · ')}</p>`:''}${panel}`;
 }
@@ -1169,7 +1174,7 @@ async function cloudPull(meta){
   const obj=JSON.parse(core),hs=new Set(),scan=o=>{if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='string'&&v.startsWith('@img:'))hs.add(v.slice(5));else scan(v)}};scan(obj);
   const imgs={},list=[...hs];for(let i=0;i<list.length;i+=6)await Promise.all(list.slice(i,i+6).map(async h=>{imgs[h]=await dbReq('/imgs/'+h,'GET')}));
   const put=o=>{if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='string'&&v.startsWith('@img:'))o[k]=imgs[v.slice(5)]||'';else put(v)}};put(obj);
-  prepareRestore(JSON.stringify(obj));if(!pendingRestore)throw new Error('Os dados da nuvem não puderam ser lidos.');
+  prepareRestore(JSON.stringify(obj));if(!pendingRestore)throw new Error('Os dados da nuvem não puderam ser lidos.');pendingRestore.cloud=true;
   await commitRestore();if(!RESTORE_OK)throw new Error(bkm||'Não foi possível aplicar os dados da nuvem.');IX.cloudBase=meta.ts;IX.cloudDirty=false;saveIx();
 }
 async function cloudSync(auto){
@@ -1328,7 +1333,7 @@ function restoreFromPastedText(){
   prepareRestore(val);
 }
 let pasteDraft='',pwDraft='';
-function backupBox(){return '<details class="bkd"'+(pendingRestore||pasteDraft?' open':'')+'><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button> <button class="sm" type="button" onclick="exportCSV()">Exportar CSV</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.03);border:1px dashed var(--bd,#333);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" oninput="pasteDraft=this.value" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--bd,#333);background:var(--bg,#111);color:inherit;resize:vertical;box-sizing:border-box">'+(pasteDraft?esc(pasteDraft):'')+'</textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
+function backupBox(){return '<details class="bkd"'+(pendingRestore||pasteDraft?' open':'')+'><summary>Backup dos dados'+(IX.lastBk?' · último: '+new Date(IX.lastBk).toLocaleDateString('pt-BR'):'')+'</summary><p class="sub">Suas alterações são salvas automaticamente neste aparelho com suporte a imagens no IndexedDB (sem limite de 5 MB). O backup inclui temporadas, elenco, partidas, transferências, campeões registrados, notícias e imagens personalizadas.</p>'+storageNote()+'<label>Lembrete de backup<select onchange="IX.bkRemind=+this.value;saveIx()"><option value="7"'+((IX.bkRemind==null||IX.bkRemind==7)?' selected':'')+'>A cada 7 dias</option><option value="30"'+(IX.bkRemind==30?' selected':'')+'>A cada 30 dias</option><option value="0"'+(IX.bkRemind===0?' selected':'')+'>Nunca lembrar</option></select></label><div class="backup-actions"><button class="btn" onclick="downloadBk()">Baixar backup (.json)</button> <button class="sm" type="button" onclick="exportCSV()">Exportar CSV</button></div><label>Restaurar de um arquivo<input type="file" accept=".json,application/json" onchange="restoreFile(this.files[0]);this.value=String()"></label><div class="backup-paste-zone" style="margin-top:14px;padding:12px;background:var(--surf);border:1px dashed var(--line);border-radius:10px"><label style="margin:0 0 6px 0;font-weight:600">Ou cole o texto do arquivo de backup (.json)<textarea id="bk-paste-text" oninput="pasteDraft=this.value" placeholder="Cole aqui todo o texto copiado de um arquivo .json de backup..." style="width:100%;height:85px;margin-top:6px;font-family:monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:inherit;resize:vertical;box-sizing:border-box">'+(pasteDraft?esc(pasteDraft):'')+'</textarea></label><button type="button" class="btn sm" style="margin-top:6px" onclick="restoreFromPastedText()">Carregar backup colado</button></div>'+(pendingRestore?'<div class="restore-confirm" role="group" aria-label="Confirmar restauração" style="margin-top:14px;padding:12px;background:rgba(46,125,50,0.15);border:1px solid #2e7d32;border-radius:8px"><p role="status" style="margin:0 0 8px 0;font-weight:600">✓ Backup reconhecido com sucesso! A confirmação abaixo vai carregar os dados neste aparelho.</p><button class="btn" type="button" onclick="commitRestore()">Confirmar restauração</button> <button class="sm" type="button" onclick="cancelRestore()">Cancelar</button></div>':'')+'</details>'}
 function markBackup(){IX.lastBk=new Date().toISOString();saveIx()}
 async function downloadBk(){
   try{
@@ -1338,9 +1343,9 @@ async function downloadBk(){
     a.href=url;a.download='diario-do-tecnico-backup-'+new Date().toISOString().slice(0,10)+'.json';
     document.body.appendChild(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
-    markBackup();bkm='Backup baixado. Guarde o arquivo em um local seguro.';render();
+    markBackup();bkm='Backup baixado. Guarde o arquivo em um local seguro.';render();return true;
   }
-  catch(e){bkm='Não foi possível baixar o backup: '+((e&&e.message)||'erro desconhecido')+'. Tente novamente.';render()}
+  catch(e){bkm='Não foi possível baixar o backup: '+((e&&e.message)||'erro desconhecido')+'. Tente novamente.';render();return false}
 }
 function restoreFile(file){if(!file)return;const rd=new FileReader();rd.onerror=()=>{bkm='Não foi possível ler o arquivo de backup.';render()};rd.onload=()=>restoreText(String(rd.result||''));rd.readAsText(file)}
 function restoreText(text){const box=document.getElementById('bk');if(box)box.value=text;return prepareRestore(text)}
@@ -1359,9 +1364,11 @@ function assetRow(kind,name){
  const logoKey=key,trophyKey='trophy:'+norm(name),logo=S.img&&S.img[logoKey],cup=S.img&&(S.img[trophyKey]||S.img[name]);
  return `<div class="asset-item comp-asset-item"><span class="asset-name">${esc(name)}</span><div class="asset-previews"><div><small>Logo</small>${compLogo(name,36)}</div><div><small>Troféu</small>${trophy(name,36)}</div></div><span class="asset-actions"><label class="sm">${logo?'Trocar logo':'Adicionar logo'}<input type="file" accept="image/*" hidden data-asset-key="${esc(logoKey)}" onchange="setImg(this.dataset.assetKey,this.files[0])"></label>${logo?`<button type="button" class="x" title="Remover logo personalizado" data-asset-key="${esc(logoKey)}" onclick="delImg(this.dataset.assetKey)">✕</button>`:''}<label class="sm">${cup?'Trocar troféu':'Adicionar troféu'}<input type="file" accept="image/*" hidden data-asset-key="${esc(trophyKey)}" onchange="setImg(this.dataset.assetKey,this.files[0])"></label>${cup?`<button type="button" class="x" title="Remover troféu personalizado" data-comp="${esc(name)}" onclick="delTrophyImg(this.dataset.comp)">✕</button>`:''}</span></div>`;
 }
+function assetFill(){const a=document.getElementById('asset-clubs'),b=document.getElementById('asset-comps');if(!a||!b||a.dataset.f)return;const L=assetLists();a.innerHTML=L.clubs.map(n=>assetRow('club',n)).join('');b.innerHTML=L.comps.map(n=>assetRow('comp',n)).join('');a.dataset.f='1'}
+function assetLists(){return{clubs:assetClubNames(),comps:[...new Set([...COMPS,...(S.assetComps||[]),...S.order.flatMap(se=>[...S.data[se].m.map(m=>m.c),...S.data[se].res.map(r=>r.c)].filter(Boolean))])].sort((a,b)=>a.localeCompare(b,'pt-BR'))}}
 function assetLibraryBox(){
  const clubs=assetClubNames(),comps=[...new Set([...COMPS,...(S.assetComps||[]),...S.order.flatMap(se=>[...S.data[se].m.map(m=>m.c),...S.data[se].res.map(r=>r.c)].filter(Boolean))])].sort((a,b)=>a.localeCompare(b,'pt-BR'));
- return `<details class="bkd" id="asset-library"><summary>Bases de dados e skins</summary><p class="sub">A base de clubes é compartilhada entre todas as carreiras deste navegador. Ao atualizar um escudo aqui, ele será usado automaticamente no time treinado, nos adversários e no histórico de partidas. Cada competição mantém o logo separado do troféu personalizado. Os dois são salvos por carreira.</p><form class="asset-tools" onsubmit="return addAssetItem(this)"><label>Adicionar item à lista<select name="kind"><option value="club">Clube</option><option value="comp">Competição</option></select></label><label>Nome do item<input name="name" placeholder="Ex.: Real Sociedad" required></label><button class="btn">Adicionar</button></form><details class="asset-section" open><summary>Clubes <span class="asset-count">${clubs.length} itens</span></summary><div class="asset-list" id="asset-clubs">${clubs.map(n=>assetRow('club',n)).join('')}</div></details><details class="asset-section"><summary>Competições <span class="asset-count">${comps.length} itens</span></summary><div class="asset-list" id="asset-comps">${comps.map(n=>assetRow('comp',n)).join('')}</div></details><p class="sub">Os escudos personalizados dos clubes ficam na base global e são compartilhados entre carreiras. Logos e troféus das competições são salvos separadamente em cada carreira. Use o ✕ correspondente para remover apenas a imagem escolhida.</p></details>`;
+ return `<details class="bkd" id="asset-library" ontoggle="if(this.open)assetFill()"><summary>Bases de dados e skins</summary><p class="sub">A base de clubes é compartilhada entre todas as carreiras deste navegador. Ao atualizar um escudo aqui, ele será usado automaticamente no time treinado, nos adversários e no histórico de partidas. Cada competição mantém o logo separado do troféu personalizado. Os dois são salvos por carreira.</p><form class="asset-tools" onsubmit="return addAssetItem(this)"><label>Adicionar item à lista<select name="kind"><option value="club">Clube</option><option value="comp">Competição</option></select></label><label>Nome do item<input name="name" placeholder="Ex.: Real Sociedad" required></label><button class="btn">Adicionar</button></form><details class="asset-section" open><summary>Clubes <span class="asset-count">${clubs.length} itens</span></summary><div class="asset-list" id="asset-clubs"></div></details><details class="asset-section"><summary>Competições <span class="asset-count">${comps.length} itens</span></summary><div class="asset-list" id="asset-comps"></div></details><p class="sub">Os escudos personalizados dos clubes ficam na base global e são compartilhados entre carreiras. Logos e troféus das competições são salvos separadamente em cada carreira. Use o ✕ correspondente para remover apenas a imagem escolhida.</p></details>`;
 }
 function addAssetItem(f){
  const o=Object.fromEntries(new FormData(f)),n=String(o.name||'').trim(),kind=o.kind;
@@ -1576,8 +1583,8 @@ async function gunz(b64){const bin=atob(b64),u=new Uint8Array(bin.length);for(le
 function archSummary(d){let j=0,v=0,e=0,l=0,gp=0,gc=0,t=0;const G={},O=d.order||[];O.forEach(sn=>{const x=d.data[sn]||{},r=rec(x);j+=r.j;v+=r.v;e+=r.e;l+=r.l;gp+=r.gp;gc+=r.gc;t+=(x.res||[]).filter(q=>norm(q.r)==='campeao').length;(x.p||[]).forEach(p=>{const st=stats(p,x),h=G[p.k]=G[p.k]||{n:p.n,g:0};h.n=p.n;h.g+=st.g})});const top=Object.values(G).sort((a,b)=>b.g-a.g)[0];return{club:d.club||'Carreira',n:O.length,from:O[0]||'',to:O[O.length-1]||'',j,v,e,l,gp,gc,t,ap:j?Math.round((v*3+e)/(j*3)*100):0,top:top&&top.g>0?top.n+' ('+top.g+' gols)':''}}
 function archAsk(id){const c=IX.list.find(x=>x.id===id);if(!c)return;let m=document.getElementById('ar-root');if(!m){m=document.createElement('div');m.id='ar-root';document.body.appendChild(m)}m.innerHTML=`<div class="lp" onclick="if(event.target===this)archClose()"><div class="lp-c"><div class="lp-h"><b>Arquivar carreira</b><button type="button" class="sm" onclick="archClose()">Fechar</button></div><p class="sub">Arquivar <b>${esc(c.name)}</b> compacta os dados dessa carreira e apaga as imagens dela deste aparelho para liberar espaço. Você continua vendo o resumo e pode desarquivar quando quiser.</p><label class="chk"><input type="checkbox" id="ar-bk" checked><span>Baixar o backup completo antes (recomendado)</span></label><div class="rem-btns"><button type="button" class="sm" onclick="archClose()">Cancelar</button><button type="button" class="btn" onclick="archGo('${id}')">Arquivar</button></div></div></div>`}
 function archClose(){const m=document.getElementById('ar-root');if(m)m.remove()}
-async function archGo(id){const b=document.getElementById('ar-bk');if(b&&b.checked){try{downloadBk()}catch(e){}}archClose();await archCareer(id)}
-async function archCareer(id){const c=IX.list.find(x=>x.id===id);if(!c||c.arch)return;const others=IX.list.filter(x=>x.id!==id&&!x.arch);if(!others.length){arcMsg='Crie outra carreira antes de arquivar esta.';render();return}if(IX.cur===id){save();switchCareer(others[0].id)}const raw=localStorage.getItem(keyOf(id));if(!raw){arcMsg='Não encontrei os dados dessa carreira.';render();return}let imgBytes=0;try{const all=await idbGetAllImgs();Object.keys(all).forEach(k=>{if(k.startsWith('c:'+id+':'))imgBytes+=String(all[k]).length})}catch(e){}let sum;try{sum=archSummary(mig(JSON.parse(raw)))}catch(e){sum={club:c.name}}let blob,tag='raw:';try{blob=await gz(raw);tag='gz:'}catch(e){blob=raw}try{localStorage.setItem('arch-'+id,tag+blob)}catch(e){arcMsg='Não foi possível arquivar: o armazenamento está cheio.';render();return}localStorage.removeItem(keyOf(id));if(typeof CAREER_IMGS==='object'&&CAREER_IMGS)delete CAREER_IMGS[id];await idbDelPrefix('c:'+id+':');c.arch={ts:Date.now(),sum,freed:Math.max(0,raw.length+imgBytes-(tag.length+blob.length))};arcMsg='Carreira arquivada. Espaço liberado: cerca de '+fmtBytes(c.arch.freed)+'.';saveIx();render()}
+async function archGo(id){const b=document.getElementById('ar-bk');if(b&&b.checked){let ok=false;try{ok=await downloadBk()}catch(e){}if(!ok){archClose();arcMsg='Não foi possível baixar o backup, então a carreira não foi arquivada.';render();return}}archClose();await archCareer(id)}
+async function archCareer(id){const c=IX.list.find(x=>x.id===id);if(!c||c.arch)return;const others=IX.list.filter(x=>x.id!==id&&!x.arch);if(!others.length){arcMsg='Crie outra carreira antes de arquivar esta.';render();return}if(IX.cur===id){save();await switchCareer(others[0].id)}const raw=localStorage.getItem(keyOf(id));if(!raw){arcMsg='Não encontrei os dados dessa carreira.';render();return}let imgBytes=0;try{const all=await idbGetAllImgs();Object.keys(all).forEach(k=>{if(k.startsWith('c:'+id+':'))imgBytes+=String(all[k]).length})}catch(e){}let sum;try{sum=archSummary(mig(JSON.parse(raw)))}catch(e){sum={club:c.name}}let blob,tag='raw:';try{blob=await gz(raw);tag='gz:'}catch(e){blob=raw}try{localStorage.setItem('arch-'+id,tag+blob)}catch(e){arcMsg='Não foi possível arquivar: o armazenamento está cheio.';render();return}localStorage.removeItem(keyOf(id));if(typeof CAREER_IMGS==='object'&&CAREER_IMGS)delete CAREER_IMGS[id];await idbDelPrefix('c:'+id+':');c.arch={ts:Date.now(),sum,freed:Math.max(0,raw.length+imgBytes-(tag.length+blob.length))};arcMsg='Carreira arquivada. Espaço liberado: cerca de '+fmtBytes(c.arch.freed)+'.';saveIx();render()}
 async function unarchCareer(id){const c=IX.list.find(x=>x.id===id);if(!c||!c.arch)return;const r=localStorage.getItem('arch-'+id);if(!r){arcMsg='Os dados dessa carreira arquivada não foram encontrados neste aparelho.';render();return}try{const raw=r.startsWith('gz:')?await gunz(r.slice(3)):r.slice(4);JSON.parse(raw);localStorage.setItem(keyOf(id),raw)}catch(e){arcMsg='Não foi possível desarquivar: '+((e&&e.message)||'dados inválidos')+'.';render();return}localStorage.removeItem('arch-'+id);delete c.arch;if(IX.imgShared)delete IX.imgShared[id];arcMsg='Carreira desarquivada. Ela voltou para a lista; as imagens são refeitas ao abri-la.';saveIx();render()}
 function archCard(c){const m=c.arch.sum||{};return `<div class="ac"><b>${esc(m.club||c.name)}</b><small>${esc(m.from||'')}${m.to&&m.to!==m.from?' a '+esc(m.to):''} · ${m.n||0} temporada${m.n>1?'s':''}</small><div class="sub">${m.j||0} J · ${m.v||0}V ${m.e||0}E ${m.l||0}D · ${m.gp||0}:${m.gc||0} G · aproveitamento ${m.ap||0}%${m.t?' · 🏆 '+m.t:''}${m.top?'<br>Artilheiro: '+esc(m.top):''}</div><div class="sub">Arquivada em ${new Date(c.arch.ts).toLocaleDateString('pt-BR')} · liberou cerca de ${fmtBytes(c.arch.freed||0)}</div><button type="button" class="sm" onclick="unarchCareer('${c.id}')">Desarquivar</button></div>`}
 function archBox(){const A=IX.list.filter(c=>c.arch);return `<h4>Arquivadas (${A.length})</h4>${A.length?A.map(archCard).join(''):'<p class="sub">Arquive carreiras que você terminou para liberar espaço no aparelho.</p>'}${arcMsg?`<p class="sub">${esc(arcMsg)}</p>`:''}`}
@@ -2494,7 +2501,7 @@ function vTemp(){
   <details class="add" ${fo.ts===false?'':'open'} ontoggle="fo.ts=this.open"><summary>Todas as temporadas</summary>
   ${sortSel('s',RECANT,'rec')}
   ${totalSeasons()}
-  ${(so.s==='ant'?[...S.order]:[...S.order].reverse()).map(s=>{const x=S.data[s],r=rec(x),ch=seasonChampions(s).filter(c=>norm(c.club)===norm(S.club));return `<div class="row"><span class="sc">${esc(s)}</span><div><div>${r.j} J · ${r.v}V ${r.e}E ${r.l}D · ${r.gp}:${r.gc} G${ch.length?' · '+ch.map(c=>trophy(c.competition,24)).join(' '):''}</div></div><button class="sm" onclick="showBalance('${esc(s)}')">Balanço</button> <button class="sm" onclick="tab='partidas';goSeason('${esc(s)}')">Abrir</button>${S.order.length>1?(seasonDeleteConfirm===s?`<span class="season-delete-confirm"><button class="sm" onclick="delSeason('${esc(s)}')">Apagar mesmo</button> <button class="sm" onclick="seasonDeleteConfirm=null;render()">Cancelar</button></span>`:`<button class="x" aria-label="Apagar temporada ${esc(s)}" onclick="delSeason('${esc(s)}')">✕</button>`):'<span></span>'}</div>`}).join('')}</details>
+  ${(so.s==='ant'?[...S.order]:[...S.order].reverse()).map(s=>{const x=S.data[s],r=rec(x),ch=seasonChampions(s).filter(c=>norm(c.club)===norm(S.club));return `<div class="row"><span class="sc">${esc(s)}</span><div><div>${r.j} J · ${r.v}V ${r.e}E ${r.l}D · ${r.gp}:${r.gc} G${ch.length?' · '+ch.map(c=>trophy(c.competition,24)).join(' '):''}</div></div><button class="sm" onclick="showBalance('${jq(s)}')">Balanço</button> <button class="sm" onclick="tab='partidas';goSeason('${jq(s)}')">Abrir</button>${S.order.length>1?(seasonDeleteConfirm===s?`<span class="season-delete-confirm"><button class="sm" onclick="delSeason('${jq(s)}')">Apagar mesmo</button> <button class="sm" onclick="seasonDeleteConfirm=null;render()">Cancelar</button></span>`:`<button class="x" aria-label="Apagar temporada ${esc(s)}" onclick="delSeason('${jq(s)}')">✕</button>`):'<span></span>'}</div>`}).join('')}</details>
   ${vChampions()}
   ${vClubRank()}
   <details class="stats-extra"><summary>Fechar temporada</summary>${vClose()}</details>
@@ -2553,7 +2560,7 @@ function prepareRestore(raw){
     const box=document.getElementById('bk'),d=JSON.parse(raw==null?(box?box.value:''):raw);let incoming={},legacy=null;
     if(d&&d.v===2){
       if(!d.ix||!Array.isArray(d.ix.list)||!d.ix.list.length||!d.ix.list.some(c=>c&&c.id===d.ix.cur)||!d.data||typeof d.data!=='object')throw new Error('invalid');
-      for(const c of d.ix.list){const value=d.data[c.id];if(!normalizeCareerData(value))throw new Error('invalid');incoming[keyOf(c.id)]=JSON.stringify(value)}
+      d.ix=Object.assign({},d.ix,{list:d.ix.list.filter(c=>c&&(!c.arch||(d.arch&&typeof d.arch[c.id]==='string')||localStorage.getItem('arch-'+c.id)))});if(!d.ix.list.some(c=>c.id===d.ix.cur&&!c.arch))throw new Error('invalid');for(const c of d.ix.list){if(c.arch)continue;const value=d.data[c.id];if(!normalizeCareerData(value))throw new Error('invalid');incoming[keyOf(c.id)]=JSON.stringify(value)}
       if(d.clubDb&&typeof d.clubDb==='object')incoming[CLUB_DB_KEY]=JSON.stringify({clubs:Array.isArray(d.clubDb.clubs)?d.clubDb.clubs:[],images:d.clubDb.images&&typeof d.clubDb.images==='object'?d.clubDb.images:{},ts:Date.now()});
       d.ix=Object.assign({},d.ix,cloudKeep());incoming['carreiras-v1']=JSON.stringify(d.ix);
     }else{legacy=mig(d);if(!normalizeCareerData(legacy))throw new Error('invalid');incoming[keyOf(IX.cur)]=JSON.stringify(legacy)}
@@ -2563,9 +2570,28 @@ function prepareRestore(raw){
 function cancelRestore(){pendingRestore=null;pasteDraft='';bkm='Restauração cancelada; os dados atuais foram mantidos.';render()}
 let RESTORE_OK=false;
 async function commitRestore(){
-  RESTORE_OK=false;if(!pendingRestore)return false;const {d,incoming,legacy}=pendingRestore;pendingRestore=null;
+  RESTORE_OK=false;if(!pendingRestore)return false;const {d,incoming,legacy}=pendingRestore,fromCloud=!!pendingRestore.cloud;pendingRestore=null;
   const previous=new Map(Object.keys(incoming).map(k=>[k,localStorage.getItem(k)]));
   try{
+    // Salva no localStorage com imagens limpas para garantir cota livre
+    try{
+      for(const [k,v] of Object.entries(incoming)){
+        if(k===CLUB_DB_KEY){
+          try{const parsed=JSON.parse(v);localStorage.setItem(k,JSON.stringify({clubs:parsed.clubs||[],images:{},ts:Date.now()}))}catch(_){localStorage.setItem(k,v)}
+        }else if(k.startsWith('carreira-')||k===KEY){
+          try{const parsed=JSON.parse(v);parsed.img={};localStorage.setItem(k,JSON.stringify(parsed))}catch(_){localStorage.setItem(k,v)}
+        }else{
+          localStorage.setItem(k,v);
+        }
+      }
+    }catch(e){
+      for(const [k,v] of previous){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(_){}}
+      throw e;
+    }
+
+    if(d&&d.v===2&&!fromCloud){const keepIds=new Set(d.ix.list.filter(c=>!c.arch).map(c=>c.id));IX.list.forEach(c=>{if(!keepIds.has(c.id)&&!c.arch){try{localStorage.removeItem(keyOf(c.id))}catch(_){}try{delete CAREER_IMGS[c.id];idbDelPrefix('c:'+c.id+':')}catch(_){}}})}
+    let imgFail=false;
+    try{
     // Salva imagens no IndexedDB e em memória para não inflar o localStorage
     if(d&&d.v===2){
       if(d.clubDb&&d.clubDb.images&&typeof d.clubDb.images==='object'){
@@ -2601,22 +2627,7 @@ async function commitRestore(){
       }
     }
 
-    // Salva no localStorage com imagens limpas para garantir cota livre
-    try{
-      for(const [k,v] of Object.entries(incoming)){
-        if(k===CLUB_DB_KEY){
-          try{const parsed=JSON.parse(v);localStorage.setItem(k,JSON.stringify({clubs:parsed.clubs||[],images:{},ts:Date.now()}))}catch(_){localStorage.setItem(k,v)}
-        }else if(k.startsWith('carreira-')||k===KEY){
-          try{const parsed=JSON.parse(v);parsed.img={};localStorage.setItem(k,JSON.stringify(parsed))}catch(_){localStorage.setItem(k,v)}
-        }else{
-          localStorage.setItem(k,v);
-        }
-      }
-    }catch(e){
-      for(const [k,v] of previous){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(_){}}
-      throw e;
-    }
-
+    }catch(_){imgFail=true}
     if(d&&d.v===2){
       if(d.clubDb){
         CLUB_DB.clubs=Array.isArray(d.clubDb.clubs)?d.clubDb.clubs:[];
@@ -2629,7 +2640,7 @@ async function commitRestore(){
     }else{
       S=legacy;fix();syncName();
     }
-    draft={};editK=null;openM=null;pasteDraft='';bkm='Backup restaurado com sucesso! Imagens salvas no IndexedDB.';RESTORE_OK=true;render();return false;
+    draft={};editK=null;openM=null;pasteDraft='';bkm=imgFail?'Backup restaurado, mas algumas imagens não puderam ser salvas. Restaure de novo ou adicione-as pelo app.':'Backup restaurado com sucesso!';RESTORE_OK=true;render();return false;
   }catch(e){
     bkm=e&&e.name==='QuotaExceededError'?'O armazenamento deste navegador está cheio. Exporte os dados atuais antes de liberar espaço e tente novamente.':'Não foi possível concluir a restauração: '+((e&&e.message)||'Erro desconhecido');
     render();return false;

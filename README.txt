@@ -1,9 +1,10 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.27.0
+DIÁRIO DO TÉCNICO — VERSÃO 1.27.2
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
-- manifest.json e icons/: instalação como PWA.
-- service-worker.js e assets/: cache offline, distintivos e ilustrações de taças.
+- manifest.json: instalação como PWA (os ícones ficam na pasta icons/).
+- service-worker.js: cache offline (os escudos e as taças ficam na pasta assets/).
+- ATENÇÃO: este pacote traz só estes 4 arquivos. As pastas icons/ e assets/ não vêm aqui: mantenha as que já estão no repositório e substitua apenas index.html, service-worker.js, manifest.json e README.txt.
 - A interface está em português.
 
 PUBLICAR NO GITHUB PAGES
@@ -27,6 +28,7 @@ DADOS E BACKUPS
 - O backup inclui os dados da carreira e imagens personalizadas. Para usar a mesma carreira em vários aparelhos, prefira a sincronização com a nuvem; o backup em arquivo continua valendo como cópia extra.
 
 RECURSOS DESTA VERSÃO
+- Versão 1.27.2 (correções): nova carreira europeia que começa em 2026/27 não vira mais 2021/22; o backup em arquivo com carreira arquivada agora pode ser restaurado; Arquivar espera o backup ser gerado e só arquiva se ele for baixado; na restauração as imagens só são gravadas depois dos dados e carreiras que não estão no backup são removidas (não na restauração pela nuvem); o backup e a nuvem não levam mais a chave do Firebase nem o e-mail (cole o código de conexão de novo em um aparelho novo); valores como "R$ 10", "12,5M" e "1.500,50" agora são lidos corretamente; a caixa de colar o texto do backup usa as cores do tema; Configurações abre mais leve (as listas de escudos só carregam ao abrir "Bases de dados e skins"); aspas em nomes não quebram mais os botões.
 - Versão 1.27: Arquivar carreira (Configurações > Carreiras e Minhas carreiras): compacta os dados, apaga as imagens da carreira, mostra um resumo e permite desarquivar. As arquivadas entram no backup em arquivo, mas não na nuvem.
 - Versão 1.26: escudos e imagens de outras carreiras passam a aparecer nas novas carreiras; a temporada do cabeçalho agora pode ser corrigida (toque nela).
 - Versão 1.25: Perfil do jogador (evolução de nota e overall, melhores jogos e prêmios) e Destaques da temporada em Estatísticas (minutos, defesas, G+A/90, prêmios e nota média).
@@ -38,7 +40,7 @@ RECURSOS DESTA VERSÃO
 - Nova carreira: escolha o tipo de temporada (europeia, de agosto a maio, como 2026/27, ou brasileira, ano corrido, como 2026) e a temporada em que a carreira começa. As carreiras antigas continuam europeias.
 - Finanças: em Transferências há a sub-aba Finanças, onde você lança por temporada a verba de transferência, a verba de salário, o gasto com salário, outras receitas e outros gastos. O app calcula a verba restante, a sobra ou o estouro da folha e o resultado da temporada, e mostra uma tabela com todas as temporadas. Há botão para copiar as verbas da temporada anterior.
 - Campeões das competições: agora dá para registrar também o vice, que pontua no ranking de clubes.
-- Removidos nesta versão: o seletor de carreira da barra do topo (para trocar de carreira use o ☰, Minhas carreiras), as Cópias automáticas e a opção de colar o texto do backup (restaure sempre pelo arquivo JSON).
+- Removidos nesta versão: o seletor de carreira da barra do topo (para trocar de carreira use o ☰, Minhas carreiras), as Cópias automáticas.
 - Limpeza geral: removidas funções que não eram mais usadas, corrigido o link "Fonte IFFHS" do ranking (o endereço estava errado) e revisado o fluxo da nuvem, sem erros nos testes.
 - Ranking de clubes refeito: base própria com nota para todos os clubes do app. Agora Real Madrid, Barcelona, Bayern, Manchester City, PSG, Liverpool, Arsenal e Inter de Milão têm reputação Mundial, e clubes como o Aston Villa ficam como Continental. Os títulos e vices continuam subindo a reputação.
 - Cartão Continuar carreira: o número de jogos agora soma todas as temporadas, inclusive os totais lançados à mão, igual à aba Temporadas.
@@ -105,4 +107,4 @@ Como funciona: ao abrir o app e depois de alterações, ele sincroniza sozinho (
 
 ATUALIZAÇÃO v1.16.0+ (INDEXEDDB & RESTAURAÇÃO POR TEXTO):
 - Escudos e imagens personalizadas são armazenados no IndexedDB nativo do navegador, eliminando o limite de 5 MB do localStorage.
-- Caixa de texto direta para restauração de backups (.json): permite colar o código diretamente no app caso o seletor de arquivos apresente limitações no aparelho.
+- Caixa de texto direta para restauração de backups (.json): permite colar o código diretamente no app caso o seletor de arquivos apresente limitações no aparelho. Ela continua disponível em Configurações > Backup dos dados.

@@ -1,4 +1,4 @@
-DIÁRIO DO TÉCNICO — VERSÃO 1.27.2
+DIÁRIO DO TÉCNICO — VERSÃO 1.30.0
 
 O QUE ESTÁ INCLUÍDO
 - index.html: aplicativo completo.
@@ -28,6 +28,9 @@ DADOS E BACKUPS
 - O backup inclui os dados da carreira e imagens personalizadas. Para usar a mesma carreira em vários aparelhos, prefira a sincronização com a nuvem; o backup em arquivo continua valendo como cópia extra.
 
 RECURSOS DESTA VERSÃO
+- Versão 1.30.0: novo tema "Preto puro" (fundo preto, bom para telas OLED); opção de tamanho Compacto (reduz botões, campos e textos neste aparelho); "Forma recente" na tela inicial (últimos 5 jogos em V/E/D e o próximo jogo agendado no calendário); botão rápido "＋ Partida" nas outras abas, que pode ser desligado em Configurações > Aparência.
+- Versão 1.29.0: na aba Ranking, três caixas novas no fim: Recordes da carreira (maior goleada e derrota, maiores sequências, artilheiro, hat-tricks e temporada com mais gols, calculados das partidas registradas), Metas da diretoria (objetivos de cada temporada, com marcação de cumpridas) e Lista de observação (jogadores que você quer contratar, valem para a carreira toda). Tudo entra no backup e na nuvem.
+- Versão 1.28.0: as temporadas não têm mais limite de ano. Ao criar a carreira você digita o ano inicial (qualquer ano de 1000 a 9999) e vê o nome da temporada antes de confirmar. No seletor de temporadas há "Outra temporada (qualquer ano)…"; corrigir o nome e fechar a temporada também usam o campo de ano. O calendário mostra o período da temporada (europeia: 01/07 a 30/06; brasileira: 01/01 a 31/12), marca o dia de hoje e rejeita datas impossíveis como 31/02. Nova opção em Configurações: Verificar dados (só mostra inconsistências, não altera nada).
 - Versão 1.27.2 (correções): nova carreira europeia que começa em 2026/27 não vira mais 2021/22; o backup em arquivo com carreira arquivada agora pode ser restaurado; Arquivar espera o backup ser gerado e só arquiva se ele for baixado; na restauração as imagens só são gravadas depois dos dados e carreiras que não estão no backup são removidas (não na restauração pela nuvem); o backup e a nuvem não levam mais a chave do Firebase nem o e-mail (cole o código de conexão de novo em um aparelho novo); valores como "R$ 10", "12,5M" e "1.500,50" agora são lidos corretamente; a caixa de colar o texto do backup usa as cores do tema; Configurações abre mais leve (as listas de escudos só carregam ao abrir "Bases de dados e skins"); aspas em nomes não quebram mais os botões.
 - Versão 1.27: Arquivar carreira (Configurações > Carreiras e Minhas carreiras): compacta os dados, apaga as imagens da carreira, mostra um resumo e permite desarquivar. As arquivadas entram no backup em arquivo, mas não na nuvem.
 - Versão 1.26: escudos e imagens de outras carreiras passam a aparecer nas novas carreiras; a temporada do cabeçalho agora pode ser corrigida (toque nela).

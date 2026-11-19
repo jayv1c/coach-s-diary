@@ -580,6 +580,13 @@ button.season-label{background:transparent;border:1px solid var(--line);border-r
 .hn .nm{flex:0 0 auto;min-width:0;overflow:visible;text-overflow:clip;white-space:nowrap}.hn>.sub{flex:0 100 auto;min-width:0;overflow:hidden;white-space:nowrap}
 #app .hlist .hrow{grid-template-columns:minmax(244px,2.6fr) repeat(10,minmax(38px,1fr))}#app .hlist{min-width:940px}
 #app .hclist .hrow{grid-template-columns:minmax(276px,2.6fr) repeat(10,minmax(38px,1fr))}#app .hclist{min-width:980px}
+
+.cd.today i{text-decoration:underline;font-weight:700}.cd.off{opacity:.35}
+
+.fb{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;font:700 12px Barlow,sans-serif;font-style:normal;color:#fff;margin-right:4px}.fb.w{background:#2f9e5b}.fb.e{background:#8a94a6}.fb.l{background:#d64545}
+.fab{position:fixed;right:14px;bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:25;background:var(--acc);color:var(--onacc);border:0;border-radius:999px;padding:11px 16px;font:700 15px Barlow,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer}
+html.dens-c body{font-size:14px;line-height:1.4}html.dens-c .btn{padding:8px 14px;min-height:38px;font-size:14px;border-radius:10px}html.dens-c input,html.dens-c select,html.dens-c textarea{padding:6px 9px;font-size:14px}html.dens-c .sm{font-size:12px}html.dens-c .chip2{padding:3px 8px;font-size:12px}
+@media (prefers-reduced-motion:reduce){.fab{transition:none}}
 </style>
 </head>
 <body>
@@ -596,11 +603,15 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.27.2';
+const APP_VERSION='1.30.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
 const sLabel=(y,t)=>t==='br'?String(y):y+'/'+String((y+1)%100).padStart(2,'0');
+const sT=()=>S&&S.tipo==='br'?'br':'eu';
+const yClamp=y=>{y=parseInt(y,10);return y>=1000&&y<=9999?y:0};
+const sYr=q=>{const m=String(q||'').match(/^(\d{4})/);return m?+m[1]:0};
+const sNorm=(v,t)=>{const m=String(v==null?'':v).trim().match(/^(\d{4})(?:\/\d{2})?$/);const y=m?yClamp(m[1]):0;return y?sLabel(y,t||sT()):''};
 function fresh(club,o){o=o||{};const t=o.tipo==='br'?'br':'eu',q=sLabel(o.y||2026,t),r={club,budget:50,cur:q,order:[q],data:{[q]:ns()}};if(t==='br')r.tipo='br';return r}
 let S=fresh('Meu clube',{y:2021});
 function mig(o){
@@ -624,7 +635,7 @@ function loadCur(){S=fresh('Meu clube',{y:2021});try{const r=localStorage.getIte
 const nk=()=>{S.nk=(S.nk||1000)+1;return S.nk};
  function fix(){S.order.forEach(s=>{const d=S.data[s];d.m=d.m||[];d.m.forEach(m=>{if(!m.date&&/^\d{4}-\d{2}-\d{2}$/.test(m.d||''))m.date=m.d});d.res=d.res||[];d.aw=d.aw||[];d.champs=Array.isArray(d.champs)?d.champs:[];d.news=Array.isArray(d.news)?d.news:[];if(d.pos){d.res.push({c:'Liga nacional',r:d.pos});d.pos=''}if(d.tit){d.res.push({c:d.tit,r:'Campeão'});d.tit=''}d.p.forEach(p=>{if(!p.k)p.k=nk();if(p.ovr){const a=auto(p,d),b={};['j','g','a','y','r'].forEach(f=>{if(p.ovr[f]!=null&&p.ovr[f]-a[f])b[f]=p.ovr[f]-a[f]});if(p.ovr.n!=null)b.n=p.ovr.n;if(Object.keys(b).length)p.base=b;delete p.ovr}})});S.order.sort();}
 loadCur();
-function goSeason(s){if(s==='__ren'){render();seasonEdit();return}if(!S.data[s]){S.data[s]=ns();S.order.push(s);S.order.sort()}S.cur=s;draft={};editK=null;save();render()}
+function goSeason(s){if(s==='__ren'){render();seasonEdit();return}if(s==='__add'){render();seasonAdd();return}if(!S.data[s]){S.data[s]=ns();S.order.push(s);S.order.sort()}S.cur=s;draft={};editK=null;save();render()}
 const persist=()=>{try{const clone=Object.assign({},S,{img:{}});localStorage.setItem(keyOf(IX.cur),JSON.stringify(clone));if(bkm.startsWith('Falha ao salvar'))bkm='';return true}catch(e){bkm='Falha ao salvar neste aparelho: '+((e&&e.message)||'armazenamento cheio');if(document.getElementById('app'))setTimeout(render,0);return false}};
 const save=()=>{RKC=null;S.ts=Date.now();try{reconcileNews()}catch(e){}cloudMark();return persist()};
 const jq=t=>esc(String(t==null?'':t).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/[\r\n]/g,' '));
@@ -755,9 +766,8 @@ const NAT='Albânia,Alemanha,Angola,Arábia Saudita,Argélia,Argentina,Armênia,
 document.body.insertAdjacentHTML('beforeend','<datalist id="dl-nat">'+NAT.map(n=>'<option value="'+n+'">').join('')+'</datalist>');
 const AWARDS=['Bola de Ouro','Melhor jogador da temporada','Chuteira de Ouro (artilheiro)','Líder de assistências','Luva de Ouro','Revelação da temporada','Seleção da temporada','Melhor técnico','Gol da temporada','Jogador do mês'];
 document.body.insertAdjacentHTML('beforeend','<datalist id="dl-aw">'+AWARDS.map(n=>'<option value="'+n+'">').join('')+'</datalist>');
-const yrList=t=>{const a=[];for(let y=2021;y<=2040;y++)a.push(sLabel(y,t));return a};
-const allS=()=>[...new Set([...yrList(S.tipo),...S.order])].sort();
-const seasonOpts=()=>allS().map(s=>`<option value="${esc(s)}" ${s===S.cur?'selected':''}>${esc(s)}${S.data[s]?'':' (nova)'}</option>`).join('')+'<option value="__ren">✎ Corrigir nome da temporada…</option>';
+const allS=()=>{const o=[...S.order].sort();if(!o.length)return o;const t=sT(),a=sYr(o[0]),b=sYr(o[o.length-1]),r=[...o];if(a>1000)r.unshift(sLabel(a-1,t));if(b<9999)r.push(sLabel(b+1,t));return [...new Set(r)]};
+const seasonOpts=()=>allS().map(s=>`<option value="${esc(s)}" ${s===S.cur?'selected':''}>${esc(s)}${S.data[s]?'':' (nova)'}</option>`).join('')+'<option value="__add">➕ Outra temporada (qualquer ano)…</option><option value="__ren">✎ Corrigir nome da temporada…</option>';
 const dt=d=>esc(d.split('-').reverse().join('/'));
 
 const LX=c=>c==='n'?seedDraft():(D().m[c].pl=D().m[c].pl||{});
@@ -932,12 +942,12 @@ function allJson(noArch){
 }
 let confC=null;
 async function switchCareer(id,t){save();IX.cur=id;saveIx();loadCur();await loadCareerImgs(id);if(CAREER_IMGS[id])S.img=Object.assign({},CAREER_IMGS[id]);shareImgs();draft={};editK=null;openM=null;confC=null;tab=t||'partidas';enterGame();render()}
-function ncSeasonOpts(t,sel){const d=sel||sLabel(2026,t);return yrList(t).map(q=>`<option ${q===d?'selected':''}>${q}</option>`).join('')}
-function ncTipo(sel){const q=sel.form&&sel.form.elements.s;if(q)q.innerHTML=ncSeasonOpts(sel.value,sLabel(parseInt(q.value)||2026,sel.value))}
-const ncFields=()=>`<label>Tipo de temporada<select name="tipo" onchange="ncTipo(this)"><option value="eu">Europeia (agosto a maio, ex.: 2026/27)</option><option value="br">Brasileira (janeiro a dezembro, ex.: 2026)</option></select></label><label>Temporada em que a carreira começa<select name="s">${ncSeasonOpts('eu')}</select></label>`;
+function ncPrev(f){const t=f.elements.tipo.value,q=sNorm(f.elements.s.value,t),e=f.querySelector('.nc-pv');if(e)e.textContent=q||'ano inválido'}
+function ncTipo(sel){if(sel.form)ncPrev(sel.form)}
+const ncFields=()=>`<label>Tipo de temporada<select name="tipo" onchange="ncTipo(this)"><option value="eu">Europeia (agosto a maio, ex.: 2026/27)</option><option value="br">Brasileira (janeiro a dezembro, ex.: 2026)</option></select></label><label>Temporada em que a carreira começa<input name="s" type="number" inputmode="numeric" min="1000" max="9999" value="2026" oninput="ncPrev(this.form)"></label><p class="sub">Temporada inicial: <b class="nc-pv">2026/27</b>. Vale qualquer ano.</p>`;
 function newCareer(f){
   const fd=new FormData(f),n=String(fd.get('n')||'').trim();if(!n)return false;
-  const tipo=fd.get('tipo')==='br'?'br':'eu',y=parseInt(fd.get('s'))||2026;
+  const tipo=fd.get('tipo')==='br'?'br':'eu',y=yClamp(fd.get('s'));if(!y){alert('Digite um ano com 4 dígitos.');return false}
   save();
   const reuse=careerInfo(IX.cur).vazia,cur=IX.list.find(c=>c.id===IX.cur);
   if(reuse&&cur){cur.name=n}else{const id='c'+Date.now().toString(36);IX.list.push({id,name:n});IX.cur=id}
@@ -1122,6 +1132,7 @@ function calByDate(v){const f=document.getElementById('mf');if(!f)return;const l
 const CAL_PAL=['#3b82f6','#a855f7','#06b6d4','#ec4899','#f97316','#6366f1','#14b8a6','#94a3b8'];
 function calCat(c){const n=norm(jc(c));if(/supercopa|superta[cç]a|super cup|shield/.test(n))return 7;if(/conference league|recopa/.test(n))return 4;if(/europa league|sul-americana|sudamericana/.test(n))return 3;if(/champions league|libertadores|mundial de clubes|intercontinental/.test(n))return 2;if(/la liga 2|segunda|championship|league one|league two|serie b|ligue 2|2\. bundesliga/.test(n))return 5;if(/copa|cup|ta[cç]a|pokal|coupe|coppa/.test(n))return 1;if(/liga|league|serie a|bundesliga|eredivisie|brasileir|ligue 1|premier|primeira|pro league|s[uü]per lig/.test(n))return 0;return 6}
 function calColors(list){const used=new Set(),out={};[...new Set(list.filter(Boolean))].forEach(c=>{let i=calCat(c),g=0;while(used.has(i)&&g++<CAL_PAL.length)i=(i+1)%CAL_PAL.length;used.add(i);out[norm(jc(c))]=CAL_PAL[i]});return out}
+const TODAY=()=>{const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0')};
 function vCal(){
   const d=D(),b=seasonBounds(S.cur),comps=d.res.map(x=>x.c);
   if(!b.min)return '<p class="empty">O calendário funciona com temporadas no formato 2026/27 ou 2026.</p>';
@@ -1131,16 +1142,16 @@ function vCal(){
   const ym=calMonth(),[y,mo]=ym.split('-').map(Number),lead=new Date(Date.UTC(y,mo-1,1,12)).getUTCDay(),days=new Date(Date.UTC(y,mo,0)).getUTCDate();
   const cell=n=>{const dt=`${ym}-${String(n).padStart(2,'0')}`,sc=d.cal.filter(e=>e.date===dt),pl=d.m.filter(m=>m.date===dt),off=dt<b.min||dt>b.max;
     const lc=x=>x==='Fora'?'F':x==='Casa'?'C':'N';
-    return `<button type="button" class="cd${CALSEL===dt?' on':''}${off?' off':''}" style="${bgOf([...pl.map(m=>m.c),...sc.map(e=>e.c)])}" onclick="calPick('${dt}')"><i>${n}</i>${pl.map(m=>`<span class="cg"><span class="cgc">${clubAvatar(m.adv,26)}</span><b class="${m.gp>m.gc?'w':m.gp<m.gc?'l':'e'}">${m.gp>m.gc?'V':m.gp<m.gc?'D':'E'}</b><em>${lc(m.loc)}</em></span>`).join('')}${sc.map(e=>`<span class="cg ag"><span class="cgc">${clubAvatar(e.adv,26)}</span><em>${lc(e.loc)}</em></span>`).join('')}</button>`};
+    return `<button type="button" class="cd${CALSEL===dt?' on':''}${off?' off':''}${dt===TODAY()?' today':''}"${off?' disabled':''} style="${bgOf([...pl.map(m=>m.c),...sc.map(e=>e.c)])}" onclick="calPick('${dt}')"><i>${n}</i>${pl.map(m=>`<span class="cg"><span class="cgc">${clubAvatar(m.adv,26)}</span><b class="${m.gp>m.gc?'w':m.gp<m.gc?'l':'e'}">${m.gp>m.gc?'V':m.gp<m.gc?'D':'E'}</b><em>${lc(m.loc)}</em></span>`).join('')}${sc.map(e=>`<span class="cg ag"><span class="cgc">${clubAvatar(e.adv,26)}</span><em>${lc(e.loc)}</em></span>`).join('')}</button>`};
   const cells=Array.from({length:lead},()=>'<span class="cd blank"></span>').concat(Array.from({length:days},(_,i)=>cell(i+1))).join('');
   let panel='';
   if(CALSEL){const sc=d.cal.filter(e=>e.date===CALSEL),pl=d.m.filter(m=>m.date===CALSEL),ed=CALEDIT&&d.cal.find(e=>e.id===CALEDIT),c0=ed?ed.c:(comps[0]||'');
     panel=`<div class="cal-modal" onclick="if(event.target===this)calPick('${CALSEL}')"><div class="rk-me cal-day cal-sheet"><button type="button" class="chip2 cal-x" onclick="calPick('${CALSEL}')">Fechar</button><h3 style="padding-right:84px">${CALSEL.slice(8,10)}/${CALSEL.slice(5,7)}/${CALSEL.slice(0,4)}</h3>${pl.map(m=>`<p class="sub">${m.gp>m.gc?'V':m.gp<m.gc?'D':'E'} ${m.gp}–${m.gc} · ${esc(m.adv)} · ${esc(jc(m.c||''))} (registrado)</p>`).join('')}${sc.map(e=>`<div class="cal-item"><div><b>${esc(e.adv)}</b><small>${esc(jc(e.c||'Sem competição'))}${e.ph?' · '+esc(e.ph):''} · ${esc(e.loc)}</small></div><button type="button" class="sm" onclick="calUse('${jq(e.id)}')">Registrar</button><button type="button" class="sm" onclick="calEdit('${jq(e.id)}')">Editar</button><button type="button" class="x" aria-label="Remover do calendário" onclick="calDel('${jq(e.id)}')">✕</button></div>`).join('')}
     <form class="cal-form" onsubmit="return calSave(this)"><input type="hidden" name="date" value="${CALSEL}"><input type="hidden" name="id" value="${ed?esc(ed.id):''}"><label>Competição<select name="c" onchange="calStages(this)">${comps.map(c=>`<option${c===c0?' selected':''}>${esc(c)}</option>`).join('')}</select></label><label>Rodada / fase<select name="ph">${calStageOpts(c0,ed?ed.ph:'')}</select></label><label>Adversário<input name="adv" list="dl-times" autocomplete="off" placeholder="Selecionar" value="${ed?esc(ed.adv):''}" required></label><label>Local<select name="loc">${['Casa','Fora','Neutro'].map(x=>`<option${ed&&ed.loc===x?' selected':''}>${x}</option>`).join('')}</select></label><button class="btn">${ed?'Salvar alteração':'Adicionar ao calendário'}</button></form></div></div>`}
-  return `<h2>Calendário de ${esc(S.cur)}</h2><p class="sub">Marque os jogos de cada mês. Ao registrar a partida, adversário, competição e data já vêm preenchidos.</p><div class="cal-head"><button type="button" class="chip2" onclick="calNav(-1)" aria-label="Mês anterior">←</button><b>${MESES[mo-1][0].toUpperCase()+MESES[mo-1].slice(1)} de ${y}</b><button type="button" class="chip2" onclick="calNav(1)" aria-label="Próximo mês">→</button></div><div class="cal-grid">${['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(x=>`<small>${x}</small>`).join('')}${cells}</div><p class="sub cal-leg"><b class="lg w">V</b> vitória · <b class="lg e">E</b> empate · <b class="lg l">D</b> derrota · <b class="lg">C</b> casa · <b class="lg">F</b> fora · escudo sem letra de resultado: jogo agendado</p>${allC.length?`<p class="sub cal-leg">${allC.map(c=>`<span class="lgc" style="background:${colOf(c)}33;border-color:${colOf(c)}"></span>${esc(jc(c))}`).join(' · ')}</p>`:''}${panel}`;
+  return `<h2>Calendário de ${esc(S.cur)}</h2><p class="sub">Temporada de ${b.start} a ${b.end}. Marque os jogos de cada mês. Ao registrar a partida, adversário, competição e data já vêm preenchidos.</p><div class="cal-head"><button type="button" class="chip2" onclick="calNav(-1)" aria-label="Mês anterior">←</button><b>${MESES[mo-1][0].toUpperCase()+MESES[mo-1].slice(1)} de ${y}</b><button type="button" class="chip2" onclick="calNav(1)" aria-label="Próximo mês">→</button></div><div class="cal-grid">${['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(x=>`<small>${x}</small>`).join('')}${cells}</div><p class="sub cal-leg"><b class="lg w">V</b> vitória · <b class="lg e">E</b> empate · <b class="lg l">D</b> derrota · <b class="lg">C</b> casa · <b class="lg">F</b> fora · escudo sem letra de resultado: jogo agendado</p>${allC.length?`<p class="sub cal-leg">${allC.map(c=>`<span class="lgc" style="background:${colOf(c)}33;border-color:${colOf(c)}"></span>${esc(jc(c))}`).join(' · ')}</p>`:''}${panel}`;
 }
 function vPartidas(){if(sub.pm!=='e'&&lpSlot!=null){lpSlot=null;lpShow()}return pills('pm',[['r','Registrar'],['c','Calendário'],['e','Escalação']],'r')+(sub.pm==='e'?vLineup():sub.pm==='c'?vCal():vPartidasBase())}
-function vRank(){return vRankBase()+vDestaques()+tierBox()}
+function vRank(){return vRankBase()+vDestaques()+tierBox()+recordsBox()+goalsBox()+watchBox()}
 function isGone(k){const ref=[...S.order].reverse().find(s=>S.data[s].p.length);return !ref||!S.data[ref].p.some(p=>p.k===k&&!p.out)}
 var CL={busy:false,msg:'',err:false,timer:null,conflict:null,last:0};
 const CLOUD_DEFAULT={key:'',db:''};
@@ -1349,7 +1360,7 @@ async function downloadBk(){
 }
 function restoreFile(file){if(!file)return;const rd=new FileReader();rd.onerror=()=>{bkm='Não foi possível ler o arquivo de backup.';render()};rd.onload=()=>restoreText(String(rd.result||''));rd.readAsText(file)}
 function restoreText(text){const box=document.getElementById('bk');if(box)box.value=text;return prepareRestore(text)}
-function vConfig(){return `<h2>Configurações</h2>${appearBox()}${assetLibraryBox()}${matchBox()}${careersBox()}${backupBox()}${cloudBox()}<p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p>`}
+function vConfig(){return `<h2>Configurações</h2>${appearBox()}${assetLibraryBox()}${checkBox()}${matchBox()}${careersBox()}${backupBox()}${cloudBox()}<p class="mn-foot"><span>Versão</span> ${APP_VERSION}</p>`}
 function assetClubNames(){
  const names=new Set([...Object.keys(CLUB_BADGES),...(CLUB_DB.clubs||[]),...(S.assetClubs||[]),String(S.nome||S.club||'').trim()].filter(Boolean));
  S.order.forEach(se=>S.data[se].m.forEach(m=>{if(m.adv)names.add(String(m.adv).trim())}));
@@ -1364,6 +1375,37 @@ function assetRow(kind,name){
  const logoKey=key,trophyKey='trophy:'+norm(name),logo=S.img&&S.img[logoKey],cup=S.img&&(S.img[trophyKey]||S.img[name]);
  return `<div class="asset-item comp-asset-item"><span class="asset-name">${esc(name)}</span><div class="asset-previews"><div><small>Logo</small>${compLogo(name,36)}</div><div><small>Troféu</small>${trophy(name,36)}</div></div><span class="asset-actions"><label class="sm">${logo?'Trocar logo':'Adicionar logo'}<input type="file" accept="image/*" hidden data-asset-key="${esc(logoKey)}" onchange="setImg(this.dataset.assetKey,this.files[0])"></label>${logo?`<button type="button" class="x" title="Remover logo personalizado" data-asset-key="${esc(logoKey)}" onclick="delImg(this.dataset.assetKey)">✕</button>`:''}<label class="sm">${cup?'Trocar troféu':'Adicionar troféu'}<input type="file" accept="image/*" hidden data-asset-key="${esc(trophyKey)}" onchange="setImg(this.dataset.assetKey,this.files[0])"></label>${cup?`<button type="button" class="x" title="Remover troféu personalizado" data-comp="${esc(name)}" onclick="delTrophyImg(this.dataset.comp)">✕</button>`:''}</span></div>`;
 }
+var BX={};
+function recordsBox(){
+ const all=[];S.order.forEach(se=>{const d=S.data[se];(d.m||[]).forEach(m=>all.push({se,m,d}))});
+ if(!all.length)return '';
+ let best=null,worst=null,v=0,u=0,mv=0,mi=0;const ht=[],gs={},tot={};
+ all.forEach(({se,m,d})=>{const gp=+m.gp,gc=+m.gc;if(isNaN(gp)||isNaN(gc))return;const df=gp-gc,adv=m.adv||'?';
+  if(df>0&&(!best||df>best.df))best={df,gp,gc,adv,se};if(df<0&&(!worst||df<worst.df))worst={df,gp,gc,adv,se};
+  v=df>0?v+1:0;u=df>=0?u+1:0;if(v>mv)mv=v;if(u>mi)mi=u;tot[se]=(tot[se]||0)+gp;
+  const pm=new Map((d.p||[]).map(p=>[String(p.k),p.n]));
+  Object.entries(m.pl||{}).forEach(([k,x])=>{const g=+(x&&x.g)||0,n=pm.get(String(k));if(!n)return;gs[n]=(gs[n]||0)+g;if(g>=3)ht.push(n+' ('+se+')')})});
+ const top=Object.entries(gs).sort((a,b)=>b[1]-a[1])[0],ts=Object.entries(tot).sort((a,b)=>b[1]-a[1])[0],li=[];
+ if(best)li.push('Maior goleada: '+best.gp+'–'+best.gc+' contra '+best.adv+' ('+best.se+')');
+ if(worst)li.push('Maior derrota: '+worst.gp+'–'+worst.gc+' contra '+worst.adv+' ('+worst.se+')');
+ if(mv)li.push('Maior sequência de vitórias: '+mv);if(mi)li.push('Maior sequência invicta: '+mi);
+ if(top&&top[1]>0)li.push('Artilheiro da carreira: '+top[0]+' ('+top[1]+' gols)');
+ if(ht.length)li.push('Hat-tricks: '+ht.length+' ('+ht.slice(0,5).join(', ')+(ht.length>5?'…':'')+')');
+ if(ts&&ts[1]>0)li.push('Temporada com mais gols: '+ts[0]+' ('+ts[1]+')');
+ if(!li.length)return '';
+ return `<details class="bkd"><summary>Recordes da carreira</summary><ul class="sub">${li.map(x=>'<li>'+esc(x)+'</li>').join('')}</ul><p class="sub">Calculado com as partidas registradas em todas as temporadas. Os artilheiros são somados pelo nome do jogador.</p></details>`}
+function goalAdd(f){const t=String(new FormData(f).get('t')||'').trim();if(!t)return false;const d=D();d.goals=Array.isArray(d.goals)?d.goals:[];d.goals.push({t:t.slice(0,120),done:false});save();BX.g=true;render();return false}
+function goalTog(i){const g=(D().goals||[])[i];if(!g)return;g.done=!g.done;save();BX.g=true;render()}
+function goalDel(i){const d=D();if(!Array.isArray(d.goals)||!d.goals[i])return;if(!confirm('Apagar esta meta?'))return;d.goals.splice(i,1);save();BX.g=true;render()}
+function goalsBox(){const g=Array.isArray(D().goals)?D().goals:[],ok=g.filter(x=>x.done).length;
+ return `<details class="bkd"${BX.g?' open':''} ontoggle="BX.g=this.open"><summary>Metas da diretoria${g.length?' ('+ok+'/'+g.length+')':''}</summary><p class="sub">Objetivos de ${esc(S.cur)} (título, vaga na Champions, não vender o craque…). Marque quando cumprir.</p>${g.map((x,i)=>`<label class="chk sw"><input type="checkbox" ${x.done?'checked':''} onchange="goalTog(${i})"><span>${esc(x.t)}</span></label><button type="button" class="x" aria-label="Apagar meta" onclick="goalDel(${i})">✕</button>`).join('')}<form class="fc" onsubmit="return goalAdd(this)"><label>Nova meta<input name="t" maxlength="120" autocomplete="off" placeholder="Ex.: Ser campeão da liga" required></label><button class="btn">Adicionar meta</button></form></details>`}
+function watchAdd(f){const o=Object.fromEntries(new FormData(f)),n=String(o.n||'').trim();if(!n)return false;S.watch=Array.isArray(S.watch)?S.watch:[];S.watch.push({n:n.slice(0,60),pos:String(o.pos||'').trim().slice(0,6),v:num(o.v),note:String(o.note||'').trim().slice(0,100)});save();BX.w=true;render();return false}
+function watchDel(i){if(!Array.isArray(S.watch)||!S.watch[i])return;if(!confirm('Remover da lista de observação?'))return;S.watch.splice(i,1);save();BX.w=true;render()}
+function watchBox(){const w=Array.isArray(S.watch)?S.watch:[];
+ return `<details class="bkd"${BX.w?' open':''} ontoggle="BX.w=this.open"><summary>Lista de observação${w.length?' ('+w.length+')':''}</summary><p class="sub">Jogadores que você quer contratar. Vale para a carreira toda e não entra no elenco.</p>${w.map((x,i)=>`<div class="cal-item"><div><b>${esc(x.n)}</b><small>${[x.pos,x.v?x.v+' mi':'',x.note].filter(Boolean).map(esc).join(' · ')}</small></div><button type="button" class="x" aria-label="Remover da lista" onclick="watchDel(${i})">✕</button></div>`).join('')}<form class="fc" onsubmit="return watchAdd(this)"><label>Jogador<input name="n" maxlength="60" autocomplete="off" required></label><label>Posição<input name="pos" maxlength="6" autocomplete="off" placeholder="Ex.: CA"></label><label>Valor-alvo (milhões)<input name="v" inputmode="decimal" autocomplete="off"></label><label>Observação<input name="note" maxlength="100" autocomplete="off"></label><button class="btn">Adicionar à lista</button></form></details>`}
+var CHK=null;
+function checkData(){const out=[];S.order.forEach(se=>{const d=S.data[se];if(!d)return;const ks=new Set(),dup=new Set();(d.p||[]).forEach(p=>{if(ks.has(p.k))dup.add(p.n);ks.add(String(p.k))});if(dup.size)out.push(se+': jogador repetido no elenco ('+[...dup].join(', ')+')');let nc=0,nd=0,np=0;(d.m||[]).forEach(m=>{if(!m.c)nc++;if(m.date&&!validMatchDate(m.date,se))nd++;Object.keys(m.pl||{}).forEach(k=>{if(!ks.has(String(k)))np++})});if(nc)out.push(se+': '+nc+' partida(s) sem competição');if(nd)out.push(se+': '+nd+' partida(s) com data fora da temporada');if(np)out.push(se+': '+np+' atuação(ões) de jogador que não está mais no elenco');(d.cal||[]).forEach(e=>{if(!validMatchDate(e.date,se))out.push(se+': jogo agendado fora da temporada ('+e.adv+')')})});return out}
+function checkBox(){const r=CHK;return `<details class="bkd" id="chk-box"${r?' open':''}><summary>Verificar dados</summary><p class="sub">Procura inconsistências nesta carreira (partidas sem competição, datas fora da temporada, jogadores repetidos). Só mostra o que achou, não altera nada.</p><button type="button" class="btn" onclick="CHK=checkData();render()">Verificar agora</button>${r?(r.length?'<ul class="sub">'+r.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<p class="sub">Nenhum problema encontrado. ✔</p>'):''}</details>`}
 function assetFill(){const a=document.getElementById('asset-clubs'),b=document.getElementById('asset-comps');if(!a||!b||a.dataset.f)return;const L=assetLists();a.innerHTML=L.clubs.map(n=>assetRow('club',n)).join('');b.innerHTML=L.comps.map(n=>assetRow('comp',n)).join('');a.dataset.f='1'}
 function assetLists(){return{clubs:assetClubNames(),comps:[...new Set([...COMPS,...(S.assetComps||[]),...S.order.flatMap(se=>[...S.data[se].m.map(m=>m.c),...S.data[se].res.map(r=>r.c)].filter(Boolean))])].sort((a,b)=>a.localeCompare(b,'pt-BR'))}}
 function assetLibraryBox(){
@@ -1571,9 +1613,11 @@ const cards=[card('Mais minutos',rows.filter(r=>r.mn>0).sort((a,b)=>b.mn-a.mn),r
 return `<details class="stats-extra" ${fo.ld===false?'':'open'} ontoggle="fo.ld=this.open"><summary>Destaques da temporada</summary><label class="so">Período<select onchange="so.ld=this.value;render()"><option value="cur"${all?'':' selected'}>Esta temporada</option><option value="all"${all?' selected':''}>Carreira toda</option></select></label><div class="ldr">${cards||'<p class="empty">Os destaques aparecem quando houver atuações registradas.</p>'}</div><p class="sub">G+A/90 só entra com ${minp}+ MIN e a nota média, com ${minj}+ jogos.</p></details>`}
 
 function renameSeason(from,to){if(!from||!to||from===to||!S.data[from]||S.data[to])return false;S.data[to]=S.data[from];delete S.data[from];S.order=S.order.map(x=>x===from?to:x).sort();if(S.cur===from)S.cur=to;save();return true}
-function seasonEdit(){let m=document.getElementById('se-root');if(!m){m=document.createElement('div');m.id='se-root';document.body.appendChild(m)}const opts=yrList(S.tipo).filter(q=>!S.data[q]||q===S.cur).map(q=>`<option${q===S.cur?' selected':''}>${esc(q)}</option>`).join('');m.innerHTML=`<div class="lp" onclick="if(event.target===this)seClose()"><div class="lp-c"><div class="lp-h"><b>Corrigir a temporada</b><button type="button" class="sm" onclick="seClose()">Fechar</button></div><p class="sub">Troca o nome da temporada atual (${esc(S.cur)}). Jogadores, partidas e tudo o que já foi registrado continuam nela.</p><label class="so">Nova temporada<select id="se-sel">${opts}</select></label><div class="rem-btns"><button type="button" class="btn" onclick="seApply()">Aplicar</button></div></div></div>`}
+function seasonEdit(){let m=document.getElementById('se-root');if(!m){m=document.createElement('div');m.id='se-root';document.body.appendChild(m)}const opts='';m.innerHTML=`<div class="lp" onclick="if(event.target===this)seClose()"><div class="lp-c"><div class="lp-h"><b>Corrigir a temporada</b><button type="button" class="sm" onclick="seClose()">Fechar</button></div><p class="sub">Troca o nome da temporada atual (${esc(S.cur)}). Jogadores, partidas e tudo o que já foi registrado continuam nela.</p><label class="so">Nova temporada<input id="se-sel" type="number" inputmode="numeric" min="1000" max="9999" value="${sYr(S.cur)}"></label><div class="rem-btns"><button type="button" class="btn" onclick="seApply()">Aplicar</button></div></div></div>`}
 function seClose(){const m=document.getElementById('se-root');if(m)m.remove()}
-function seApply(){const e=document.getElementById('se-sel'),v=e&&e.value;seClose();if(v&&v!==S.cur&&renameSeason(S.cur,v)){draft={};render()}}
+function seApply(){const e=document.getElementById('se-sel'),v=sNorm(e&&e.value);if(!v){alert('Digite um ano com 4 dígitos.');return}if(v!==S.cur&&S.data[v]){alert('A temporada '+v+' já existe nesta carreira.');return}seClose();if(v!==S.cur&&renameSeason(S.cur,v)){draft={};render()}}
+function seasonAdd(){let m=document.getElementById('se-root');if(!m){m=document.createElement('div');m.id='se-root';document.body.appendChild(m)}m.innerHTML=`<div class="lp" onclick="if(event.target===this)seClose()"><div class="lp-c"><div class="lp-h"><b>Outra temporada</b><button type="button" class="sm" onclick="seClose()">Fechar</button></div><p class="sub">Digite o ano em que a temporada começa (1000 a 9999). Ela abre no formato da sua carreira e o calendário se ajusta sozinho.</p><label class="so">Ano<input id="se-yr" type="number" inputmode="numeric" min="1000" max="9999" value="${sYr(S.cur)}" oninput="document.getElementById('se-pv').textContent=sNorm(this.value)||'ano inválido'"></label><p class="sub">Temporada: <b id="se-pv">${esc(S.cur)}</b></p><div class="rem-btns"><button type="button" class="btn" onclick="seAddGo()">Abrir</button></div></div></div>`}
+function seAddGo(){const e=document.getElementById('se-yr'),q=sNorm(e&&e.value);if(!q){alert('Digite um ano com 4 dígitos.');return}seClose();goSeason(q)}
 async function shareImgs(){try{const cid=IX.cur;IX.imgShared=IX.imgShared||{};if(IX.imgShared[cid])return;if(typeof waitMediaReady==='function')await waitMediaReady();const all=await idbGetAllImgs(),mine=S.img=S.img||{};let n=0;const best={};Object.keys(all).forEach(k=>{if(!k.startsWith('c:'))return;const p=k.split(':'),ik=p.slice(2).join(':');if(p[1]===cid||!ik||!all[k])return;if(best[ik]==null)best[ik]=all[k]});for(const ik of Object.keys(best)){if(mine[ik]==null||mine[ik]===''){mine[ik]=best[ik];await idbPutImg('c:'+cid+':'+ik,best[ik]);n++}}if(typeof CAREER_IMGS==='object'&&CAREER_IMGS)CAREER_IMGS[cid]=Object.assign({},CAREER_IMGS[cid]||{},mine);IX.imgShared[cid]=true;saveIx();if(n)render()}catch(e){}}
 
 let arcMsg='';
@@ -1599,7 +1643,9 @@ function navHtml(){
   return NAVB.map(([k,n])=>`<button role="tab" aria-selected="${k===tab}" onclick="go('${k}')">${ico(k)}${k==='home'&&(IX.hlUnread||[]).length?'<i class="hl-dot"></i>':''}<span>${k==='config'?'<span class="nl">'+n+'</span><span class="ns">Config.</span>':n}</span></button>`).join('');
 }
 const heroStyle=()=>okHex(S.cor1)?`background:${S.cor1};color:${txtOn(S.cor1)}`:'';
-function vHome(){
+function formStrip(){const d=D(),m=(d.m||[]).filter(x=>x.gp!==''&&x.gc!==''&&x.gp!=null&&x.gc!=null&&!isNaN(+x.gp)&&!isNaN(+x.gc)).slice(-5);if(!m.length)return '';const nx=(Array.isArray(d.cal)?d.cal:[]).filter(e=>e.date>=TODAY()).sort((a,b)=>a.date<b.date?-1:1)[0];return `<div class="rk-me"><b>Forma recente</b> <span class="form">${m.map(x=>{const r=+x.gp>+x.gc?'w':+x.gp<+x.gc?'l':'e';return `<i class="fb ${r}" title="${esc((x.adv||'')+' '+x.gp+'–'+x.gc)}">${r==='w'?'V':r==='l'?'D':'E'}</i>`}).join('')}</span>${nx?`<p class="sub">Próximo jogo: ${nx.date.slice(8,10)}/${nx.date.slice(5,7)} · ${esc(nx.adv)}${nx.c?' · '+esc(jc(nx.c)):''}</p>`:''}</div>`}
+function vHome(){const h=vHomeBase();return sub.home==='n'?h:h+formStrip()}
+function vHomeBase(){
   const d=D();if(sub.home==='n')return pills('home',[['t','Esta temporada'],['c','Carreira toda'],['n','Jornal']],'t')+vJornal();
   const car=sub.home==='c',b=car?{}:(d.tb||{}),ed=editT&&!car;
   const r=car?S.order.reduce((a,s)=>{const q=rec(S.data[s]);a.j+=q.j;a.v+=q.v;a.e+=q.e;a.l+=q.l;a.gp+=q.gp;a.gc+=q.gc;return a},{j:0,v:0,e:0,l:0,gp:0,gc:0}):rec(d);
@@ -1733,11 +1779,14 @@ const fm2=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDi
 function applyTema(){
   let v=null;try{v=localStorage.getItem('tema')}catch(e){}
   const r=document.documentElement;if(!r)return;
-  if(v==='light'||v==='dark')r.setAttribute('data-theme',v);else r.removeAttribute('data-theme');
+  if(v==='light'||v==='dark')r.setAttribute('data-theme',v);else if(v==='amoled')r.setAttribute('data-theme','dark');else r.removeAttribute('data-theme');
   let bg='#e9e2d5';try{bg=localStorage.getItem('fundoClaro')||bg}catch(e){}
-  const light=v==='light'||(v!=='dark'&&(!window.matchMedia||!window.matchMedia('(prefers-color-scheme: dark)').matches));
-  if(light&&okHex(bg)){r.style.setProperty('--bg',bg);r.style.setProperty('--surf',`color-mix(in srgb, ${bg} 82%, white)`);r.style.setProperty('--line',`color-mix(in srgb, ${bg} 70%, #718096)`)}else{r.style.removeProperty('--bg');r.style.removeProperty('--surf');r.style.removeProperty('--line')}
+  const light=v==='light'||(v!=='dark'&&v!=='amoled'&&(!window.matchMedia||!window.matchMedia('(prefers-color-scheme: dark)').matches));
+  if(light&&okHex(bg)){r.style.setProperty('--bg',bg);r.style.setProperty('--surf',`color-mix(in srgb, ${bg} 82%, white)`);r.style.setProperty('--line',`color-mix(in srgb, ${bg} 70%, #718096)`)}else if(v==='amoled'){r.style.setProperty('--bg','#000');r.style.setProperty('--surf','#0d0d0d');r.style.setProperty('--line','#262626')}else{r.style.removeProperty('--bg');r.style.removeProperty('--surf');r.style.removeProperty('--line')}
+  try{r.classList.toggle('dens-c',localStorage.getItem('dens')==='c')}catch(e){}
 }
+function setDens(v){try{if(v==='c')localStorage.setItem('dens','c');else localStorage.removeItem('dens')}catch(e){}applyTema();render()}
+function setFab(v){try{if(v)localStorage.removeItem('fab');else localStorage.setItem('fab','0')}catch(e){}render()}
 function setTema(v){try{if(v==='auto')localStorage.removeItem('tema');else localStorage.setItem('tema',v)}catch(e){}applyTema();render()}
 function setLightBg(v){if(okHex(v)){try{localStorage.setItem('fundoClaro',v)}catch(e){}applyTema()}}
 const okHex=x=>/^#[0-9a-f]{6}$/i.test(x||'');
@@ -1746,7 +1795,8 @@ const hdrStyle=()=>(okHex(S.cor1)?`background:${S.cor1};color:${txtOn(S.cor1)};`
 function appearBox(){
   const t=(()=>{try{return localStorage.getItem('tema')||'auto'}catch(e){return 'auto'}})();
   const lightBg=(()=>{try{return localStorage.getItem('fundoClaro')||'#e9e2d5'}catch(e){return '#e9e2d5'}})();
-  return `<details class="bkd" open><summary>🎨 Aparência</summary><p class="sub">Tema (neste aparelho)</p><div class="chips">${[['auto','Automático'],['light','Claro'],['dark','Escuro']].map(([v,l])=>`<button type="button" class="chip2${t===v?' on':''}" onclick="setTema('${v}')">${l}</button>`).join('')}</div><label style="max-width:320px;margin:12px 0">Cor de fundo no modo claro<input type="color" value="${lightBg}" onchange="setLightBg(this.value)" aria-label="Cor de fundo do modo claro"></label><p class="sub">Escolha um tom suave para reduzir o brilho. A cor só se aplica no tema claro.</p>
+  return `<details class="bkd" open><summary>🎨 Aparência</summary><p class="sub">Tema (neste aparelho)</p><div class="chips">${[['auto','Automático'],['light','Claro'],['dark','Escuro'],['amoled','Preto puro']].map(([v,l])=>`<button type="button" class="chip2${t===v?' on':''}" onclick="setTema('${v}')">${l}</button>`).join('')}</div><label style="max-width:320px;margin:12px 0">Cor de fundo no modo claro<input type="color" value="${lightBg}" onchange="setLightBg(this.value)" aria-label="Cor de fundo do modo claro"></label><p class="sub">Escolha um tom suave para reduzir o brilho. A cor só se aplica no tema claro.</p>
+  <p class="sub">Tamanho dos elementos (neste aparelho)</p><div class="chips">${[['','Confortável'],['c','Compacto']].map(([v,l])=>`<button type="button" class="chip2${(()=>{try{return (localStorage.getItem('dens')||'')===v}catch(e){return !v}})()?' on':''}" onclick="setDens('${v}')">${l}</button>`).join('')}</div><p class="sub">Botão rápido “＋ Partida” nas outras abas</p><div class="chips">${[[1,'Ligado'],[0,'Desligado']].map(([v,l])=>`<button type="button" class="chip2${(()=>{try{return (localStorage.getItem('fab')!=='0')===!!v}catch(e){return !!v}})()?' on':''}" onclick="setFab(${v})">${l}</button>`).join('')}</div>
   <p class="sub">Escudo do clube (aparece no registro de partida)</p><div class="crest"><div class="av">${avMe()}</div><label class="sm">Escolher imagem<input type="file" accept="image/*" hidden onchange="setImg('__crest',this.files[0])"></label>${(S.img&&S.img.__crest)?'<button type="button" class="sm" onclick="delImg(\'__crest\')">Remover</button>':''}</div>
   <p class="sub">Cor do app: botões e destaques (desta carreira)</p><div class="sw8">${ACCS.map(([n,c])=>`<button type="button" class="swc${(okHex(S.acc)?S.acc:ACC0)===c?' on':''}" style="background:${c}" title="${n}" aria-label="${n}" onclick="setAcc('${c}')"></button>`).join('')}<label class="swc custom" title="Outra cor"><input type="color" value="${okHex(S.acc)?S.acc:ACC0}" onchange="setAcc(this.value)" aria-label="Outra cor"></label></div>
   <p class="sub">Cores do topo (desta carreira)</p><div class="ef"><label>Cor principal<input type="color" value="${okHex(S.cor1)?S.cor1:'#14213d'}" onchange="S.cor1=this.value;save();render()"></label><label>Cor de destaque<input type="color" value="${okHex(S.cor2)?S.cor2:'#f2c94c'}" onchange="S.cor2=this.value;save();render()"></label></div>
@@ -2124,13 +2174,13 @@ function vClose(){
    <h3>2. Elenco da próxima temporada</h3>
    ${pl.length?`<div class="scroll"><table class="tc"><thead><tr><th title="Continua no clube">Fica</th><th>Jogador</th><th>Idade</th><th>Overall</th></tr></thead><tbody>${pl.map(p=>`<tr><td><input type="checkbox" name="k_${p.k}" checked aria-label="${esc(p.n)} continua no clube"></td><td>${posBadge(p.pos)} ${esc(p.n)}</td><td><input class="ni" type="number" name="a_${p.k}" min="15" max="50" value="${p.id?p.id+1:''}"></td><td><input class="ni" type="number" name="o_${p.k}" min="1" max="99" value="${p.ov||''}"></td></tr>`).join('')}</tbody></table></div><p class="sub">A idade já vem com +1. Atualize o overall como ficou no jogo e desmarque quem saiu do clube. As estatísticas da nova temporada começam zeradas.</p>`:'<p class="sub">Elenco vazio.</p>'}
    <h3>3. Próxima temporada</h3>
-   <label>Temporada<select name="s">${allS().map(s=>`<option ${s===nx?'selected':''}>${esc(s)}</option>`).join('')}</select></label>
+   <label>Temporada<input name="s" type="number" inputmode="numeric" min="1000" max="9999" value="${sYr(nx)||''}" required></label>
    <label class="chk sw"><input type="checkbox" name="cc" checked><span>Levar a lista de campeonatos (sem resultados)</span></label>
    <button class="btn">Fechar temporada e abrir a próxima</button></form>`;
 }
 function closeSeason(f){
-  const prevSeason=S.cur,o=Object.fromEntries(new FormData(f)),d=D(),n=o.s;
-  if(!n||n===S.cur)return false;
+  const prevSeason=S.cur,o=Object.fromEntries(new FormData(f)),d=D(),n=sNorm(o.s);
+  if(!n){alert('Digite um ano com 4 dígitos.');return false}if(n===S.cur)return false;
   mark('Temporada fechada');
   const names=compNames(d);
   names.forEach((c,i)=>{const v=o['r_'+i];if(v===undefined)return;const x=d.res.find(y=>y.c===c);if(x){x.r=v.trim();delete x.auto}else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))});
@@ -2224,7 +2274,7 @@ const ek=c=>encodeURIComponent(c).replace(/'/g,'%27');
 function addComp(f){const c=new FormData(f).get('c').trim();if(c&&!D().res.some(y=>y.c===c)){D().res.push({c,r:''});save()}render();return false}
 function delComp(c){const d=D();if(d.m.some(m=>m.c===c))return;mark('Campeonato removido');d.res=d.res.filter(y=>y.c!==c);save();render()}
 function seasonBounds(season){const q=String(season||'').trim(),br=q.match(/^(\d{4})$/);if(br){const y=+br[1];return{min:y+'-01-01',max:y+'-12-31',start:'01/01/'+y,end:'31/12/'+y}}const m=q.match(/^(\d{4})\/\d{2}$/);if(!m)return{min:'',max:'',start:'',end:''};const y=+m[1],end=y+1;return{min:`${y}-07-01`,max:`${end}-06-30`,start:`01/07/${y}`,end:`30/06/${end}`}}
-function validMatchDate(value,season){if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value||'')))return false;const b=seasonBounds(season);return !b.min||(value>=b.min&&value<=b.max)}
+function validMatchDate(value,season){if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value||'')))return false;const dt=new Date(value+'T12:00:00Z');if(isNaN(dt)||dt.toISOString().slice(0,10)!==value)return false;const b=seasonBounds(season);return !b.min||(value>=b.min&&value<=b.max)}
 function defaultMatchDate(season){const b=seasonBounds(season);if(!b.min)return'';const dates=(S.data[season]?.m||[]).map(m=>m.date).filter(d=>validMatchDate(d,season)).sort();if(dates.length){const last=dates[dates.length-1],next=new Date(`${last}T12:00:00Z`);next.setUTCDate(next.getUTCDate()+7);const candidate=next.toISOString().slice(0,10);return candidate<=b.max?candidate:last}const now=new Date(),todayDate=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;return todayDate>=b.min&&todayDate<=b.max?todayDate:b.min}
 function formatMatchDate(value,locale='pt-BR',style='short'){const m=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return'';return new Date(+m[1],+m[2]-1,+m[3],12).toLocaleDateString(locale,style==='long'?{day:'numeric',month:'long',year:'numeric'}:{day:'2-digit',month:'short',year:'numeric'})}
 function vPartidasBase(){
@@ -2459,7 +2509,7 @@ function vHistBase(){
   ${list.length?'<div class="scroll"><div class="hlist"><div class="hrow hh"><span></span><span>Temp.</span><span>Nota</span><span>Jogos</span><span>Gols</span><span>Ass.</span><span title="Participações em gol: gols + assistências">G+A</span><span title="Participações em gol por jogo">G+A/J</span><span>MIN</span><span>DEF</span><span title="G+A por 90 minutos">G+A/90</span></div>'+totRow+list.map(h=>`<details class="ed hd${h.gone?' gone':''}"><summary class="hrow"><span class="hn"><i class="ar">▸</i>${posBadge(h.rows[h.rows.length-1].p.pos)} <span class="nm">${esc(h.n)}</span>${natSub(h)}${h.t.mv?` <span class="mv" title="Melhor da partida">★${h.t.mv}</span>`:''}</span><span>${h.rows.length}</span><span><span class="rating ${ratingClass(h.nt)}">${h.nt}</span></span><span>${h.t.j}</span><span>${h.t.g}</span><span>${h.t.a}</span><span>${h.t.g+h.t.a}</span><span>${fm2(h.t.j?(h.t.g+h.t.a)/h.t.j:0)}</span><span>${h.t.mn}</span><span>${h.rows.some(r=>r.p.pos==='GOL')?h.t.df:'–'}</span><span>${fm2(h.t.mn?(h.t.g+h.t.a)*90/h.t.mn:0)}</span></summary><button type="button" class="sm" onclick="perfilOpen(${h.rows[0].p.k})">Ver perfil completo</button><div class="scroll"><table><thead><tr><th>Temporada</th><th>Nota</th><th>Pos</th><th>Idade</th><th>Ovr</th><th>J</th><th>Gols</th><th>Ast.</th><th>G+A</th><th>G+A/J</th><th>MIN</th><th>DEF</th><th>G+A/90</th><th>🟨</th><th>🟥</th></tr></thead><tbody>${h.rows.map(({s,p,st})=>`<tr><td>${esc(s)}${isCap(p,s)?' <span class="cap" title="Capitão">C</span>':''}</td><td><span class="rating ${ratingClass(st.nt)}">${st.nt}</span></td><td>${posBadge(p.pos)}</td><td>${p.id||'–'}</td><td>${p.ov||'–'}</td><td>${st.j}</td><td>${st.g}</td><td>${st.a}</td><td>${st.g+st.a}</td><td>${fm2(st.j?(st.g+st.a)/st.j:0)}</td><td>${st.mn}</td><td>${p.pos==='GOL'?st.df:'–'}</td><td>${fm2(p90(st))}</td><td>${st.y}</td><td>${st.r}</td></tr>`).join('')}</tbody></table></div></details>`).join('')+'</div></div>':'<p class="empty">Sem jogadores ainda. O histórico aparece quando você cadastrar o elenco.</p>'}`;
 }
 
-function nextName(){if(/^\d{4}$/.test(S.cur))return String(+S.cur+1);const m=S.cur.match(/^(\d{4})\/(\d{2})$/);if(!m)return '';const y=+m[1]+1;return y+'/'+String((+m[2]+1)%100).padStart(2,'0')}
+function nextName(){const y=sYr(S.cur);return y&&y<9999&&/^\d{4}(\/\d{2})?$/.test(S.cur)?sLabel(y+1,/\//.test(S.cur)?'eu':'br'):''}
 let AUTO_CH=false,QUIET_CH=false;
 function reconcileFinals(season){
   const d=S.data[season];if(!d)return false;
@@ -2657,6 +2707,8 @@ waitMediaReady();
 setTimeout(()=>{if(cloudIn()&&IX.cloudAuto!==false)cloudSync(true)},5000);
 document.addEventListener('visibilitychange',()=>{if(!cloudIn()||IX.cloudAuto===false)return;if(document.hidden){if(IX.cloudDirty)cloudSync(true)}else if(!IX.cloudDirty&&Date.now()-CL.last>60000)cloudSync(true)});
 
+function fabSync(){let b=document.getElementById('fab');let on=true;try{on=localStorage.getItem('fab')!=='0'}catch(e){}if(!on||MENU||tab==='partidas'){if(b)b.remove();return}if(!b){b=document.createElement('button');b.id='fab';b.className='fab';b.type='button';b.setAttribute('aria-label','Registrar partida');b.textContent='＋ Partida';b.onclick=()=>{tab='partidas';sub.pm='r';fo.m=true;render();window.scrollTo(0,0)};document.body.appendChild(b)}}
+(function(){const r0=render;render=function(){r0.apply(this,arguments);try{fabSync()}catch(e){}}})();
 // Instalação PWA e cache offline do aplicativo.
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => {

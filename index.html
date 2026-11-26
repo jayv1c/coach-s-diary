@@ -20,7 +20,7 @@
 :root[data-theme="dark"]{--bg:#0f1419;--surf:#171d25;--ink:#e8edf2;--mute:#9aa6b2;--line:#2a3340;--acc:#7fb8d6;--onacc:#0b1a22;--win:#6fbf9c;--draw:#8b95a3;--loss:#ef6b5b;--board:#0a0e13;color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif}
+html{background:var(--bg)}body.pk-lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif}
 body{font-weight:500}
 .board{background:var(--board);color:var(--boardink);padding:20px 16px 18px;border-bottom:4px solid var(--yel)}
 .wrap{max-width:860px;margin:0 auto}
@@ -99,7 +99,7 @@ table.cmp{min-width:0}.cmp td:not(:first-child),.cmp th:not(:first-child){text-a
 .leg{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:14px;margin:4px 0 0}.leg span{display:inline-block;width:12px;height:12px;border-radius:3px;margin-left:8px}
 
 .ht{padding:8px 0;border-bottom:2px solid var(--line);font-weight:700;font-size:15px}
-.pkov{position:fixed;left:0;right:0;top:0;height:100%;z-index:100;background:var(--bg);flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 0;box-sizing:border-box}
+.pkov{position:fixed;left:0;right:0;top:0;height:100%;overscroll-behavior:contain;z-index:100;background:var(--bg);flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 0;box-sizing:border-box}
 .pkh{display:flex;gap:8px;align-items:center}.pkh input{flex:1;font-size:17px;padding:12px}
 .pkt{font-size:13px;color:var(--mute);padding:6px 2px}
 .pkl{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:24px}
@@ -197,7 +197,7 @@ details.anim[open]>*:not(summary){animation:dopen .22s ease-out}
 .msheet{animation:pop .16s ease-out;transform-origin:bottom right}
 @keyframes pop{from{opacity:0;transform:scale(.92) translateY(6px)}to{opacity:1;transform:none}}
 .pkov{animation:pkin .18s ease-out}
-@keyframes pkin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pkin{from{opacity:0}to{opacity:1}}
 .bkw{animation:bin .2s ease-out}
 @keyframes bin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .flash{animation:flash .9s ease-out}
@@ -572,7 +572,7 @@ body.menu-on #top,body.menu-on #tabs{display:none}
 .bj{display:flex;gap:10px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:13px}.bj small{color:var(--mute)}
 .ldr{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:8px 0}.ldc{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px}.ldc h4{margin:0 0 6px}.ldc ol{list-style:none;margin:0;padding:0}.ldc li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0}.lk{background:none;border:0;padding:0;min-height:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
 
-button.season-label{background:transparent;border:1px solid var(--line);border-radius:999px;color:inherit;font:inherit;padding:3px 10px;min-height:0;min-width:0;cursor:pointer}
+button.season-label,span.season-label.sl-pill{background:transparent;border:1px solid var(--line);border-radius:999px;color:inherit;font:inherit;padding:3px 10px;min-height:0;min-width:0;cursor:pointer}
 
 .ac{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}.ac b{display:block}.ac small{color:var(--mute)}.ac .sm{margin-top:6px}
 .chk{display:flex;align-items:center;gap:8px;margin:10px 0}
@@ -587,6 +587,11 @@ button.season-label{background:transparent;border:1px solid var(--line);border-r
 .fab{position:fixed;right:14px;bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:25;background:var(--acc);color:var(--onacc);border:0;border-radius:999px;padding:11px 16px;font:700 15px Barlow,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer}
 html.dens-c body{font-size:14px;line-height:1.4}html.dens-c .btn{padding:8px 14px;min-height:38px;font-size:14px;border-radius:10px}html.dens-c input,html.dens-c select,html.dens-c textarea{padding:6px 9px;font-size:14px}html.dens-c .sm{font-size:12px}html.dens-c .chip2{padding:3px 8px;font-size:12px}
 @media (prefers-reduced-motion:reduce){.fab{transition:none}}
+.season-pick{position:relative;display:inline-flex;flex:0 0 auto;align-items:center}
+.board .season-pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;font-size:16px;cursor:pointer;-webkit-appearance:none;appearance:none;background:transparent}
+.emp{display:inline-block;font:700 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.04em;padding:3px 5px;border-radius:5px;background:color-mix(in srgb,var(--acc) 20%,transparent);color:var(--acc);vertical-align:middle}
+.emp-l{color:var(--acc)}
+.lnbox{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
 </style>
 </head>
 <body>
@@ -603,7 +608,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.30.0';
+const APP_VERSION='1.31.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -662,7 +667,7 @@ function head(){
   const it=(l,t,val)=>`<div><dt title="${t}">${l}</dt><dd>${val}</dd></div>`;
   return `<header class="board" style="${hdrStyle()}"><div class="wrap"><div class="ident"><button type="button" class="menu-btn" aria-label="Menu inicial" title="Menu inicial" onclick="openMenu()">☰</button>
   <span class="head-club-avatar" title="Escudo do clube">${avMe()}</span><strong class="club-name">${esc(S.club)}</strong>
-  ${S.order.length>1?`<select aria-label="Temporada" onchange="goSeason(this.value)">${seasonOpts()}</select>`:`<button type="button" class="season-label" onclick="seasonEdit()" title="Corrigir a temporada">${esc(S.cur)} ▾</button>`}</div>
+  ${S.order.length>1?`<span class="season-pick"><span class="season-label sl-pill">${esc(S.cur)} ▾</span><select aria-label="Temporada" onchange="goSeason(this.value)">${seasonOpts()}</select></span>`:`<button type="button" class="season-label" onclick="seasonEdit()" title="Corrigir a temporada">${esc(S.cur)} ▾</button>`}</div>
   </div></header>`;
 }
 
@@ -1643,8 +1648,7 @@ function navHtml(){
   return NAVB.map(([k,n])=>`<button role="tab" aria-selected="${k===tab}" onclick="go('${k}')">${ico(k)}${k==='home'&&(IX.hlUnread||[]).length?'<i class="hl-dot"></i>':''}<span>${k==='config'?'<span class="nl">'+n+'</span><span class="ns">Config.</span>':n}</span></button>`).join('');
 }
 const heroStyle=()=>okHex(S.cor1)?`background:${S.cor1};color:${txtOn(S.cor1)}`:'';
-function formStrip(){const d=D(),m=(d.m||[]).filter(x=>x.gp!==''&&x.gc!==''&&x.gp!=null&&x.gc!=null&&!isNaN(+x.gp)&&!isNaN(+x.gc)).slice(-5);if(!m.length)return '';const nx=(Array.isArray(d.cal)?d.cal:[]).filter(e=>e.date>=TODAY()).sort((a,b)=>a.date<b.date?-1:1)[0];return `<div class="rk-me"><b>Forma recente</b> <span class="form">${m.map(x=>{const r=+x.gp>+x.gc?'w':+x.gp<+x.gc?'l':'e';return `<i class="fb ${r}" title="${esc((x.adv||'')+' '+x.gp+'–'+x.gc)}">${r==='w'?'V':r==='l'?'D':'E'}</i>`}).join('')}</span>${nx?`<p class="sub">Próximo jogo: ${nx.date.slice(8,10)}/${nx.date.slice(5,7)} · ${esc(nx.adv)}${nx.c?' · '+esc(jc(nx.c)):''}</p>`:''}</div>`}
-function vHome(){const h=vHomeBase();return sub.home==='n'?h:h+formStrip()}
+function vHome(){return vHomeBase()}
 function vHomeBase(){
   const d=D();if(sub.home==='n')return pills('home',[['t','Esta temporada'],['c','Carreira toda'],['n','Jornal']],'t')+vJornal();
   const car=sub.home==='c',b=car?{}:(d.tb||{}),ed=editT&&!car;
@@ -2063,6 +2067,8 @@ function pkFilter(opts,q){
   return{items:all.slice(0,150),exact:opts.some(o=>norm(o)===n),total:all.length};
 }
 let PK=null;
+let PKY=0,PKLK=false;
+function pkLock(on){const b=document.body;if(on&&!PKLK){PKLK=true;PKY=window.pageYOffset||0;b.style.top=(-PKY)+'px';b.classList.add('pk-lock')}else if(!on&&PKLK){PKLK=false;b.classList.remove('pk-lock');b.style.top='';window.scrollTo(0,PKY)}}
 function pkFit(){const ov=document.getElementById('pkov'),vv=window.visualViewport;ov.style.height=(vv?vv.height:window.innerHeight)+'px';ov.style.top=(vv?vv.offsetTop:0)+'px'}
 function pkOpen(inp){
   const dl=document.getElementById(inp.dataset.pk);if(!dl)return;
@@ -2070,7 +2076,7 @@ function pkOpen(inp){
   const lb=inp.closest('label'),t=lb?[...lb.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim():'';
   document.getElementById('pkt').textContent=t||inp.getAttribute('aria-label')||'Escolher';
   const q=document.getElementById('pkq');q.value='';pkList('');
-  document.getElementById('pkov').style.display='flex';pkFit();q.focus();
+  pkLock(true);document.getElementById('pkov').style.display='flex';pkFit();try{q.focus({preventScroll:true})}catch(x){q.focus()}setTimeout(()=>{if(PK)pkFit()},120);setTimeout(()=>{if(PK)pkFit()},350);
 }
 function pkList(q){
   if(!PK)return;
@@ -2084,7 +2090,7 @@ function pkPick(v){
   const i=PK&&PK.inp;pkClose();if(!i)return;
   i.value=v;i.dispatchEvent(new Event('input',{bubbles:true}));i.dispatchEvent(new Event('change',{bubbles:true}));
 }
-function pkClose(){document.getElementById('pkov').style.display='none';PK=null}
+function pkClose(){document.getElementById('pkov').style.display='none';PK=null;pkLock(false)}
 function pkKey(e){
   if(e.key==='Escape'){pkClose();return}
   if(e.key==='Enter'){e.preventDefault();const b=document.querySelector('#pkl .pki:not(.free)')||document.querySelector('#pkl .pki');if(b)pkPick(b.dataset.v)}
@@ -2166,13 +2172,13 @@ function delTrophyImg(c){const k1='trophy:'+norm(c),k2=c;if(S.img){delete S.img[
 
 const compNames=d=>[...new Set([...d.m.map(x=>x.c).filter(Boolean),...d.res.map(x=>x.c)])];
 function vClose(){
-  const d=D(),names=compNames(d),pl=d.p.filter(p=>!p.out).sort((a,b)=>posIx(a)-posIx(b)||(b.ov||0)-(a.ov||0)),nx=nextName();
+  const d=D(),names=compNames(d),pl=d.p.filter(p=>!p.out||(p.out==='empout'&&p.emp)).sort((a,b)=>posIx(a)-posIx(b)||(b.ov||0)-(a.ov||0)),nx=nextName();
   return `<h2>Fechar ${esc(S.cur)}</h2><p class="sub">Um passo só: resultados dos campeonatos, elenco da próxima temporada e abertura da nova temporada. Dá para desfazer logo depois.</p>
   <form class="fc" onsubmit="return closeSeason(this)">
    <h3>1. Resultados dos campeonatos</h3>
    ${names.length?names.map((c,i)=>{const x=d.res.find(y=>y.c===c);return `<label>${esc(c)}<input name="r_${i}" list="dl-res" autocomplete="off" placeholder="Toque para escolher (campeão, 3º lugar…)" value="${esc(x?x.r:'')}"></label>`}).join(''):'<p class="sub">Nenhum campeonato nesta temporada.</p>'}
    <h3>2. Elenco da próxima temporada</h3>
-   ${pl.length?`<div class="scroll"><table class="tc"><thead><tr><th title="Continua no clube">Fica</th><th>Jogador</th><th>Idade</th><th>Overall</th></tr></thead><tbody>${pl.map(p=>`<tr><td><input type="checkbox" name="k_${p.k}" checked aria-label="${esc(p.n)} continua no clube"></td><td>${posBadge(p.pos)} ${esc(p.n)}</td><td><input class="ni" type="number" name="a_${p.k}" min="15" max="50" value="${p.id?p.id+1:''}"></td><td><input class="ni" type="number" name="o_${p.k}" min="1" max="99" value="${p.ov||''}"></td></tr>`).join('')}</tbody></table></div><p class="sub">A idade já vem com +1. Atualize o overall como ficou no jogo e desmarque quem saiu do clube. As estatísticas da nova temporada começam zeradas.</p>`:'<p class="sub">Elenco vazio.</p>'}
+   ${pl.length?`<div class="scroll"><table class="tc"><thead><tr><th title="Continua no clube">Fica</th><th>Jogador</th><th>Idade</th><th>Overall</th></tr></thead><tbody>${pl.map(p=>`<tr><td><input type="checkbox" name="k_${p.k}" ${empStay(p)?'checked':''} aria-label="${esc(p.n)} continua no clube"></td><td>${posBadge(p.pos)} ${esc(p.n)}${p.emp?`<div class="sub emp-l">${esc(empCloseNote(p))}</div>`:''}</td><td><input class="ni" type="number" name="a_${p.k}" min="15" max="50" value="${p.id?p.id+1:''}"></td><td><input class="ni" type="number" name="o_${p.k}" min="1" max="99" value="${p.ov||''}"></td></tr>`).join('')}</tbody></table></div><p class="sub">A idade já vem com +1. Atualize o overall como ficou no jogo e desmarque quem saiu do clube. As estatísticas da nova temporada começam zeradas. Jogadores que vieram emprestados e cujo empréstimo termina saem do elenco (a menos que você os compre antes); jogadores seus emprestados a outros clubes voltam quando o empréstimo acaba.</p>`:'<p class="sub">Elenco vazio.</p>'}
    <h3>3. Próxima temporada</h3>
    <label>Temporada<input name="s" type="number" inputmode="numeric" min="1000" max="9999" value="${sYr(nx)||''}" required></label>
    <label class="chk sw"><input type="checkbox" name="cc" checked><span>Levar a lista de campeonatos (sem resultados)</span></label>
@@ -2186,9 +2192,10 @@ function closeSeason(f){
   names.forEach((c,i)=>{const v=o['r_'+i];if(v===undefined)return;const x=d.res.find(y=>y.c===c);if(x){x.r=v.trim();delete x.auto}else d.res.push({c,r:v.trim()});if(norm(v)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))});
   let x=S.data[n];
   if(!x){x=ns();S.data[n]=x;S.order.push(n);S.order.sort()}
-  d.p.filter(p=>!p.out).forEach(p=>{
+  d.p.filter(p=>!p.out||(p.out==='empout'&&p.emp)).forEach(p=>{
     if(o['k_'+p.k]===undefined||x.p.some(q=>q.k===p.k))return;
-    const{ovr,base,out,ent,...r}=p;
+    const{ovr,base,out,ent,emp,...r}=p;
+    if(emp){const left=empLeft(p)-12;if(left>0){r.emp={...emp,r:left};if(out==='empout')r.out='empout'}}
     r.id=+o['a_'+p.k]||(p.id?p.id+1:0);r.ov=+o['o_'+p.k]||p.ov||0;
     x.p.push(r);
   });
@@ -2340,7 +2347,7 @@ function stats(p,d=D()){
 }
 function pe(i,f,v){D().p[i][f]=v;save()}
 function ed(k){editK=editK===k?null:k;render()}
-const cloneSquad=src=>S.data[src].p.filter(p=>!p.out).map(p=>{const{ovr,base,out,ent,...r}=p;return{...r,id:r.id?r.id+1:0}});
+const cloneSquad=src=>S.data[src].p.map(carryPlayer).filter(Boolean);
 function impSquad(f){
   const s=f.elements.src.value;if(!s||!S.data[s])return false;
   const items=cloneSquad(s).filter(p=>!D().p.some(x=>x.k===p.k));mark('Elenco importado da temporada '+s);items.forEach(p=>D().p.push(p));
@@ -2348,6 +2355,55 @@ function impSquad(f){
 }
 const FOOT=['Direito','Esquerdo','Ambidestro'];
 const TL={compra:'Compra de',venda:'Venda para',empin:'Empréstimo de',empout:'Empréstimo para'};
+// ===== Empréstimos =====
+// p.emp = {t:'in'|'out', m:6|12|24 (meses), r:meses restantes no início da temporada, cl:clube, opt:0|1, ov:valor da opção (milhões), s:temporada}
+const empDur=m=>+m===6?'6 meses':+m===12?'1 ano':+m===24?'2 anos':(+m||12)+' meses';
+const empLeft=p=>{const e=p&&p.emp;if(!e)return 0;const r=e.r!=null?+e.r:+e.m;return Number.isFinite(r)&&r>0?r:12};
+const empOpt=e=>e&&e.opt?'opção de compra'+(+e.ov?' '+fm(+e.ov)+' M':''):'';
+function empLine(p){const e=p.emp;if(!e)return '';const l=empLeft(p),m=+e.m||l;
+  const who=e.cl?(e.t==='out'?' a ':' por ')+e.cl:'';
+  return ['Emprestado'+who,empDur(m)+(l<m?' (restam '+empDur(l)+')':''),empOpt(e)].filter(Boolean).join(' · ')}
+function empTr(t){if(t.fromLoan)return ' · opção de compra exercida';const e=t.emp;if(!e)return '';return ' · '+[empDur(e.m),empOpt(e)].filter(Boolean).join(' · ')}
+const empDurSel=(m,fn)=>`<select onchange="${fn}">${[6,12,24].map(x=>`<option value="${x}" ${+m===x?'selected':''}>${empDur(x)}</option>`).join('')}</select>`;
+const loanFields=()=>`<label class="lf" style="display:none">Duração do empréstimo<select name="em"><option value="6">6 meses</option><option value="12" selected>1 ano</option><option value="24">2 anos</option></select></label><label class="chk sw lf" style="display:none"><input type="checkbox" name="eopt" onchange="updLoan(this.form)"><span>Tem opção de compra</span></label><label class="lfv" style="display:none">Valor da opção de compra (milhões)<input type="number" name="eov" step="any" min="0" inputmode="decimal"></label>`;
+function updLoan(f){
+  if(!f)return;const el=f.elements;
+  const on=el.sit?!!el.sit.value:!!(el.tipo&&['empin','empout'].includes(el.tipo.value));
+  f.querySelectorAll('.lf').forEach(l=>{l.style.display=on?'':'none'});
+  const op=el.eopt;f.querySelectorAll('.lfv').forEach(l=>{l.style.display=on&&op&&op.checked?'':'none'});
+}
+function empMk(t,o,cl){const m=+o.em||12;return{t,m,r:m,cl:(cl||'').trim(),opt:o.eopt?1:0,ov:o.eopt?(num(o.eov)||0):0,s:S.cur}}
+const empFind=k=>D().p.find(x=>x.k===k);
+function empSet(k,f,v){const p=empFind(k);if(!p||!p.emp)return;p.emp[f]=v;if(f==='m')p.emp.r=v;save();if(f==='m'||f==='opt')render()}
+function empMode(k,v){const p=empFind(k);if(!p)return;if(v==='in')p.emp={t:'in',m:12,r:12,cl:'',opt:0,ov:0,s:S.cur};else delete p.emp;save();render()}
+function empDeal(k,tipo){
+  const d=D(),p=empFind(k);if(!p||!p.emp)return;
+  const inp=document.getElementById('empov-'+k),v=inp&&inp.value!==''?num(inp.value):(+p.emp.ov||0),prev={...p.emp},cl=p.emp.cl||'';
+  mark(tipo==='compra'?'Jogador comprado':'Jogador vendido');
+  if(tipo==='venda')p.out='venda';
+  delete p.emp;
+  const tr={id:'t-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),tipo,j:p.n,cl,v,pk:p.k,fromLoan:1,prevEmp:prev};
+  d.t.push(tr);maybeTransferNews(S.cur,tr,p);save();render()}
+function empBack(k){const p=empFind(k);if(!p||p.out!=='empout')return;mark('Jogador voltou do empréstimo');delete p.out;delete p.emp;save();render()}
+function empEdit(p){
+  const k=p.k,e=p.emp;
+  const base=`<label>Vínculo<select onchange="empMode(${k},this.value)"><option value="" ${e?'':'selected'}>Contrato com o meu clube</option><option value="in" ${e?'selected':''}>Emprestado ao meu clube</option></select></label>`;
+  if(!e)return `<div class="ef lnbox">${base}</div>`;
+  return `<div class="ef lnbox">${base}<label>Clube de origem<input value="${esc(e.cl||'')}" list="dl-times" autocomplete="off" onchange="empSet(${k},'cl',this.value)"></label><label>Duração${empDurSel(e.m,`empSet(${k},'m',+this.value)`)}</label><label class="chk sw"><input type="checkbox" ${e.opt?'checked':''} onchange="empSet(${k},'opt',this.checked?1:0)"><span>Tem opção de compra</span></label>${e.opt?`<label>Valor da compra (milhões)<input id="empov-${k}" type="number" step="any" min="0" inputmode="decimal" value="${e.ov||''}" onchange="empSet(${k},'ov',num(this.value))"></label><button type="button" class="sm" onclick="empDeal(${k},'compra')">Comprar jogador</button>`:''}</div>`}
+function empOutBox(p){
+  const k=p.k,e=p.emp;
+  return `<details class="ed"><summary>Empréstimo</summary><div class="ef"><label>Clube<input value="${esc(e.cl||'')}" list="dl-times" autocomplete="off" onchange="empSet(${k},'cl',this.value)"></label><label>Duração${empDurSel(e.m,`empSet(${k},'m',+this.value)`)}</label><label class="chk sw"><input type="checkbox" ${e.opt?'checked':''} onchange="empSet(${k},'opt',this.checked?1:0)"><span>Tem opção de compra</span></label>${e.opt?`<label>Valor da compra (milhões)<input id="empov-${k}" type="number" step="any" min="0" inputmode="decimal" value="${e.ov||''}" onchange="empSet(${k},'ov',num(this.value))"></label><button type="button" class="sm" onclick="empDeal(${k},'venda')">Clube comprou</button>`:''}<button type="button" class="sm" onclick="empBack(${k})">Voltou ao clube</button></div></details>`}
+function carryPlayer(p){
+  const{ovr,base,out,ent,emp,...r}=p;r.id=r.id?r.id+1:0;
+  if(emp){const left=empLeft(p)-12;
+    if(emp.t==='in'){if(left<=0)return null;r.emp={...emp,r:left};return r}
+    if(out==='empout'){if(left>0){r.out='empout';r.emp={...emp,r:left}}return r}}
+  return out?null:r}
+const empStay=p=>!(p.emp&&p.emp.t==='in'&&empLeft(p)<=12);
+function empCloseNote(p){const e=p.emp,left=empLeft(p)-12,a=e.cl?' ('+e.cl+')':'';
+  if(e.t==='in')return left<=0?'Empréstimo termina'+a+': não fica. Para manter, compre antes (aba Elenco) ou marque Fica.':'Empréstimo continua'+a+': restam '+empDur(left);
+  return left<=0?'Emprestado'+(e.cl?' a '+e.cl:'')+': volta ao clube':'Emprestado'+(e.cl?' a '+e.cl:'')+': continua cedido (restam '+empDur(left)+')'}
+
 function ratingClass(n){if(n==null||n===''||!Number.isFinite(+n))return 'r-none';const v=+n;if(v<6)return 'r'+Math.max(0,Math.floor(v));if(v<6.75)return 'r65';if(v<7.75)return 'r7';if(v<8.75)return 'r8';if(v<9.75)return 'r9';return 'r10'}
 
 function pov(i,f,v){
@@ -2382,6 +2438,9 @@ function vElenco(){
    
    <label>Pé<select name="foot">${FOOT.map(x=>`<option>${x}</option>`).join('')}</select></label>
    
+   <label>Situação<select name="sit" onchange="updLoan(this.form)"><option value="">Contrato com o meu clube</option><option value="in">Emprestado ao meu clube</option><option value="out">Meu jogador, emprestado a outro clube</option></select></label>
+   <label class="lf" style="display:none">Clube do empréstimo<input name="ecl" list="dl-times" autocomplete="off" placeholder="Digite e escolha"></label>
+   ${loanFields()}
    <details class="ini"><summary>Estatísticas já acumuladas (opcional)</summary><div class="ef">${sx.map(([n,t])=>`<label>${t}<input type="number" name="${n}" min="0"></label>`).join('')}<label>Nota média<input type="number" name="sn" min="0" max="10" step="0.1"></label></div><p class="sub">Para números de antes do app. As partidas registradas daqui para frente somam por cima.</p></details>
    <button class="btn">Adicionar jogador</button></form></details>
 
@@ -2392,12 +2451,13 @@ function vElenco(){
     const ni=(f,x)=>`<td data-label="${LB[f]}"><input class="ni${(f==='n'?b.n!=null:!!b[f])?' ov':''}" type="number" min="0" ${f==='n'?'step="0.1" max="10"':''} value="${x}" aria-label="${LB[f]} de ${esc(p.n)}" onchange="pov(${i},'${f}',this.value)"></td>`;
     const ei=(f,lab,t,ex)=>`<label>${lab}<input type="${t}" ${ex||''} value="${esc(p[f]||'')}" onchange="pe(${i},'${f}',${t==='number'?'+this.value':'this.value'})"></label>`;
     const info=[natTag(p.nat),p.id?p.id+'A':'',p.foot?({Direito:'D',Esquerdo:'E',Ambidestro:'Amb'}[p.foot]||p.foot):''].filter(Boolean).join(' · ');
-    return `<tr><td data-label="Jogador" style="box-shadow:inset 4px 0 0 var(--s-${sectorOf(p.pos)})">${p.nr?`<span class="nn">${p.nr}</span> `:''}${esc(p.n)}<button type="button" class="pf-btn" onclick="event.stopPropagation();perfilOpen(${p.k})" aria-label="Ver perfil">${PF_ICO}</button>${isCap(p)?' <span class="cap" title="Capitão">C</span>':''}${s.mv?' <span class="mv" title="Melhor da partida">★'+s.mv+'</span>':''}<div class="sub">${posBadge(p.pos)} ${esc(info)}</div></td><td data-label="Nota"><span class="rating ${ratingClass(s.n)}">${s.nt}</span></td><td data-label="Overall">${p.ov||'–'}</td>${ni('j',s.j)}${ni('g',s.g)}${ni('a',s.a)}<td data-label="G+A">${s.g+s.a}</td><td data-label="G+A/J">${fm2(s.j?(s.g+s.a)/s.j:0)}</td><td data-label="MIN">${s.mn}</td><td data-label="DEF">${p.pos==='GOL'?s.df:'–'}</td><td data-label="G+A/90">${fm2(p90(s))}</td>${ni('y',s.y)}${ni('r',s.r)}<td data-label="Ações" class="act"><button class="sm" aria-label="Editar ${esc(p.n)}" onclick="ed(${p.k})">${o?'Fechar':'✎'}</button><button class="x" aria-label="Remover ${esc(p.n)}" onclick="del('p',${i})">✕</button></td></tr>${o?`<tr class="er"><td colspan="14"><div class="ef">${ei('n','Nome','text')}${ei('nr','Número','number','min="1" max="99"')}${ei('nat','Nacionalidade','text','list="dl-nat" autocomplete="off"')}<label>Posição<select onchange="pe(${i},'pos',this.value)">${posOpts(p.pos)}</select></label>${ei('id','Idade','number')}${ei('ov','Overall','number')}<label>Pé<select onchange="pe(${i},'foot',this.value)">${FOOT.map(x=>`<option ${x===p.foot?'selected':''}>${x}</option>`).join('')}</select></label></div></td></tr>`:''}`}).join('')}</tbody></table></div><p class="sub">As notas seguem faixas de cor inspiradas no SofaScore. Os totais incluem atuações registradas nas partidas e os ajustes digitados aqui. Use os campos para corrigir diferenças ou incluir números anteriores ao app; apagar um campo remove apenas o ajuste.</p>`:`<p class="empty">${sec!=='TODOS'?'Nenhum jogador neste setor.':'Elenco vazio nesta temporada.'}</p>`}
-  ${out.length?`<h3>Saíram do clube</h3>${out.map(p=>{const s=stats(p);return `<div class="row"><span></span><div>${esc(p.n)}<div class="sub">${p.out==='venda'?'Vendido':'Cedido por empréstimo'} · ${s.j} jogos · ${s.g} gols · ${s.a} ass.</div></div><span></span><span></span></div>`}).join('')}<p class="sub">Para desfazer uma saída, apague a transferência na aba Transferências.</p>`:''}`;
+    return `<tr><td data-label="Jogador" style="box-shadow:inset 4px 0 0 var(--s-${sectorOf(p.pos)})">${p.nr?`<span class="nn">${p.nr}</span> `:''}${esc(p.n)}<button type="button" class="pf-btn" onclick="event.stopPropagation();perfilOpen(${p.k})" aria-label="Ver perfil">${PF_ICO}</button>${isCap(p)?' <span class="cap" title="Capitão">C</span>':''}${p.emp?` <span class="emp" title="${esc(empLine(p))}">EMP</span>`:''}${s.mv?' <span class="mv" title="Melhor da partida">★'+s.mv+'</span>':''}<div class="sub">${posBadge(p.pos)} ${esc(info)}</div>${p.emp?`<div class="sub emp-l">${esc(empLine(p))}</div>`:''}</td><td data-label="Nota"><span class="rating ${ratingClass(s.n)}">${s.nt}</span></td><td data-label="Overall">${p.ov||'–'}</td>${ni('j',s.j)}${ni('g',s.g)}${ni('a',s.a)}<td data-label="G+A">${s.g+s.a}</td><td data-label="G+A/J">${fm2(s.j?(s.g+s.a)/s.j:0)}</td><td data-label="MIN">${s.mn}</td><td data-label="DEF">${p.pos==='GOL'?s.df:'–'}</td><td data-label="G+A/90">${fm2(p90(s))}</td>${ni('y',s.y)}${ni('r',s.r)}<td data-label="Ações" class="act"><button class="sm" aria-label="Editar ${esc(p.n)}" onclick="ed(${p.k})">${o?'Fechar':'✎'}</button><button class="x" aria-label="Remover ${esc(p.n)}" onclick="del('p',${i})">✕</button></td></tr>${o?`<tr class="er"><td colspan="14"><div class="ef">${ei('n','Nome','text')}${ei('nr','Número','number','min="1" max="99"')}${ei('nat','Nacionalidade','text','list="dl-nat" autocomplete="off"')}<label>Posição<select onchange="pe(${i},'pos',this.value)">${posOpts(p.pos)}</select></label>${ei('id','Idade','number')}${ei('ov','Overall','number')}<label>Pé<select onchange="pe(${i},'foot',this.value)">${FOOT.map(x=>`<option ${x===p.foot?'selected':''}>${x}</option>`).join('')}</select></label></div>${empEdit(p)}</td></tr>`:''}`}).join('')}</tbody></table></div><p class="sub">As notas seguem faixas de cor inspiradas no SofaScore. Os totais incluem atuações registradas nas partidas e os ajustes digitados aqui. Use os campos para corrigir diferenças ou incluir números anteriores ao app; apagar um campo remove apenas o ajuste.</p>`:`<p class="empty">${sec!=='TODOS'?'Nenhum jogador neste setor.':'Elenco vazio nesta temporada.'}</p>`}
+  ${out.length?`<h3>Saíram do clube</h3>${out.map(p=>{const s=stats(p);return `<div class="row"><span></span><div>${esc(p.n)}<div class="sub">${p.out==='venda'?'Vendido':'Cedido por empréstimo'} · ${s.j} jogos · ${s.g} gols · ${s.a} ass.</div>${p.out==='empout'&&p.emp?`<div class="sub emp-l">${esc(empLine(p))}</div>${empOutBox(p)}`:''}</div><span></span><span></span></div>`}).join('')}<p class="sub">Para desfazer uma saída, apague a transferência na aba Transferências.</p>`:''}`;
 }
 
 function updTr(){
   const f=document.getElementById('tf');if(!f)return;
+  updLoan(f);
   const inn=['compra','empin'].includes(f.elements.tipo.value);
   f.querySelectorAll('.in').forEach(l=>{l.style.display=inn?'':'none';l.querySelectorAll('input,select').forEach(e=>e.disabled=!inn)});
   f.querySelectorAll('.out').forEach(l=>{l.style.display=inn?'none':'';l.querySelectorAll('input,select').forEach(e=>e.disabled=inn)});
@@ -2406,7 +2466,9 @@ function ui(){updStage();updPen();updRet();updTr();updVs()}
 function delT(i){
   mark('Transferência apagada');
   const d=D(),t=d.t[i];
-  if(t&&t.pk){const x=d.p.findIndex(p=>p.k===t.pk);if(x>=0){if(d.p[x].ent===t.tipo)d.p.splice(x,1);else delete d.p[x].out}}
+  if(t&&t.pk){const x=d.p.findIndex(p=>p.k===t.pk);if(x>=0){const q=d.p[x];
+    if(t.fromLoan){if(t.prevEmp)q.emp=t.prevEmp;if(t.tipo==='venda')q.out='empout'}
+    else if(q.ent===t.tipo)d.p.splice(x,1);else{delete q.out;if(t.tipo==='empout')delete q.emp}}}
   d.t.splice(i,1);save();render();
 }
 
@@ -2434,12 +2496,13 @@ function vTransfBase(){
    <label class="in">Overall<input type="number" name="ov" min="1" max="99"></label>
    
    <label class="in">Pé<select name="foot">${FOOT.map(x=>`<option>${x}</option>`).join('')}</select></label>
+   ${loanFields()}
    
    <button class="btn">Registrar</button></form></details>
-  <p class="sub">Compra e empréstimo recebido adicionam o jogador ao elenco e saem do caixa. Venda e empréstimo cedido tiram o jogador do elenco e entram no caixa. Empréstimo sem taxa: valor 0.</p>
+  <p class="sub">Compra e empréstimo recebido adicionam o jogador ao elenco e saem do caixa. Venda e empréstimo cedido tiram o jogador do elenco e entram no caixa. Empréstimo sem taxa: valor 0. Nos empréstimos, escolha a duração e a opção de compra: depois use Comprar no Elenco (jogador recebido) ou Clube comprou na lista Saíram do clube (jogador cedido).</p>
   ${profitHtml()}
   ${l.length?`<details class="add" ${fo.tl===false?'':'open'} ontoggle="fo.tl=this.open"><summary>Transferências da temporada</summary>`:''}${D().t.length>1?sortSel('t',[['rec','Mais recentes'],['ant','Mais antigas'],['valor','Maior valor'],['nome','Jogador (A–Z)'],['tipo','Tipo']],'rec'):''}
-  ${l.length?l.map(([t,i])=>`<div class="mrow"><div class="row"><span class="sc ${sg(t)>0?'pos':'neg'}">${sg(t)>0?'+':'−'}${fm(t.v)}</span><div><div>${esc(t.j)}</div><div class="sub">${TL[t.tipo]||''} ${esc(t.cl||'—')}</div></div><span></span><button class="x" aria-label="Apagar transferência" onclick="delT(${i})">✕</button></div><details class="ed" ${openT===i?'open':''}><summary>Editar</summary><div class="ef">${tfld(i,t,'j','Jogador')}${tfld(i,t,'cl','Clube','list="dl-times" autocomplete="off"')}<label>Valor (milhões)<input type="number" step="any" min="0" value="${t.v}" onchange="te(${i},'v',num(this.value))"></label></div></details></div>`).join(''):'<p class="empty">Nenhuma transferência nesta temporada.</p>'}${l.length?'</details>':''}`;
+  ${l.length?l.map(([t,i])=>`<div class="mrow"><div class="row"><span class="sc ${sg(t)>0?'pos':'neg'}">${sg(t)>0?'+':'−'}${fm(t.v)}</span><div><div>${esc(t.j)}</div><div class="sub">${TL[t.tipo]||''} ${esc(t.cl||'—')}${esc(empTr(t))}</div></div><span></span><button class="x" aria-label="Apagar transferência" onclick="delT(${i})">✕</button></div><details class="ed" ${openT===i?'open':''}><summary>Editar</summary><div class="ef">${tfld(i,t,'j','Jogador')}${tfld(i,t,'cl','Clube','list="dl-times" autocomplete="off"')}<label>Valor (milhões)<input type="number" step="any" min="0" value="${t.v}" onchange="te(${i},'v',num(this.value))"></label></div></details></div>`).join(''):'<p class="empty">Nenhuma transferência nesta temporada.</p>'}${l.length?'</details>':''}`;
 }
 
 const finOf=d=>d.fin||{};
@@ -2580,12 +2643,12 @@ function add(k,f,event){
   if(k==='m'&&!validMatchDate(o.date,S.cur)){const er=document.getElementById('dateErr');if(er)er.textContent='A data precisa estar dentro da temporada.';return false}
   if(k==='m'&&hasDuplicateMatch(o.c,o.ph)){const er=document.getElementById('stageErr');if(er)er.textContent='Já existe uma partida desta competição registrada nessa rodada/fase.';return false}
   if(k==='m'){if(!(o.adv||'').trim()){const er=document.getElementById('vserr');if(er)er.textContent='Escolha o adversário: toque no círculo com +.';return false}const away=o.away==='1',sl=+o.sl||0,sr=+o.sr||0,m={id:'m-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),date:o.date,adv:o.adv.trim(),loc:isNeutro(o.ph)?'Neutro':(away?'Fora':'Casa'),gp:away?sr:sl,gc:away?sl:sr,c:(o.c||'').trim(),ph:o.ph||'',pg:pn(o.pg),pc:pn(o.pc),et:o.et?1:0,pl:draft};d.m.push(m);maybeMatchNews(m,S.cur);calDone(m,f);draft={};FL=()=>document.querySelector('[data-mi="'+(D().m.length-1)+'"]')}
-  if(k==='p'){const b={};[['sj','j'],['sg','g'],['sa','a'],['sy','y'],['sr','r']].forEach(([x,f])=>{if(+o[x])b[f]=+o[x]});if(o.sn!==undefined&&o.sn!=='')b.n=+o.sn;const np={n:o.n.trim(),nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,foot:o.foot,k:nk()};if(Object.keys(b).length)np.base=b;d.p.push(np)}
+  if(k==='p'){const b={};[['sj','j'],['sg','g'],['sa','a'],['sy','y'],['sr','r']].forEach(([x,f])=>{if(+o[x])b[f]=+o[x]});if(o.sn!==undefined&&o.sn!=='')b.n=+o.sn;const np={n:o.n.trim(),nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,foot:o.foot,k:nk()};if(Object.keys(b).length)np.base=b;if(o.sit==='in'||o.sit==='out'){np.emp=empMk(o.sit,o,o.ecl);if(o.sit==='out')np.out='empout'}d.p.push(np)}
   if(k==='r'&&o.c.trim()){const c=o.c.trim(),r=(o.r||'').trim(),x=d.res.find(y=>y.c===c);if(x){if(r){x.r=r;delete x.auto}}else d.res.push({c,r});if(norm(r)==='campeao')upsertChampion(S.cur,c,S.club);else d.champs=(d.champs||[]).filter(y=>!(norm(y.competition)===norm(c)&&norm(y.club)===norm(S.club)))}
   if(k==='t'){const inn=o.tipo==='compra'||o.tipo==='empin';let nm,pk,player;
-    if(inn){nm=o.j.trim();const np={n:nm,nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,foot:o.foot,k:nk(),ent:o.tipo};d.p.push(np);pk=np.k;player=np}
-    else{const q=d.p.find(x=>String(x.k)===o.jk);if(!q)return false;q.out=o.tipo;nm=q.n;pk=q.k;player=q}
-    const transfer={id:'t-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),tipo:o.tipo,j:nm,cl:(o.cl||'').trim(),v:num(o.v),pk};d.t.push(transfer);maybeTransferNews(S.cur,transfer,player||{})}
+    if(inn){nm=o.j.trim();const np={n:nm,nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,foot:o.foot,k:nk(),ent:o.tipo};if(o.tipo==='empin')np.emp=empMk('in',o,o.cl);d.p.push(np);pk=np.k;player=np}
+    else{const q=d.p.find(x=>String(x.k)===o.jk);if(!q)return false;q.out=o.tipo;if(o.tipo==='empout')q.emp=empMk('out',o,o.cl);nm=q.n;pk=q.k;player=q}
+    const transfer={id:'t-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),tipo:o.tipo,j:nm,cl:(o.cl||'').trim(),v:num(o.v),pk};if(o.tipo==='empin'||o.tipo==='empout'){const e=empMk(o.tipo==='empin'?'in':'out',o,o.cl);transfer.emp={m:e.m,opt:e.opt,ov:e.ov}}d.t.push(transfer);maybeTransferNews(S.cur,transfer,player||{})}
   if(k==='m'&&event&&event.submitter&&event.submitter.value==='again')fo.m=true;
   save();render();return false;
 }

@@ -592,6 +592,16 @@ html.dens-c body{font-size:14px;line-height:1.4}html.dens-c .btn{padding:8px 14p
 .emp{display:inline-block;font:700 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.04em;padding:3px 5px;border-radius:5px;background:color-mix(in srgb,var(--acc) 20%,transparent);color:var(--acc);vertical-align:middle}
 .emp-l{color:var(--acc)}
 .lnbox{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.stp{display:flex;gap:6px;align-items:stretch}
+.stp input{order:2;flex:1 1 0;width:0;min-width:2.4ch;padding:0 2px;text-align:center;font:700 20px Barlow,sans-serif;font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stp .stb{flex:0 0 40px;width:40px;min-width:0;min-height:44px;padding:0;font:600 22px/1 Barlow,sans-serif;border:1px solid var(--line);border-radius:10px;background:var(--fld);color:var(--ink);cursor:pointer}
+.stp .stb:active{background:var(--line)}
+.stp .stb.m{order:1}.stp .stb.p{order:3}
+.pkt{margin:12px 6px 2px;color:var(--mute);font:700 12px Barlow,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.stf{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
+.stf .stp{flex:0 0 176px;width:176px}
+.player-modal-card form{display:block;margin-bottom:0}
 </style>
 </head>
 <body>
@@ -608,7 +618,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.31.0';
+const APP_VERSION='1.32.1';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -808,7 +818,8 @@ function updStageCore(){
 const selectedLineup=c=>{const L=LX(c),P=D().p.filter(p=>L[p.k]).sort(posCmp);return P.length?P.map(p=>{const x=L[p.k],rating=x.n===''||x.n==null?'—':(+x.n).toFixed(1);return `<div class="picked-player"><div><b>${esc(p.n)}${isCap(p)?' <span class="cap" title="Capitão">C</span>':''}${mvpKeys({pl:LX(c)}).has(String(p.k))?' <span class="mv">★ MVP</span>':''}</b><div class="sub">${posBadge(p.pos)} · ${x.g||0} G · ${x.a||0} A · Nota <span class="rating ${ratingClass(x.n)}">${rating}</span></div></div><button type="button" class="sm" onclick="openPlayerStats('${c}',${p.k})">Editar dados</button><button type="button" class="x" aria-label="Remover ${esc(p.n)}" onclick="removeMatchPlayer('${c}',${p.k})">✕</button></div>`}).join(''):'<p class="sub">Nenhum jogador selecionado.</p>'};
 const lineupBox=c=>`<div class="player-picker"><label for="player-search-${c}">Pesquisar jogador do elenco</label><input id="player-search-${c}" type="search" placeholder="Digite o nome do jogador..." autocomplete="off" oninput="searchMatchPlayers('${c}',this.value)"><div id="player-results-${c}" class="player-results"><p class="sub">Comece a digitar para encontrar um jogador.</p></div><div class="picked-list"><h3>Jogadores selecionados</h3><div id="picked-${c}">${selectedLineup(c)}</div></div></div>`;
 function searchMatchPlayers(c,q){const box=document.getElementById('player-results-'+c);if(!box)return;const term=norm(q.trim());if(!term){box.innerHTML='<p class="sub">Comece a digitar para encontrar um jogador.</p>';return}const L=LX(c),players=D().p.filter(p=>!p.out||L[p.k]).filter(p=>norm(p.n).includes(term)).sort(posCmp);box.innerHTML=players.length?players.map(p=>`<button type="button" class="player-result" onclick="openPlayerStats('${c}',${p.k})"><span>${esc(p.n)}<small>${posBadge(p.pos)} ${esc(p.pos||'')}</small></span><b>${L[p.k]?'Editar':'Selecionar'} ›</b></button>`).join(''):'<p class="sub">Nenhum jogador encontrado no elenco.</p>'}
-function openPlayerStats(c,k){const p=D().p.find(x=>String(x.k)===String(k));if(!p)return;const x=LX(c)[k]||{g:0,a:0,y:0,r:0,n:''};let modal=document.getElementById('player-stats-modal');if(!modal){modal=document.createElement('div');modal.id='player-stats-modal';modal.className='player-modal';document.body.appendChild(modal)}modal.innerHTML=`<div class="player-modal-backdrop" onclick="closePlayerStats()"></div><section class="player-modal-card" role="dialog" aria-modal="true" aria-label="Dados da atuação"><div class="player-modal-head"><div><span class="sub">Dados da atuação</span><h2>${esc(p.n)}</h2></div><button type="button" class="x" onclick="closePlayerStats()" aria-label="Fechar">✕</button></div><form onsubmit="return savePlayerStats('${c}',${k},this)"><div class="player-stat-grid"><label class="rating-field">Nota<input name="n" type="text" inputmode="decimal" autocomplete="off" maxlength="4" oninput="fmtNota(this)" value="${x.n!==''&&x.n!=null?esc(String(x.n)):''}" placeholder="Ex.: 6.5"></label><label>MIN<input name="min" type="number" min="1" max="120" inputmode="numeric" placeholder="${dMin(c)}" value="${x.min!=null&&x.min!==''&&+x.min!==dMin(c)?x.min:''}"></label>${p.pos==='GOL'?`<label>DEF<input name="def" type="number" min="0" inputmode="numeric" placeholder="0" value="${x.def||''}"></label>`:''}<label>Gols<input name="g" type="number" min="0" inputmode="numeric" placeholder="0" value="${x.g||''}"></label><label>Assistências<input name="a" type="number" min="0" inputmode="numeric" placeholder="0" value="${x.a||''}"></label><label>Cartões amarelos<input name="y" type="number" min="0" max="2" inputmode="numeric" placeholder="0" value="${x.y||''}"></label><label>Cartões vermelhos<input name="r" type="number" min="0" max="1" inputmode="numeric" placeholder="0" value="${x.r||''}"></label></div><p class="sub" id="nerr" style="color:var(--loss);min-height:1em"></p><div class="player-modal-actions"><button type="button" class="sm" onclick="closePlayerStats()">Cancelar</button><button class="btn">Salvar atuação</button></div></form></section>`;modal.classList.add('show');const first=modal.querySelector('input');if(first)first.focus()}
+function stp(b,d){const i=b.parentNode.querySelector('input');if(!i)return;const mn=i.min!==''?+i.min:0,mx=i.max!==''?+i.max:Infinity;let v=(parseInt(i.value,10)||0)+d;v=Math.max(mn,Math.min(mx,v));i.value=v?String(v):'';i.dispatchEvent(new Event('input',{bubbles:true}))}
+function openPlayerStats(c,k){const p=D().p.find(x=>String(x.k)===String(k));if(!p)return;const x=LX(c)[k]||{g:0,a:0,y:0,r:0,n:''};let modal=document.getElementById('player-stats-modal');if(!modal){modal=document.createElement('div');modal.id='player-stats-modal';modal.className='player-modal';document.body.appendChild(modal)}modal.innerHTML=`<div class="player-modal-backdrop" onclick="closePlayerStats()"></div><section class="player-modal-card" role="dialog" aria-modal="true" aria-label="Dados da atuação"><div class="player-modal-head"><div><span class="sub">Dados da atuação</span><h2>${esc(p.n)}</h2></div><button type="button" class="x" onclick="closePlayerStats()" aria-label="Fechar">✕</button></div><form onsubmit="return savePlayerStats('${c}',${k},this)"><div class="player-stat-grid"><label class="rating-field">Nota<input name="n" type="text" inputmode="decimal" autocomplete="off" maxlength="4" oninput="fmtNota(this)" value="${x.n!==''&&x.n!=null?esc(String(x.n)):''}" placeholder="Ex.: 6.5"></label><label>MIN<input name="min" type="number" min="1" max="120" inputmode="numeric" placeholder="${dMin(c)}" value="${x.min!=null&&x.min!==''&&+x.min!==dMin(c)?x.min:''}"></label>${p.pos==='GOL'?`<label>DEF<input name="def" type="number" min="0" inputmode="numeric" placeholder="0" value="${x.def||''}"></label>`:''}<label class="stf">Gols<span class="stp"><input name="g" type="number" min="0" inputmode="numeric" placeholder="0" value="${x.g||''}"><button type="button" class="stb m" tabindex="-1" aria-label="Menos um gol" onclick="stp(this,-1)">−</button><button type="button" class="stb p" tabindex="-1" aria-label="Mais um gol" onclick="stp(this,1)">＋</button></span></label><label class="stf">Assistências<span class="stp"><input name="a" type="number" min="0" inputmode="numeric" placeholder="0" value="${x.a||''}"><button type="button" class="stb m" tabindex="-1" aria-label="Menos uma assistência" onclick="stp(this,-1)">−</button><button type="button" class="stb p" tabindex="-1" aria-label="Mais uma assistência" onclick="stp(this,1)">＋</button></span></label><label class="stf">Cartões amarelos<span class="stp"><input name="y" type="number" min="0" max="2" inputmode="numeric" placeholder="0" value="${x.y||''}"><button type="button" class="stb m" tabindex="-1" aria-label="Menos um cartão amarelo" onclick="stp(this,-1)">−</button><button type="button" class="stb p" tabindex="-1" aria-label="Mais um cartão amarelo" onclick="stp(this,1)">＋</button></span></label><label class="stf">Cartões vermelhos<span class="stp"><input name="r" type="number" min="0" max="1" inputmode="numeric" placeholder="0" value="${x.r||''}"><button type="button" class="stb m" tabindex="-1" aria-label="Menos um cartão vermelho" onclick="stp(this,-1)">−</button><button type="button" class="stb p" tabindex="-1" aria-label="Mais um cartão vermelho" onclick="stp(this,1)">＋</button></span></label></div><p class="sub" id="nerr" style="color:var(--loss);min-height:1em"></p><div class="player-modal-actions"><button type="button" class="sm" onclick="closePlayerStats()">Cancelar</button><button class="btn">Salvar atuação</button></div></form></section>`;modal.classList.add('show');const first=modal.querySelector('input');if(first)first.focus()}
 function closePlayerStats(){const m=document.getElementById('player-stats-modal');if(m)m.classList.remove('show')}
 const NOTA_MIN=3;
 function fmtNota(el){const v=String(el.value).replace(',','.').replace(/[^0-9.]/g,''),dg=v.replace(/\./g,'');const er=document.getElementById('nerr');if(er)er.textContent='';if(!dg){el.value='';return}if(dg[0]==='1'){el.value=dg[1]==='0'?'10':'1';return}el.value=dg.length>=2?dg[0]+'.'+dg[1]:(v.indexOf('.')>0?dg+'.':dg)}
@@ -2067,6 +2078,15 @@ function pkFilter(opts,q){
   return{items:all.slice(0,150),exact:opts.some(o=>norm(o)===n),total:all.length};
 }
 let PK=null;
+function pkRecent(id,opts,name){
+  const ok=new Set(opts.map(norm)),seen=new Set([norm(S.club)]),out=[];
+  const add=v=>{v=String(v||'').trim();const k=norm(v);if(!k||seen.has(k)||!ok.has(k)||out.length>=8)return;seen.add(k);out.push(v)};
+  const ss=[...S.order].reverse(),rv=a=>[...(a||[])].reverse();
+  if(id==='dl-times'){
+    const fromM=()=>ss.forEach(s=>rv(S.data[s].m).forEach(m=>add(m.adv))),fromT=()=>ss.forEach(s=>rv(S.data[s].t).forEach(x=>add(x.cl)));
+    if(name==='adv'){fromM();fromT()}else{fromT();fromM()}
+  }else if(id==='dl-comps')ss.forEach(s=>rv(S.data[s].m).forEach(m=>add(m.c)));
+  return out}
 let PKY=0,PKLK=false;
 function pkLock(on){const b=document.body;if(on&&!PKLK){PKLK=true;PKY=window.pageYOffset||0;b.style.top=(-PKY)+'px';b.classList.add('pk-lock')}else if(!on&&PKLK){PKLK=false;b.classList.remove('pk-lock');b.style.top='';window.scrollTo(0,PKY)}}
 function pkFit(){const ov=document.getElementById('pkov'),vv=window.visualViewport;ov.style.height=(vv?vv.height:window.innerHeight)+'px';ov.style.top=(vv?vv.offsetTop:0)+'px'}
@@ -2083,7 +2103,9 @@ function pkList(q){
   const r=pkFilter(PK.opts,q),t=q.trim();
   const clr=!t&&PK.inp.value?'<button type="button" class="pki free" data-v="">✕ Limpar campo</button>':'';
   const free=t&&!r.exact?`<button type="button" class="pki free" data-v="${esc(t)}">Usar “${esc(t)}”</button>`:'';
-  document.getElementById('pkl').innerHTML=clr+free+r.items.map(o=>`<button type="button" class="pki" data-v="${esc(o)}">${esc(o)}</button>`).join('')+(r.total>150?`<p class="sub">Mostrando 150 de ${r.total}. Digite mais para filtrar.</p>`:'')+(!r.items.length&&!free?'<p class="sub">Nada encontrado.</p>':'');
+  const btn=o=>`<button type="button" class="pki" data-v="${esc(o)}">${esc(o)}</button>`,rc=!t?pkRecent(PK.inp.dataset.pk,PK.opts,PK.inp.name):[],rs=new Set(rc.map(norm));
+  const body=rc.length?'<p class="pkt">Recentes</p>'+rc.map(btn).join('')+'<p class="pkt">Todos</p>'+r.items.filter(o=>!rs.has(norm(o))).map(btn).join(''):r.items.map(btn).join('');
+  document.getElementById('pkl').innerHTML=clr+free+body+(r.total>150?`<p class="sub">Mostrando 150 de ${r.total}. Digite mais para filtrar.</p>`:'')+(!r.items.length&&!free?'<p class="sub">Nada encontrado.</p>':'');
 }
 function pkClick(e){const b=e.target.closest('.pki');if(b)pkPick(b.dataset.v)}
 function pkPick(v){

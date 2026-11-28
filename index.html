@@ -610,7 +610,7 @@ document.getElementById('dl-comps').innerHTML=opt(COMPS);
 </script>
 
 <script>
-const APP_VERSION='1.33.0';
+const APP_VERSION='1.34.0';
 const KEY='carreira-tecnico-v1';
 function appLanguage(){return 'pt'}
 const ns=()=>({m:[],p:[],t:[],res:[],aw:[],champs:[],news:[],obs:''});
@@ -1573,6 +1573,50 @@ document.addEventListener('pointerup',()=>{const d=lnDrag;lnDrag=null;if(!d||!d.
 const lpPl=k=>k==null?null:(D().p.find(p=>String(p.k)===String(k)&&!p.out)||null);
 const SEEDED=new WeakSet();
 function seedDraft(){if(!SEEDED.has(draft)){SEEDED.add(draft);matchET=false;const l=S.lineup;if(l&&l.s)l.s.forEach(k=>{const p=lpPl(k);if(p&&!draft[p.k])draft[p.k]={g:0,a:0,y:0,r:0,n:'',min:dMin('n'),def:0}})}return draft}
+
+// ===== Escalações salvas: S.lineups=[{id,n,f,s,r,o}] =====
+const lnCp=l=>JSON.parse(JSON.stringify({f:l.f,s:l.s,r:l.r,o:l.o}));
+const lnChips=()=>{const a=S.lineups||[];return a.length?`<div><p class="sub">Escalações salvas</p><div class="chips">${a.map(x=>`<button type="button" class="chip2" data-action="lnUse" data-id="${esc(x.id)}">${esc(x.n)}</button>`).join('')}</div></div>`:''};
+const lnSaved=()=>{const a=S.lineups||[];return `<h3>Escalações salvas</h3><p class="sub">Salve a escalação atual com um nome e use de novo em qualquer jogo. Ao usar, ela vira a escalação atual e você pode ajustar à vontade sem mudar a salva.</p><div class="tools"><label class="so">Nome<input id="ln-nome" type="text" maxlength="30" autocomplete="off" placeholder="Ex.: Titular, Copa, Reservas"></label><button type="button" class="sm" data-action="lnSave">Salvar escalação atual</button></div>${a.map(x=>{const n=x.s.filter(k=>lpPl(k)).length,miss=x.s.filter(k=>k!=null&&!lpPl(k)).length;return `<div class="picked-player"><div><b>${esc(x.n)}</b><div class="sub">${esc(x.f)} · ${n}/11${miss?` · ${miss} fora do elenco`:''}</div></div><button type="button" class="sm" data-action="lnUse" data-id="${esc(x.id)}">Usar</button></div><details class="ed"><summary>Opções de ${esc(x.n)}</summary><div class="tools"><button type="button" class="sm" data-action="lnUpd" data-id="${esc(x.id)}">Atualizar com a atual</button><button type="button" class="sm" data-action="lnRen" data-id="${esc(x.id)}">Renomear</button><button type="button" class="sm" data-action="lnDel" data-id="${esc(x.id)}">Excluir</button></div></details>`}).join('')}`};
+function lnSave(){const el=document.getElementById('ln-nome'),n=el?el.value.trim():'';if(!n){alert('Dê um nome para a escalação.');return}const l=lnGet();if(!l.s.some(k=>lpPl(k))){alert('Escale ao menos um jogador antes de salvar.');return}S.lineups=S.lineups||[];const one=S.lineups.find(x=>norm(x.n)===norm(n));if(one){if(!confirm('Já existe uma escalação com esse nome. Substituir pela atual?'))return;mark('Escalação atualizada');delete one.r;delete one.o;Object.assign(one,lnCp(l))}else{mark('Escalação salva');S.lineups.push(Object.assign({id:'l'+nk(),n},lnCp(l)))}save();render()}
+function lnUse(id){const x=(S.lineups||[]).find(y=>y.id===id);if(!x)return;const c=lnCp(x),miss=c.s.filter(k=>k!=null&&!lpPl(k)).length;c.s=c.s.map(k=>lpPl(k)?k:null);S.lineup=c;lnGet();lnChanged();const m=document.getElementById('rem-root');if(m){m.remove();REMD=null;lnRemind()}if(miss)alert(miss+(miss>1?' jogadores dessa escalação não estão mais no elenco e ficaram vagos.':' jogador dessa escalação não está mais no elenco e ficou vago.'))}
+function lnUpd(id){const x=(S.lineups||[]).find(y=>y.id===id);if(!x)return;const l=lnGet();if(!l.s.some(k=>lpPl(k))){alert('A escalação atual está vazia.');return}if(!confirm('Substituir "'+x.n+'" pela escalação atual?'))return;mark('Escalação atualizada');delete x.r;delete x.o;Object.assign(x,lnCp(l));save();render()}
+function lnRen(id){const x=(S.lineups||[]).find(y=>y.id===id);if(!x)return;const n=(prompt('Novo nome da escalação',x.n)||'').trim();if(!n||n===x.n)return;if(S.lineups.some(y=>y!==x&&norm(y.n)===norm(n))){alert('Já existe uma escalação com esse nome.');return}mark('Escalação renomeada');x.n=n.slice(0,30);save();render()}
+function lnDel(id){const x=(S.lineups||[]).find(y=>y.id===id);if(!x||!confirm('Excluir a escalação "'+x.n+'"?'))return;mark('Escalação excluída');S.lineups=S.lineups.filter(y=>y!==x);save();render()}
+
+// ===== Categoria de base: D().y=[{k,n,nr,nat,pos,id,ov,pot,foot}] =====
+let editY=null;
+const elSubs=()=>`<div class="chips pl"><button type="button" class="chip2${sub.el==='b'?'':' on'}" data-action="elSub" data-v="p">Elenco principal ${D().p.filter(p=>!p.out).length}</button><button type="button" class="chip2${sub.el==='b'?' on':''}" data-action="elSub" data-v="b">Base ${(D().y||[]).length}</button></div>`;
+const ytFind=k=>(D().y||[]).find(y=>String(y.k)===String(k));
+function vYouth(){
+  const Y=D().y||[],sec=fsec.base||'TODOS',ord=so.base||'pot';
+  const cnt={n:Y.length,GOL:0,DEF:0,MEI:0,ATQ:0};Y.forEach(y=>{const s=sectorOf(y.pos);if(cnt[s]!=null)cnt[s]++});
+  const kf={pot:y=>-(y.pot||0),ovr:y=>-(y.ov||0),idade:y=>y.id||99,pos:y=>posIx(y)*1000-(y.ov||0),nome:y=>y.n.toLowerCase()}[ord]||(()=>0);
+  const l=Y.filter(y=>sec==='TODOS'||sectorOf(y.pos)===sec).sort((a,b)=>{const x=kf(a),z=kf(b);return typeof x==='string'?x.localeCompare(z,'pt-BR'):x-z});
+  const chips=['TODOS','GOL','DEF','MEI','ATQ'].map(s=>`<button type="button" class="chip2${sec===s?' on':''}" ${s!=='TODOS'?`style="--c:var(--s-${s})"`:''} data-action="ytFil" data-v="${s}">${s==='TODOS'?'Todos':s} ${s==='TODOS'?cnt.n:cnt[s]}</button>`).join('');
+  const ordSel=`<label class="so">Ordenar por<select data-action="ytOrd">${[['pot','Potencial'],['ovr','Overall'],['idade','Idade'],['pos','Posição (setor)'],['nome','Nome (A–Z)']].map(([v,t])=>`<option value="${v}"${ord===v?' selected':''}>${t}</option>`).join('')}</select></label>`;
+  const row=y=>{const o=editY===y.k,info=[natTag(y.nat),y.id?y.id+' anos':'',y.foot?({Direito:'D',Esquerdo:'E',Ambidestro:'Amb'}[y.foot]||y.foot):''].filter(Boolean).join(' · ');
+    const ei=(f,lab,tp,ex)=>`<label>${lab}<input type="${tp}" ${ex||''} value="${esc(y[f]||'')}" data-action="ytSet" data-k="${y.k}" data-f="${f}"></label>`;
+    return `<div class="picked-player" style="box-shadow:inset 4px 0 0 var(--s-${sectorOf(y.pos)});padding-left:10px"><div><b>${y.nr?`<span class="nn">${y.nr}</span> `:''}${esc(y.n)}</b><div class="sub">${posBadge(y.pos)} ${esc(info)}</div><div class="sub">Overall <b class="${ovClass(y.ov)}">${y.ov||'–'}</b> · Potencial <b class="${ovClass(y.pot)}">${y.pot||'–'}</b></div></div><button type="button" class="sm" data-action="ytUp" data-k="${y.k}">Subir</button><button type="button" class="sm" data-action="ytEd" data-k="${y.k}" aria-label="Editar ${esc(y.n)}">${o?'Fechar':'✎'}</button><button type="button" class="x" data-action="ytDel" data-k="${y.k}" aria-label="Dispensar ${esc(y.n)}">✕</button></div>${o?`<div class="ef lnbox">${ei('n','Nome','text')}${ei('nr','Número','number','min="1" max="99"')}${ei('nat','Nacionalidade','text','list="dl-nat" autocomplete="off"')}<label>Posição<select data-action="ytSet" data-k="${y.k}" data-f="pos">${posOpts(y.pos)}</select></label>${ei('id','Idade','number','min="14" max="50"')}${ei('ov','Overall','number','min="1" max="99"')}${ei('pot','Potencial','number','min="1" max="99"')}<label>Pé<select data-action="ytSet" data-k="${y.k}" data-f="foot">${FOOT.map(x=>`<option ${x===y.foot?'selected':''}>${x}</option>`).join('')}</select></label></div>`:''}`};
+  return `<details class="add"><summary>+ Adicionar jovem</summary>
+  <form data-action="ytAdd">
+   <label>Nome<input name="n" required></label>
+   <label>Número<input type="number" name="nr" min="1" max="99"></label>
+   <label>Nacionalidade<input name="nat" list="dl-nat" autocomplete="off" placeholder="Digite e escolha"></label>
+   <label>Posição<select name="pos">${posOpts(undefined,true)}</select></label>
+   <label>Idade<input type="number" name="id" min="14" max="50"></label>
+   <label>Overall<input type="number" name="ov" min="1" max="99"></label>
+   <label>Potencial<input type="number" name="pot" min="1" max="99"></label>
+   <label>Pé<select name="foot">${FOOT.map(x=>`<option>${x}</option>`).join('')}</select></label>
+   <button class="btn">Adicionar à base</button></form></details>
+  ${Y.length?`<div class="tools">${ordSel}<div class="chips">${chips}</div></div>`:''}
+  ${l.length?l.map(row).join(''):`<p class="empty">${Y.length?'Nenhum jovem neste setor.':'Base vazia nesta temporada. Adicione os jovens que você contratou para a academia.'}</p>`}
+  <p class="sub">Subir leva o jovem para o elenco principal com os mesmos dados. Dispensar remove da base. Overall e potencial você atualiza no ✎ conforme eles evoluem. A base não aparece na escalação nem nas estatísticas, e vem para a próxima temporada com +1 de idade.</p>`;
+}
+function ytAdd(f){const o=Object.fromEntries(new FormData(f)),n=(o.n||'').trim();if(!n)return;const d=D();d.y=d.y||[];mark('Jovem adicionado à base');d.y.push({n,nr:+o.nr||0,nat:(o.nat||'').trim(),pos:o.pos,id:+o.id||0,ov:+o.ov||0,pot:+o.pot||0,foot:o.foot,k:nk()});save();render()}
+function ytUp(k){const d=D(),y=ytFind(k);if(!y)return;mark('Jogador subiu para o elenco principal');d.p.push({...y});d.y=d.y.filter(x=>x!==y);if(editY===y.k)editY=null;save();render()}
+function ytDel(k){const d=D(),y=ytFind(k);if(!y||!confirm('Dispensar '+y.n+' da base?'))return;mark('Jovem dispensado da base');d.y=d.y.filter(x=>x!==y);if(editY===y.k)editY=null;save();render()}
+function ytSet(k,f,el){const y=ytFind(k);if(!y)return;if(['id','ov','pot','nr'].includes(f))y[f]=+el.value||0;else{const v=el.value.trim();if(f==='n'&&!v){render();return}y[f]=v}save();render()}
 function lnChanged(){const un=Object.values(draft).every(x=>x&&!(+x.g||+x.a||+x.y||+x.r||+x.def)&&(x.n===''||x.n==null)&&(x.min==null||+x.min===90||+x.min===120));if(un)draft={};save();render()}
 function lnForm(f){const l=lnGet(),old=fEff(l),pool=l.s.map((k,i)=>({k,pos:old[i]&&old[i].pos})).filter(x=>x.k!=null),res=fSlots(f).map(()=>null);fSlots(f).forEach((sl,i)=>{const j=pool.findIndex(x=>x.pos===sl.pos);if(j>=0){res[i]=pool[j].k;pool.splice(j,1)}});l.f=f;l.s=res;delete l.r;delete l.o;lnChanged()}
 function lpShow(){let m=document.getElementById('lp-root');if(lpSlot==null){if(m)m.remove();return}if(!m){m=document.createElement('div');m.id='lp-root';document.body.appendChild(m)}m.innerHTML=lpHtml()}
@@ -1583,7 +1627,7 @@ function lpRemove(){const l=lnGet();if(lpSlot!=null)l.s[lpSlot]=null;lpSlot=null
 function lnClear(){const l=lnGet();l.s=l.s.map(()=>null);lnChanged()}
 const PITCH_SVG='<svg class="pitch-bg" viewBox="0 0 100 130" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="130" fill="#2b6b47"/><g fill="#2f7650" opacity=".55"><rect y="0" width="100" height="13"/><rect y="26" width="100" height="13"/><rect y="52" width="100" height="13"/><rect y="78" width="100" height="13"/><rect y="104" width="100" height="13"/></g><g fill="none" stroke="#e9f2ec" stroke-width=".6" opacity=".8"><rect x="4" y="4" width="92" height="122"/><path d="M4 65h92"/><circle cx="50" cy="65" r="10"/><rect x="26" y="4" width="48" height="18"/><rect x="38" y="4" width="24" height="7"/><rect x="26" y="108" width="48" height="18"/><rect x="38" y="119" width="24" height="7"/></g></svg>';
 function lpHtml(){if(lpSlot==null)return '';const l=lnGet(),s=fEff(l)[lpSlot];if(!s)return '';const all=D().p.filter(p=>!p.out),inl=new Set(l.s.filter(k=>k!=null).map(String)),item=p=>`<button type="button" class="lp-i" onclick="lpPick(${p.k})">${posBadge(p.pos)}<span>${esc(p.n)}</span>${inl.has(String(p.k))?'<em>em campo</em>':''}</button>`,A=all.filter(p=>p.pos===s.pos).sort(posCmp),B=all.filter(p=>p.pos!==s.pos).sort(posCmp);return `<div class="lp" onclick="if(event.target===this)lpClose()"><div class="lp-c"><div class="lp-h"><b>Escalar em ${s.pos}</b><button type="button" class="sm" onclick="lpClose()">Fechar</button></div>${l.s[lpSlot]!=null?`<button type="button" class="sm" onclick="lpRemove()">Remover desta posição</button>`:''}<p class="lp-s">Função desta posição</p><div class="lp-r">${POS.map(r=>`<button type="button" class="sm${r===s.pos?' on':''}" onclick="lpRole('${r}')">${r}</button>`).join('')}</div>${A.length?`<p class="lp-s">Jogadores de ${s.pos}</p>${A.map(item).join('')}`:''}${B.length?`<p class="lp-s">${A.length?'Outras posições':'Todos os jogadores'}</p>${B.map(item).join('')}`:''}${all.length?'':'<p class="empty">Cadastre jogadores no Elenco primeiro.</p>'}</div></div>`}
-function vLineup(){const l=lnGet(),sl=fEff(l),n=l.s.filter(k=>lpPl(k)).length,edited=!!((l.r&&Object.keys(l.r).length)||(l.o&&Object.keys(l.o).length));const slots=sl.map((q,i)=>{const p=lpPl(l.s[i]);return `<button type="button" class="slot${p?' on':''}${lnEdit?' edit':''}" data-i="${i}" style="left:${q.x}%;top:${q.y}%" onclick="lnTap(${i})" aria-label="${p?esc(p.n):'Escalar '+q.pos}"><i>${p?esc(q.pos):'+'}</i><b>${p?esc(p.n):q.pos}</b></button>`}).join('');return `<h2>Escalação</h2><p class="sub">Toque no + de cada posição para escolher o jogador. A lista mostra primeiro quem joga naquela posição, mas você pode usar qualquer um. Os titulares escalados já vêm selecionados ao registrar uma partida nova, e você pode desmarcar qualquer um na hora.</p><div class="tools"><label class="so">Formação<select onchange="lnForm(this.value)">${Object.keys(FORMS).map(f=>`<option${f===l.f?' selected':''}>${f}</option>`).join('')}</select></label><button type="button" class="sm" onclick="lnClear()">Limpar</button><button type="button" class="sm" onclick="lnEdit=!lnEdit;render()">${lnEdit?'Concluir edição':'Editar posições'}</button>${edited?`<button type="button" class="sm" onclick="lnReset()">Restaurar formação</button>`:''}</div>${lnEdit?'<p class="sub">Arraste cada posição para ajustar no campo. Toque nela para trocar o jogador ou a função (ex.: MC para VOL).</p>':''}<p class="sub ln-c">${n}/11 escalados${edited?' · formação editada':''}</p><div class="pitch">${PITCH_SVG}${slots}</div>`}
+function vLineup(){const l=lnGet(),sl=fEff(l),n=l.s.filter(k=>lpPl(k)).length,edited=!!((l.r&&Object.keys(l.r).length)||(l.o&&Object.keys(l.o).length));const slots=sl.map((q,i)=>{const p=lpPl(l.s[i]);return `<button type="button" class="slot${p?' on':''}${lnEdit?' edit':''}" data-i="${i}" style="left:${q.x}%;top:${q.y}%" onclick="lnTap(${i})" aria-label="${p?esc(p.n):'Escalar '+q.pos}"><i>${p?esc(q.pos):'+'}</i><b>${p?esc(p.n):q.pos}</b></button>`}).join('');return `<h2>Escalação</h2><p class="sub">Toque no + de cada posição para escolher o jogador. A lista mostra primeiro quem joga naquela posição, mas você pode usar qualquer um. Os titulares escalados já vêm selecionados ao registrar uma partida nova, e você pode desmarcar qualquer um na hora.</p><div class="tools"><label class="so">Formação<select onchange="lnForm(this.value)">${Object.keys(FORMS).map(f=>`<option${f===l.f?' selected':''}>${f}</option>`).join('')}</select></label><button type="button" class="sm" onclick="lnClear()">Limpar</button><button type="button" class="sm" onclick="lnEdit=!lnEdit;render()">${lnEdit?'Concluir edição':'Editar posições'}</button>${edited?`<button type="button" class="sm" onclick="lnReset()">Restaurar formação</button>`:''}</div>${lnEdit?'<p class="sub">Arraste cada posição para ajustar no campo. Toque nela para trocar o jogador ou a função (ex.: MC para VOL).</p>':''}<p class="sub ln-c">${n}/11 escalados${edited?' · formação editada':''}</p><div class="pitch">${PITCH_SVG}${slots}</div>${lnSaved()}`}
 
 function exportCSV(){const q=v=>{v=v==null?'':String(v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v},rows=[['Temporada','Jogador','Posição','Jogos','Gols','Assistências','G+A','MIN','Defesas','Amarelos','Vermelhos','Nota média','Melhor da partida']];
 S.order.forEach(sn=>{const d=S.data[sn]||{};(d.p||[]).forEach(p=>{const t=stats(p,d),nt=t.nt==null||t.nt==='–'||t.nt===''?'':String(t.nt).replace('.',',');rows.push([sn,p.n,p.pos||'',t.j,t.g,t.a,t.g+t.a,t.mn,p.pos==='GOL'?t.df:'',t.y,t.r,nt,t.mv||0])})});
@@ -1594,7 +1638,7 @@ const dMin=c=>c==='n'?(matchET?120:90):((D().m[+c]||{}).et?120:90);
 function etToggle(on){matchET=!!on;Object.values(draft).forEach(x=>{if(x&&(on?+x.min===90:+x.min===120))x.min=on?120:90});if(typeof refreshPicked==='function')refreshPicked('n')}
 let REMD=null;
 function lnMini(){const l=lnGet();return `<div class="pitch mini">${PITCH_SVG}${fEff(l).map((q,i)=>{const p=lpPl(l.s[i]);return `<span class="slot${p?' on':''}" style="left:${q.x}%;top:${q.y}%"><i>${p?esc(q.pos):'·'}</i><b>${p?esc(p.n):''}</b></span>`}).join('')}</div>`}
-function lnRemind(){const l=S.lineup,key=S.cur+'|'+D().m.length;if(!l||!l.s||!l.s.some(k=>lpPl(k))||IX.noLnRemind||REMD===key)return;REMD=key;let m=document.getElementById('rem-root');if(!m){m=document.createElement('div');m.id='rem-root';document.body.appendChild(m)}m.innerHTML=`<div class="lp"><div class="lp-c"><div class="lp-h"><b>Revise a escalação</b></div><p class="sub">Estes titulares já vêm selecionados neste registro.</p>${lnMini()}<label class="chk"><input type="checkbox" id="rem-off"><span>Não mostrar de novo</span></label><div class="rem-btns"><button type="button" class="sm" onclick="remGo(true)">Ajustar escalação</button><button type="button" class="btn" onclick="remGo(false)">Usar assim e continuar</button></div></div></div>`}
+function lnRemind(){const l=S.lineup,key=S.cur+'|'+D().m.length;if(!l||!l.s||!l.s.some(k=>lpPl(k))||IX.noLnRemind||REMD===key)return;REMD=key;let m=document.getElementById('rem-root');if(!m){m=document.createElement('div');m.id='rem-root';document.body.appendChild(m)}m.innerHTML=`<div class="lp"><div class="lp-c"><div class="lp-h"><b>Revise a escalação</b></div><p class="sub">Estes titulares já vêm selecionados neste registro.</p>${lnChips()}${lnMini()}<label class="chk"><input type="checkbox" id="rem-off"><span>Não mostrar de novo</span></label><div class="rem-btns"><button type="button" class="sm" onclick="remGo(true)">Ajustar escalação</button><button type="button" class="btn" onclick="remGo(false)">Usar assim e continuar</button></div></div></div>`}
 function remGo(adj){const off=document.getElementById('rem-off');if(off&&off.checked){IX.noLnRemind=true;saveIx()}const m=document.getElementById('rem-root');if(m)m.remove();if(adj){sub.pm='e';fo.m=false;render()}}
 
 const PF_ICO='<svg class="ei" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6"/></svg>';
@@ -1802,8 +1846,17 @@ function setTema(v){try{if(v==='auto')localStorage.removeItem('tema');else local
 function setLightBg(v){if(okHex(v)){try{localStorage.setItem('fundoClaro',v)}catch(e){}applyTema()}}
 function setCaixaCor(v){if(v===''||v==='cab'||okHex(v)){try{if(v==='')localStorage.removeItem('caixaCor');else localStorage.setItem('caixaCor',v)}catch(e){}applyTema();render()}}
 function onAct(e){const el=e.target&&e.target.closest?e.target.closest('[data-action]'):null;if(!el)return;
-  if(el.dataset.action==='caixaCor'){if(el.tagName==='INPUT'){if(e.type==='change')setCaixaCor(el.value)}else if(e.type==='click')setCaixaCor(el.dataset.v)}}
-document.addEventListener('click',onAct);document.addEventListener('change',onAct);
+  const a=el.dataset.action,clk=e.type==='click',chg=e.type==='change',sbm=e.type==='submit',id=el.dataset.id,k=el.dataset.k;
+  if(a==='caixaCor'){if(el.tagName==='INPUT'){if(chg)setCaixaCor(el.value)}else if(clk)setCaixaCor(el.dataset.v)}
+  else if(clk&&a==='lnSave')lnSave();else if(clk&&a==='lnUse')lnUse(id);else if(clk&&a==='lnUpd')lnUpd(id);else if(clk&&a==='lnRen')lnRen(id);else if(clk&&a==='lnDel')lnDel(id);
+  else if(clk&&a==='elSub'){sub.el=el.dataset.v;render()}
+  else if(clk&&a==='ytFil'){fsec.base=el.dataset.v;render()}
+  else if(chg&&a==='ytOrd'){so.base=el.value;render()}
+  else if(clk&&a==='ytEd'){editY=editY===ytFind(k).k?null:ytFind(k).k;render()}
+  else if(clk&&a==='ytUp')ytUp(k);else if(clk&&a==='ytDel')ytDel(k);
+  else if(chg&&a==='ytSet')ytSet(k,el.dataset.f,el);
+  else if(sbm&&a==='ytAdd'){e.preventDefault();ytAdd(el)}}
+document.addEventListener('click',onAct);document.addEventListener('change',onAct);document.addEventListener('submit',onAct);
 const okHex=x=>/^#[0-9a-f]{6}$/i.test(x||'');
 const txtOn=hex=>{const n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;return (0.299*r+0.587*g+0.114*b)>150?'#111827':'#f4f6f2'};
 const hdrStyle=()=>(okHex(S.cor1)?`background:${S.cor1};color:${txtOn(S.cor1)};`:'')+(okHex(S.cor2)?`border-bottom-color:${S.cor2}`:'');
@@ -2232,6 +2285,7 @@ function closeSeason(f){
     r.id=+o['a_'+p.k]||(p.id?p.id+1:0);r.ov=+o['o_'+p.k]||p.ov||0;
     x.p.push(r);
   });
+  (d.y||[]).forEach(y=>{x.y=x.y||[];if(!x.y.some(q=>q.k===y.k))x.y.push({...y,id:y.id?y.id+1:0})});
   if(o.cc)names.forEach(c=>{if(!x.res.some(y=>y.c===c))x.res.push({c,r:''})});
   S.cur=n;draft={};editK=null;tab='home';save();render();setTimeout(()=>showBalance(prevSeason),250);return false;
 }
@@ -2337,7 +2391,7 @@ function vPartidasBase(){
   };
   return `<h2>Partidas de ${esc(S.cur)}</h2>
   ${comps.length?`<details class="add" ${fo.m||!d.m.length?'open':''} ontoggle="fo.m=this.open;if(this.open)lnRemind()"><summary>+ Registrar partida</summary>
-  <form id="mf" class="mfm" onsubmit="return add('m',this,event)">
+  <form id="mf" class="mfm" onsubmit="return add('m',this,event)">${lnChips()}
    ${calChips()}<input type="hidden" name="away" value="0">
    <div class="mfsel">
     <label>Competição<select name="c" onchange="updStage();updPen()">${comps.map(c=>`<option ${c===last?'selected':''}>${esc(c)}</option>`).join('')}</select></label>
@@ -2384,6 +2438,7 @@ const cloneSquad=src=>S.data[src].p.map(carryPlayer).filter(Boolean);
 function impSquad(f){
   const s=f.elements.src.value;if(!s||!S.data[s])return false;
   const items=cloneSquad(s).filter(p=>!D().p.some(x=>x.k===p.k));mark('Elenco importado da temporada '+s);items.forEach(p=>D().p.push(p));
+  (S.data[s].y||[]).filter(y=>!(D().y||[]).some(x=>x.k===y.k)).forEach(y=>{D().y=D().y||[];D().y.push({...y,id:y.id?y.id+1:0})});
   save();render();return false;
 }
 const FOOT=['Direito','Esquerdo','Ambidestro'];
@@ -2450,6 +2505,7 @@ function pov(i,f,v){
   save();render();
 }
 function vElenco(){
+  if(sub.el==='b')return `<h2>Elenco de ${esc(S.cur)}</h2>${elSubs()}`+vYouth();
   const tot=D().p.filter(p=>!p.out).length,sec=fsec.elenco||'TODOS';
   let l=D().p.map((p,i)=>[p,i]).filter(([p])=>!p.out);
   const cnt={n:l.length,GOL:0,DEF:0,MEI:0,ATQ:0};l.forEach(([p])=>{const s=sectorOf(p.pos);if(cnt[s]!=null)cnt[s]++});
@@ -2460,7 +2516,7 @@ function vElenco(){
   const srcs=S.order.filter(s=>s!==S.cur&&S.data[s].p.some(p=>!p.out)).reverse();
   const LB={j:'Jogos',g:'Gols',a:'Assistências',y:'Amarelos',r:'Vermelhos',n:'Nota'};
   const sx=[['sj','Jogos'],['sg','Gols'],['sa','Assist.'],['sy','Amarelos'],['sr','Vermelhos']];
-  return `<h2>Elenco de ${esc(S.cur)}</h2>
+  return `<h2>Elenco de ${esc(S.cur)}</h2>${elSubs()}
   <details class="add" ${fo.p||!tot?'open':''} ontoggle="fo.p=this.open"><summary>+ Adicionar jogador</summary>
   <form onsubmit="return add('p',this)">
    <label>Nome<input name="n" required></label>
